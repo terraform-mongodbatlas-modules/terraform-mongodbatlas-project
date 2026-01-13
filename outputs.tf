@@ -30,7 +30,7 @@ output "project_limits" {
   value = {
     # using data source as the resource only holds "user configured" limits in the state
     for l in data.mongodbatlas_project.this.limits : l.name => {
-      value         = l.value
+      limit_value   = l.value
       current_usage = l.current_usage
       default_limit = l.default_limit
       maximum_limit = l.maximum_limit
