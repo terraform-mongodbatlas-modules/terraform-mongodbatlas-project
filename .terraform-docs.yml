@@ -24,18 +24,8 @@ content: |-
 
     name   = "my-project"
     org_id = "5f4d8e9a0123456789abcdef"
-
-    tags = {
-      Environment = "production"
-      ManagedBy   = "Terraform"
-    }
   }
   ```
-
-  ## Examples
-
-  - [Basic Project](examples/basic/) - Creates a project with minimal configuration
-  - [Complete Project](examples/complete/) - Creates a project with all optional features enabled
 
   {{ .Requirements }}
 
