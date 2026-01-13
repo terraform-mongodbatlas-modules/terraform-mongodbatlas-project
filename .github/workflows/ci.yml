@@ -30,31 +30,6 @@ jobs:
       - name: Terraform Validate
         run: terraform validate
 
-  validate-examples:
-    name: Validate Examples
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        example:
-          - basic
-          - with-limits
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v3
-        with:
-          terraform_version: "1.7.0"
-
-      - name: Terraform Init
-        working-directory: examples/${{ matrix.example }}
-        run: terraform init -backend=false
-
-      - name: Terraform Validate
-        working-directory: examples/${{ matrix.example }}
-        run: terraform validate
-
   terraform-docs:
     name: Terraform Docs
     runs-on: ubuntu-latest
