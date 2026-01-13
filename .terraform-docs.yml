@@ -1,17 +1,6 @@
 formatter: "markdown table"
 
-version: ""
-
 header-from: main.tf
-footer-from: ""
-
-recursive:
-  enabled: false
-  path: modules
-
-sections:
-  hide: []
-  show: []
 
 content: |-
   {{ .Header }}
@@ -27,11 +16,13 @@ content: |-
   }
   ```
 
+  ## Examples
+
+  - [Basic](./examples/basic) - Minimal project configuration
+
   {{ .Requirements }}
 
   {{ .Providers }}
-
-  {{ .Modules }}
 
   {{ .Resources }}
 
@@ -40,16 +31,12 @@ content: |-
   {{ .Outputs }}
 
 output:
-  file: "README.md"
+  file: README.md
   mode: inject
   template: |-
     <!-- BEGIN_TF_DOCS -->
     {{ .Content }}
     <!-- END_TF_DOCS -->
-
-output-values:
-  enabled: false
-  from: ""
 
 sort:
   enabled: true
