@@ -59,8 +59,3 @@ variable "tags" {
   description = "Map of tags to assign to the project."
   default     = {}
 }
-
-# not supported deprecated parameters:
-# is_slow_operation_thresholding_enabled
-# ip_addresses
-# teams
