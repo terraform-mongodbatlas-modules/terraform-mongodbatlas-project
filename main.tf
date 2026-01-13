@@ -4,14 +4,15 @@ resource "mongodbatlas_project" "this" {
 
   project_owner_id = var.project_owner_id
 
-  is_collect_database_specifics_statistics_enabled = try(var.project_settings.is_collect_database_specifics_enabled, null)
-  is_data_explorer_enabled                         = try(var.project_settings.is_data_explorer_enabled, null)
-  is_extended_storage_sizes_enabled                = try(var.project_settings.is_extended_storage_sizes_enabled, null)
-  is_performance_advisor_enabled                   = try(var.project_settings.is_performance_advisor_enabled, null)
-  is_realtime_performance_panel_enabled            = try(var.project_settings.is_realtime_performance_panel_enabled, null)
-  is_schema_advisor_enabled                        = try(var.project_settings.is_schema_advisor_enabled, null)
+  is_collect_database_specifics_statistics_enabled = var.project_settings.is_collect_database_specifics_enabled
+  is_data_explorer_enabled                         = var.project_settings.is_data_explorer_enabled
+  is_extended_storage_sizes_enabled                = var.project_settings.is_extended_storage_sizes_enabled
+  is_performance_advisor_enabled                   = var.project_settings.is_performance_advisor_enabled
+  is_realtime_performance_panel_enabled            = var.project_settings.is_realtime_performance_panel_enabled
+  is_schema_advisor_enabled                        = var.project_settings.is_schema_advisor_enabled
 
   with_default_alerts_settings = var.with_default_alerts_settings
+  region_usage_restrictions    = var.region_usage_restrictions
 
   dynamic "limits" {
     for_each = var.limits

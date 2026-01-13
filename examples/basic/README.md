@@ -1,16 +1,28 @@
 # Basic MongoDB Atlas Project Example
 
-This example demonstrates creating a MongoDB Atlas project with minimal configuration.
+This example demonstrates creating a MongoDB Atlas project with project settings, limits, and tags.
 
 ## Prerequisites
 
 - Terraform >= 1.0
 - MongoDB Atlas account
-- MongoDB Atlas API credentials
+- MongoDB Atlas organization ID
+- MongoDB Atlas API credentials (Public and Private Key)
+
+## What This Example Creates
+
+This example creates a MongoDB Atlas project with:
+- **Project Settings**: Extended storage sizes enabled
+- **Project Limits**: 
+  - Maximum 50 clusters
+  - Maximum 25 custom database access roles
+- **Tags**: Environment and management tags
 
 ## Usage
 
-1. Set your MongoDB Atlas credentials:
+### 1. Set MongoDB Atlas Credentials
+
+Set your MongoDB Atlas credentials as environment variables:
 
 ```bash
 export MONGODB_ATLAS_PUBLIC_KEY="your-public-key"
@@ -30,7 +42,38 @@ org_id       = "your-org-id"
 terraform init
 terraform plan
 terraform apply
+
+# When done, destroy resources
+terraform destroy
 ```
+
+## Configuration Details
+
+### Project Settings
+```hcl
+project_settings = {
+  is_extended_storage_sizes_enabled = true
+}
+```
+Enables extended storage sizes for this project. Other settings use Atlas defaults.
+
+### Project Limits
+```hcl
+limits = {
+  "atlas.project.deployment.clusters" = 50
+  "atlas.project.security.databaseAccess.customRoles" = 25
+}
+```
+Sets maximum limits for clusters and custom roles to control resource usage.
+
+### Tags
+```hcl
+tags = {
+  Environment = "Development"
+  ManagedBy   = "Terraform"
+}
+```
+Tags help organize and identify the `mongodbatlas_project` resource.
 
 ## Inputs
 
@@ -43,5 +86,4 @@ terraform apply
 
 | Name | Description |
 |------|-------------|
-| project_id | The unique identifier for the project |
-| project_name | The name of the project |
+| atlas_project | Complete MongoDB Atlas project details including id, name, settings, and limits |
