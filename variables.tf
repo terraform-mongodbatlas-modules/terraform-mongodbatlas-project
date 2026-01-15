@@ -42,6 +42,36 @@ variable "limits" {
   default = {}
 }
 
+variable "ip_access_list" {
+  description = <<-EOT
+  IP access list entries with optional comments.
+  EOT
+  type = list(object({
+    entry   = string
+    comment = optional(string)
+  }))
+  default = []
+
+  validation {
+    condition = length(var.ip_access_list) == length(distinct([
+      for entry in var.ip_access_list : trimspace(entry.entry)
+    ]))
+    error_message = "ip_access_list.entry values must be unique."
+  }
+
+  validation {
+    condition = alltrue([
+      for entry in var.ip_access_list : (
+        can(cidrhost(entry.entry, 0)) ||
+        can(regex("^sg-[0-9a-fA-F]+$", entry.entry)) ||
+        can(cidrhost("${entry.entry}/32", 0)) ||
+        can(cidrhost("${entry.entry}/128", 0))
+      )
+    ])
+    error_message = "ip_access_list.entry values must be valid CIDR blocks, IP addresses, or AWS security group IDs (sg-...)."
+  }
+}
+
 variable "with_default_alerts_settings" {
   type        = bool
   description = "Flag that indicates whether to create the project with default alert settings."

@@ -37,3 +37,8 @@ output "project_limits" {
     }
   }
 }
+
+output "ip_access_list" {
+  description = "Project IP access list entries."
+  value       = local.ip_access_list_enabled ? module.ip_access_list[0].entries : []
+}

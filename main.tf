@@ -25,6 +25,19 @@ resource "mongodbatlas_project" "this" {
   tags = var.tags
 }
 
+locals {
+  ip_access_list_entries = var.ip_access_list
+  ip_access_list_enabled = length(var.ip_access_list) > 0
+}
+
+module "ip_access_list" {
+  source = "./modules/ip_access_list"
+  count  = local.ip_access_list_enabled ? 1 : 0
+
+  project_id = mongodbatlas_project.this.id
+  entries    = local.ip_access_list_entries
+}
+
 data "mongodbatlas_project" "this" {
   project_id = mongodbatlas_project.this.id
 
