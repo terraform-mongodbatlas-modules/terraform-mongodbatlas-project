@@ -2,7 +2,8 @@
 
 # === OK_EDIT: path-sync header ===
 # Module-specific configuration
-PLAN_TEST_FILES := "-filter=tests/plan_auto_scaling.tftest.hcl -filter=tests/plan_regions.tftest.hcl -filter=tests/plan_replication_spec.tftest.hcl -filter=tests/plan_geosharded_multi_shard.tftest.hcl -filter=tests/plan_sharded.tftest.hcl"
+# No plan tests yet - add filters here when tests are created
+PLAN_TEST_FILES := ""
 
 # === DO_NOT_EDIT: path-sync standard ===
 set dotenv-load
