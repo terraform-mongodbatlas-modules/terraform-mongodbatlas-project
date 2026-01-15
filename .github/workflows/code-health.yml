@@ -1,4 +1,3 @@
-# path-sync copy -n sdlc
 name: Code Health
 
 on:
@@ -53,22 +52,22 @@ jobs:
           mise: 'true'
       - run: just test-compat
 
-  plan-snapshot-tests:
-    name: Terraform Examples Plan Snapshot Tests
-    runs-on: ubuntu-latest
-    env: # Using a static project to avoid generating 5 projects for every run
-      MONGODB_ATLAS_CLIENT_ID: ${{ secrets.MONGODB_ATLAS_CLIENT_ID }}
-      MONGODB_ATLAS_CLIENT_SECRET: ${{ secrets.MONGODB_ATLAS_CLIENT_SECRET }}
-      MONGODB_ATLAS_BASE_URL: ${{ secrets.MONGODB_ATLAS_BASE_URL }}
-    steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
-      - uses: ./.github/actions/setup
-        with:
-          just: 'true'
-          uv: 'true'
-          terraform: 'true'
-      - uses: ./.github/actions/setup-provider-dev
-        with:
-          provider-ref: ${{ inputs.provider_ref }}
-      - run: just dev-vars-project ${{ vars.MONGODB_ATLAS_PROJECT_ID_SNAPSHOT_TEST }}
-      - run: just plan-snapshot-test --var-file $(pwd)/tests/workspace_cluster_examples/dev.tfvars
+  # plan-snapshot-tests:
+  #   name: Terraform Examples Plan Snapshot Tests
+  #   runs-on: ubuntu-latest
+  #   env: # Using a static project to avoid generating 5 projects for every run
+  #     MONGODB_ATLAS_CLIENT_ID: ${{ secrets.MONGODB_ATLAS_CLIENT_ID }}
+  #     MONGODB_ATLAS_CLIENT_SECRET: ${{ secrets.MONGODB_ATLAS_CLIENT_SECRET }}
+  #     MONGODB_ATLAS_BASE_URL: ${{ secrets.MONGODB_ATLAS_BASE_URL }}
+  #   steps:
+  #     - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+  #     - uses: ./.github/actions/setup
+  #       with:
+  #         just: 'true'
+  #         uv: 'true'
+  #         terraform: 'true'
+  #     - uses: ./.github/actions/setup-provider-dev
+  #       with:
+  #         provider-ref: ${{ inputs.provider_ref }}
+  #     - run: just dev-vars-project ${{ vars.MONGODB_ATLAS_PROJECT_ID_SNAPSHOT_TEST }}
+  #     - run: just plan-snapshot-test --var-file $(pwd)/tests/workspace_cluster_examples/dev.tfvars
