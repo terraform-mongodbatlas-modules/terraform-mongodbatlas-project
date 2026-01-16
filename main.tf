@@ -43,6 +43,6 @@ data "mongodbatlas_project" "this" {
 
   depends_on = [
     mongodbatlas_project.this,
-    module.ip_access_list  # required because limits such as "atlas.project.security.networkAccess.entries" may change when ip access list changes
+    module.ip_access_list # required because limits such as "atlas.project.security.networkAccess.entries" may change when ip access list changes
   ]
 }
