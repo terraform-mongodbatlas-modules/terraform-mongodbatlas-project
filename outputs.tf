@@ -42,3 +42,8 @@ output "ip_access_list" {
   description = "Project IP access list entries."
   value       = local.ip_access_list_enabled ? module.ip_access_list[0].entries : []
 }
+
+output "maintenance_window" {
+  description = "Maintenance window configuration if set."
+  value       = local.maintenance_window_configured && local.maintenance_window_enabled && local.maintenance_window_scheduled ? module.maintenance_window[0].maintenance_window : null
+}

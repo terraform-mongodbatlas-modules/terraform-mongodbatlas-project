@@ -42,3 +42,19 @@ run "duplicate_ip_and_cidr_rejected" {
   }
   expect_failures = [var.ip_access_list]
 }
+
+run "maintenance_window_configured" {
+  command = plan
+  variables {
+    maintenance_window = {
+      enabled     = true
+      day_of_week = 7
+      hour_of_day = 3
+      auto_defer  = false
+    }
+  }
+  assert {
+    condition     = length(module.maintenance_window) == 1
+    error_message = "Expected maintenance_window submodule to be instantiated"
+  }
+}

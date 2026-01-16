@@ -21,6 +21,7 @@ This Terraform module creates and manages a MongoDB Atlas Project with configura
 | Name | Source | Version |
 |------|--------|---------|
 | <a name="module_ip_access_list"></a> [ip\_access\_list](#module\_ip\_access\_list) | ./modules/ip_access_list | n/a |
+| <a name="module_maintenance_window"></a> [maintenance\_window](#module\_maintenance\_window) | ./modules/maintenance_window | n/a |
 
 ## Resources
 
@@ -35,6 +36,7 @@ This Terraform module creates and manages a MongoDB Atlas Project with configura
 |------|-------------|------|---------|:--------:|
 | <a name="input_ip_access_list"></a> [ip\_access\_list](#input\_ip\_access\_list) | IP access list entries with optional comments. | <pre>list(object({<br/>    entry   = string<br/>    comment = optional(string)<br/>  }))</pre> | `[]` | no |
 | <a name="input_limits"></a> [limits](#input\_limits) | Optional Atlas project limits keyed by limit name. Limit name is the key, value is the limit value. <br/>For example, <br/>limits = {<br/>  "atlas.project.deployment.clusters" = 100<br/>  } | `map(number)` | `{}` | no |
+| <a name="input_maintenance_window"></a> [maintenance\_window](#input\_maintenance\_window) | Maintenance window configuration for the Atlas project. | <pre>object({<br/>    enabled                 = optional(bool)<br/>    day_of_week             = optional(number)<br/>    hour_of_day             = optional(number)<br/>    defer                   = optional(bool)<br/>    auto_defer              = optional(bool)<br/>    auto_defer_once_enabled = optional(bool)<br/>    protected_hours = optional(object({<br/>      start_hour_of_day = number<br/>      end_hour_of_day   = number<br/>    }))<br/>  })</pre> | `{}` | no |
 | <a name="input_name"></a> [name](#input\_name) | The name of the MongoDB Atlas project. | `string` | n/a | yes |
 | <a name="input_org_id"></a> [org\_id](#input\_org\_id) | The ID of the MongoDB Atlas organization in which to create the project. | `string` | n/a | yes |
 | <a name="input_project_owner_id"></a> [project\_owner\_id](#input\_project\_owner\_id) | Unique 24-hexadecimal digit string that identifies the Atlas user account to be granted the Project Owner role on the specified project. | `string` | `null` | no |
@@ -48,6 +50,7 @@ This Terraform module creates and manages a MongoDB Atlas Project with configura
 | Name | Description |
 |------|-------------|
 | <a name="output_ip_access_list"></a> [ip\_access\_list](#output\_ip\_access\_list) | Project IP access list entries. |
+| <a name="output_maintenance_window"></a> [maintenance\_window](#output\_maintenance\_window) | Maintenance window configuration if set. |
 | <a name="output_project"></a> [project](#output\_project) | MongoDB Atlas project details |
 | <a name="output_project_limits"></a> [project\_limits](#output\_project\_limits) | All project limits returned by Atlas for the project. Limit name is the key, value is a map of limit details. |
 | <a name="output_project_settings"></a> [project\_settings](#output\_project\_settings) | All project settings returned by Atlas for the project |

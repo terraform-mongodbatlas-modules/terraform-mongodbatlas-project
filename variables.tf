@@ -77,6 +77,34 @@ variable "ip_access_list" {
   }
 }
 
+variable "maintenance_window" {
+  description = "Maintenance window configuration for the Atlas project."
+  type = object({
+    enabled                 = optional(bool)
+    day_of_week             = number
+    hour_of_day             = number
+    defer                   = optional(bool)
+    auto_defer              = optional(bool)
+    auto_defer_once_enabled = optional(bool)
+    protected_hours = optional(object({
+      start_hour_of_day = number
+      end_hour_of_day   = number
+    }))
+  })
+  default = null
+
+  validation {
+    condition = (
+      var.maintenance_window == null ||
+      !coalesce(var.maintenance_window.enabled, true) ||
+      (var.maintenance_window.day_of_week != null && var.maintenance_window.hour_of_day != null)
+    )
+    error_message = "When maintenance_window.enabled is true, day_of_week and hour_of_day must both be set."
+  }
+
+  # Range validation handled by provider; keep only structural checks here.
+}
+
 variable "with_default_alerts_settings" {
   type        = bool
   description = "Flag that indicates whether to create the project with default alert settings."

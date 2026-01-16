@@ -28,6 +28,10 @@ resource "mongodbatlas_project" "this" {
 locals {
   ip_access_list_entries = var.ip_access_list
   ip_access_list_enabled = length(var.ip_access_list) > 0
+
+  maintenance_window_configured = var.maintenance_window != null
+  maintenance_window_enabled    = var.maintenance_window == null ? false : coalesce(var.maintenance_window.enabled, true)
+  maintenance_window_scheduled  = var.maintenance_window != null
 }
 
 module "ip_access_list" {
@@ -38,11 +42,25 @@ module "ip_access_list" {
   entries    = local.ip_access_list_entries
 }
 
+module "maintenance_window" {
+  source = "./modules/maintenance_window"
+  count  = (local.maintenance_window_configured && local.maintenance_window_enabled && local.maintenance_window_scheduled) ? 1 : 0
+
+  project_id              = mongodbatlas_project.this.id
+  day_of_week             = var.maintenance_window != null ? var.maintenance_window.day_of_week : null
+  hour_of_day             = var.maintenance_window != null ? var.maintenance_window.hour_of_day : null
+  defer                   = try(var.maintenance_window.defer, false)
+  auto_defer              = try(var.maintenance_window.auto_defer, false)
+  auto_defer_once_enabled = try(var.maintenance_window.auto_defer_once_enabled, false)
+  protected_hours         = try(var.maintenance_window.protected_hours, null)
+}
+
 data "mongodbatlas_project" "this" {
   project_id = mongodbatlas_project.this.id
 
   depends_on = [
     mongodbatlas_project.this,
-    module.ip_access_list # required because limits such as "atlas.project.security.networkAccess.entries" may change when ip access list changes
+    module.ip_access_list, # required because limits such as "atlas.project.security.networkAccess.entries" may change when ip access list changes
+    module.maintenance_window
   ]
 }
