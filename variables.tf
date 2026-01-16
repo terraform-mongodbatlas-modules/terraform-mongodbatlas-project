@@ -101,8 +101,6 @@ variable "maintenance_window" {
     )
     error_message = "When maintenance_window.enabled is true, day_of_week and hour_of_day must both be set."
   }
-
-  # Range validation handled by provider; keep only structural checks here.
 }
 
 variable "with_default_alerts_settings" {
