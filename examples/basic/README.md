@@ -1,6 +1,6 @@
 # Basic MongoDB Atlas Project Example
 
-This example demonstrates creating a MongoDB Atlas project with project settings, limits, and tags.
+This example demonstrates creating a MongoDB Atlas project with project settings, limits, IP access list entries, and tags.
 
 ## Prerequisites
 
@@ -13,9 +13,12 @@ This example demonstrates creating a MongoDB Atlas project with project settings
 
 This example creates a MongoDB Atlas project with:
 - **Project Settings**: Extended storage sizes enabled
-- **Project Limits**: 
+- **Project Limits**:
   - Maximum 50 clusters
   - Maximum 25 custom database access roles
+- **IP Access List**:
+  - One CIDR block entry with a comment
+  - One IP address entry
 - **Tags**: Environment and management tags
 
 ## Usage
@@ -66,6 +69,23 @@ limits = {
 ```
 Sets maximum limits for clusters and custom roles to control resource usage.
 
+### IP Access List
+```hcl
+ip_access_list = [
+  {
+    entry   = "203.0.113.0/24"
+    comment = "Office VPN"
+  },
+  {
+    entry = "198.51.100.10"
+  },
+  {
+    entry = "sg-0123456789abcdef0"
+  }
+]
+```
+Each entry can be a CIDR block, IP address, or AWS security group ID. Comments are optional.
+
 ### Tags
 ```hcl
 tags = {
@@ -86,4 +106,4 @@ Tags help organize and identify the `mongodbatlas_project` resource.
 
 | Name | Description |
 |------|-------------|
-| atlas_project | Complete MongoDB Atlas project details including id, name, settings, and limits |
+| atlas_project | Complete MongoDB Atlas project details including id, name, settings, limits, and IP access list |

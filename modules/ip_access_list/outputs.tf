@@ -9,8 +9,7 @@ output "entries" {
       ip_address         = try(entry.ip_address, null)
       aws_security_group = try(entry.aws_security_group, null)
 
-      comment           = try(entry.comment, null)
-      delete_after_date = try(entry.delete_after_date, null)
+      comment = try(entry.comment, null)
     }
   ]
 }

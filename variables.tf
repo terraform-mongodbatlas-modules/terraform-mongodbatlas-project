@@ -54,9 +54,14 @@ variable "ip_access_list" {
 
   validation {
     condition = length(var.ip_access_list) == length(distinct([
-      for entry in var.ip_access_list : trimspace(entry.entry)
+      for entry in var.ip_access_list : (
+        can(cidrhost(entry.entry, 0)) ? "${cidrhost(entry.entry, 0)}/${split("/", entry.entry)[1]}" :
+        can(cidrhost("${entry.entry}/32", 0)) ? "${cidrhost("${entry.entry}/32", 0)}/32" :
+        can(cidrhost("${entry.entry}/128", 0)) ? "${cidrhost("${entry.entry}/128", 0)}/128" :
+        lower(trimspace(entry.entry))
+      )
     ]))
-    error_message = "ip_access_list.entry values must be unique."
+    error_message = "ip_access_list.entry values must be unique (IP and CIDR equivalents are considered duplicates)."
   }
 
   validation {
