@@ -16,18 +16,8 @@ module "atlas_project" {
   }
 
   ip_access_list = [
-    {
-      entry   = "203.0.113.0/24"
-      comment = "Office VPN"
-    },
-    {
-      entry   = "198.51.100.10"
-      comment = "Admin workstation"
-    },
-    {
-      entry   = "sg-0123456789abcdef0"
-      comment = "AWS security group"
-    }
+    { entry = "203.0.113.0/24", comment = "Office VPN" },
+    { entry = "198.51.100.10", comment = "Admin workstation" }
   ]
 
   maintenance_window = {
@@ -35,6 +25,11 @@ module "atlas_project" {
     day_of_week = 6
     hour_of_day = 2
     auto_defer  = false
+
+    protected_hours = {
+      start_hour_of_day = 18
+      end_hour_of_day   = 23
+    }
   }
 
   tags = {
