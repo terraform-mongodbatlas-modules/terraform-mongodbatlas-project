@@ -76,24 +76,24 @@ variable "ip_access_list" {
 variable "maintenance_window" {
   description = "Maintenance window configuration for the Atlas project."
   type = object({
-    enabled                 = optional(bool)
+    enabled                 = bool
     day_of_week             = optional(number)
     hour_of_day             = optional(number)
-    defer                   = optional(bool)
-    auto_defer              = optional(bool)
-    auto_defer_once_enabled = optional(bool)
+    defer                   = optional(bool, false)
+    auto_defer              = optional(bool, false)
+    auto_defer_once_enabled = optional(bool, false)
     protected_hours = optional(object({
       start_hour_of_day = number
       end_hour_of_day   = number
     }))
   })
-  default = null
+  default  = { enabled = false }
+  nullable = false
 
   validation {
     condition = (
-      var.maintenance_window == null ||
-      !coalesce(try(var.maintenance_window.enabled, null), true) ||
-      (try(var.maintenance_window.day_of_week, null) != null && try(var.maintenance_window.hour_of_day, null) != null)
+      !var.maintenance_window.enabled ||
+      (var.maintenance_window.day_of_week != null && var.maintenance_window.hour_of_day != null)
     )
     error_message = "When maintenance_window.enabled is true, day_of_week and hour_of_day must both be set."
   }

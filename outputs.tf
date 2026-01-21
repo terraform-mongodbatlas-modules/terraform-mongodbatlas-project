@@ -14,6 +14,6 @@ output "cluster_count" {
 }
 
 output "maintenance_window" {
-  description = "Maintenance window configuration if set."
-  value       = local.maintenance_window_configured && local.maintenance_window_enabled && local.maintenance_window_scheduled ? module.maintenance_window[0].maintenance_window : null
+  description = "Maintenance window details."
+  value       = length(module.maintenance_window) > 0 ? module.maintenance_window[0].maintenance_window : null
 }

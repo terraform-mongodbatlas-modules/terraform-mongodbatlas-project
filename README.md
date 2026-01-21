@@ -231,6 +231,10 @@ Description: MongoDB Atlas project ID.
 
 ### <a name="output_maintenance_window"></a> [maintenance\_window](#output\_maintenance\_window)
 
+Description: Maintenance window computed details.
+
+### <a name="output_maintenance_window"></a> [maintenance\_window](#output\_maintenance\_window)
+
 Description: Maintenance window configuration if set.
 <!-- END_TF_DOCS -->
 
