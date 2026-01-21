@@ -53,15 +53,15 @@ Run 'just docs' to regenerate.
 
 The following requirements are needed by this module:
 
-- <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) (>= 1.0)
+- <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) (>= 1.9)
 
-- <a name="requirement_mongodbatlas"></a> [mongodbatlas](#requirement\_mongodbatlas) (~> 2.0)
+- <a name="requirement_mongodbatlas"></a> [mongodbatlas](#requirement\_mongodbatlas) (>= 2.0)
 
 ## Providers
 
 The following providers are used by this module:
 
-- <a name="provider_mongodbatlas"></a> [mongodbatlas](#provider\_mongodbatlas) (~> 2.0)
+- <a name="provider_mongodbatlas"></a> [mongodbatlas](#provider\_mongodbatlas) (>= 2.0)
 
 ## Resources
 
@@ -158,6 +158,29 @@ Default: `{}`
 
 ## Optional Variables
 
+### ip_access_list
+
+IP access list entries for the Atlas project. Each "entry" maps to one of: cidrBlock, ipAddress, or
+awsSecurityGroup.
+
+Example:
+ip_access_list = [
+  { entry = "203.0.113.0/24", comment = "Office VPN" },
+  { entry = "198.51.100.10" },
+  { entry = "sg-0123456789abcdef0" }
+]
+
+Type:
+
+```hcl
+list(object({
+  entry   = string
+  comment = optional(string)
+}))
+```
+
+Default: `[]`
+
 ### tags
 
 Map of tags to assign to the project.
@@ -171,6 +194,10 @@ Default: `{}`
 ## Outputs
 
 The following outputs are exported:
+
+### <a name="output_ip_access_list"></a> [ip\_access\_list](#output\_ip\_access\_list)
+
+Description: Project IP access list entries.
 
 ### <a name="output_project"></a> [project](#output\_project)
 
