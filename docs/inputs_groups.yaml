@@ -1,0 +1,34 @@
+sections:
+  - id: required
+    title: "Required Variables"
+    level: 2
+    match:
+      names:
+        - name
+        - org_id
+
+  - id: project_settings
+    title: "Project Settings"
+    level: 2
+    description: |
+      Configure Atlas project feature settings.
+    match:
+      names:
+        - project_settings
+        - project_owner_id
+        - with_default_alerts_settings
+        - region_usage_restrictions
+
+  - id: limits
+    title: "Project Limits"
+    level: 2
+    description: |
+      Configure project resource limits. See the [Atlas project limits documentation](https://www.mongodb.com/docs/atlas/reference/api-resources-spec/v2/#tag/Projects/operation/setProjectLimit) for details.
+    match:
+      names:
+        - limits
+
+  - id: optional
+    title: "Optional Variables"
+    level: 2
+    is_default: true

@@ -1,0 +1,161 @@
+# path-sync copy -n sdlc
+name: Release
+run-name: >-
+  Release ${{ inputs.version }}
+  ${{ inputs.skip-pre-release-checks && '(skip-checks)' || '' }}
+  ${{ inputs.skip-release-tag && '(skip-tag)' || '' }}
+  ${{ inputs.skip-release-github && '(skip-github)' || '' }}
+  ${{ inputs.skip-post-release-revert && '(skip-revert)' || '' }}
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Release version (e.g., v1.0.0)'
+        required: true
+        type: string
+      skip-pre-release-checks:
+        description: 'Skip pre-release validation (can be useful in forks, that always updates the registry source in check-docs target)'
+        required: false
+        type: boolean
+        default: false
+      skip-release-tag:
+        description: 'Skip creating the changelog commit, release commit, and tag (useful to re-run other steps after manual fixes)'
+        required: false
+        type: boolean
+        default: false
+      skip-release-github:
+        description: 'Skip creating GitHub release (useful if release was already created manually)'
+        required: false
+        type: boolean
+        default: false
+      skip-post-release-revert:
+        description: 'Skip reverting release commit on main (useful if revert was already done manually)'
+        required: false
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+env:
+  # Use APIX_BOT_PAT if available (bypasses branch rulesets), otherwise fall back to GITHUB_TOKEN
+  GH_TOKEN: ${{ secrets.APIX_BOT_PAT || github.token }}
+
+jobs:
+  pre-release-checks:
+    if: ${{ !inputs.skip-pre-release-checks }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          fetch-depth: 0
+          ref: main
+      - uses: ./.github/actions/setup
+        with:
+          just: 'true'
+          terraform: 'true'
+          docs: 'true'
+      - name: Pre-release validation
+        env:
+          RELEASE_VERSION: ${{ inputs.version }}
+        run: just check-release-ready "$RELEASE_VERSION"
+
+  release-tag:
+    needs: pre-release-checks
+    if: ${{ always() && !inputs.skip-release-tag && (needs.pre-release-checks.result == 'success' || needs.pre-release-checks.result == 'skipped') }}
+    runs-on: ubuntu-latest
+    outputs:
+      release_commit_sha: ${{ steps.create_commits.outputs.release_commit_sha }}
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          fetch-depth: 0
+          ref: main
+          token: ${{ env.GH_TOKEN }}
+      - uses: ./.github/actions/setup
+        with:
+          just: 'true'
+          terraform: 'true'
+          docs: 'true'
+      - name: Configure Git
+        run: |
+          if [[ -n "${{ secrets.APIX_BOT_PAT }}" ]]; then
+            git config user.name "apix-bot[bot]"
+            git config user.email "apix-bot[bot]@users.noreply.github.com"
+          else
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+          fi
+      - name: Create release commits and tag
+        id: create_commits
+        env:
+          RELEASE_VERSION: ${{ inputs.version }}
+        run: |
+          just release-commit "$RELEASE_VERSION"
+          echo "release_commit_sha=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
+      - name: Push commits and tag
+        env:
+          RELEASE_VERSION: ${{ inputs.version }}
+        run: git push origin main "$RELEASE_VERSION"
+
+  release-github:
+    needs: release-tag
+    if: ${{ always() && !inputs.skip-release-github && (needs.release-tag.result == 'success' || needs.release-tag.result == 'skipped') }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          fetch-depth: 0
+          ref: ${{ inputs.version }}
+      - uses: ./.github/actions/setup
+        with:
+          just: 'true'
+          uv: 'true'
+      - name: Generate release body
+        id: release_body
+        env:
+          RELEASE_VERSION: ${{ inputs.version }}
+        run: |
+          BODY=$(just generate-release-body "$RELEASE_VERSION")
+          echo "body<<EOF" >> $GITHUB_OUTPUT
+          echo "$BODY" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@7b4da11513bf3f43f9999e90eabced41ab8bb048
+        with:
+          tag_name: ${{ inputs.version }}
+          name: ${{ inputs.version }}
+          body: ${{ steps.release_body.outputs.body }}
+          draft: false
+          prerelease: false
+
+  # Note: Runs in parallel with release-github for speed. This is safe because:
+  # - release-github checks out the tag (immutable)
+  # - post-release-revert operates on main branch
+  # Uses release_commit_sha to avoid race conditions if PRs are merged during release
+  # Only runs if release-tag succeeded (no point reverting if no commit was created)
+  post-release-revert:
+    needs: release-tag
+    if: ${{ !inputs.skip-post-release-revert && needs.release-tag.result == 'success' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          fetch-depth: 0
+          ref: main
+          token: ${{ env.GH_TOKEN }}
+      - name: Configure Git
+        run: |
+          if [[ -n "${{ secrets.APIX_BOT_PAT }}" ]]; then
+            git config user.name "apix-bot[bot]"
+            git config user.email "apix-bot[bot]@users.noreply.github.com"
+          else
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+          fi
+      - name: Pull latest main with release commits
+        run: git pull origin main
+      - name: Revert release commit
+        run: git revert ${{ needs.release-tag.outputs.release_commit_sha }} --no-edit
+      - name: Push main with changelog and revert
+        run: git push origin main
