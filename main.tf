@@ -54,12 +54,3 @@ module "maintenance_window" {
   auto_defer_once_enabled = try(var.maintenance_window.auto_defer_once_enabled, false)
   protected_hours         = try(var.maintenance_window.protected_hours, null)
 }
-
-data "mongodbatlas_project" "this" {
-  project_id = mongodbatlas_project.this.id
-
-  depends_on = [
-    mongodbatlas_project.this,
-    module.ip_access_list, # required because limits such as "atlas.project.security.networkAccess.entries" may change when ip access list changes
-  ]
-}

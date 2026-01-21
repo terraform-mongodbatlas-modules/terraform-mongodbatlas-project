@@ -180,6 +180,29 @@ list(object({
 
 Default: `[]`
 
+### maintenance_window
+
+Maintenance window configuration for the Atlas project.
+
+Type:
+
+```hcl
+object({
+  enabled                 = optional(bool)
+  day_of_week             = number
+  hour_of_day             = number
+  defer                   = optional(bool)
+  auto_defer              = optional(bool)
+  auto_defer_once_enabled = optional(bool)
+  protected_hours = optional(object({
+    start_hour_of_day = number
+    end_hour_of_day   = number
+  }))
+})
+```
+
+Default: `null`
+
 ### tags
 
 Map of tags to assign to the project.
@@ -205,6 +228,10 @@ Description: MongoDB Atlas project creation time (RFC3339).
 ### <a name="output_id"></a> [id](#output\_id)
 
 Description: MongoDB Atlas project ID.
+
+### <a name="output_maintenance_window"></a> [maintenance\_window](#output\_maintenance\_window)
+
+Description: Maintenance window configuration if set.
 <!-- END_TF_DOCS -->
 
 ## License
