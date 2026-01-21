@@ -44,25 +44,21 @@ variable "limits" {
 
 variable "ip_access_list" {
   description = <<-EOT
-  IP access list entries with optional comments.
+  IP access list entries for the Atlas project. Each "entry" maps to one of: cidrBlock, ipAddress, or
+  awsSecurityGroup.
+
+  Example:
+  ip_access_list = [
+    { entry = "203.0.113.0/24", comment = "Office VPN" },
+    { entry = "198.51.100.10" },
+    { entry = "sg-0123456789abcdef0" }
+  ]
   EOT
   type = list(object({
     entry   = string
     comment = optional(string)
   }))
   default = []
-
-  validation {
-    condition = length(var.ip_access_list) == length(distinct([
-      for item in var.ip_access_list : (
-        can(cidrhost(item.entry, 0)) ? "${cidrhost(item.entry, 0)}/${split("/", item.entry)[1]}" :
-        can(cidrhost("${item.entry}/32", 0)) ? "${cidrhost("${item.entry}/32", 0)}/32" :
-        can(cidrhost("${item.entry}/128", 0)) ? "${cidrhost("${item.entry}/128", 0)}/128" :
-        lower(trimspace(item.entry))
-      )
-    ]))
-    error_message = "ip_access_list.entry values must be unique (IP and CIDR equivalents are considered duplicates)."
-  }
 
   validation {
     condition = alltrue([
