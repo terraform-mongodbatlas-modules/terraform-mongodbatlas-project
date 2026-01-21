@@ -68,7 +68,6 @@ The following providers are used by this module:
 The following resources are used by this module:
 
 - [mongodbatlas_project.this](https://registry.terraform.io/providers/mongodb/mongodbatlas/latest/docs/resources/project) (resource)
-- [mongodbatlas_project.this](https://registry.terraform.io/providers/mongodb/mongodbatlas/latest/docs/data-sources/project) (data source)
 
 <!-- BEGIN_TF_INPUTS_RAW -->
 <!-- @generated
