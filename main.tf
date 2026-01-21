@@ -29,8 +29,7 @@ locals {
   ip_access_list_entries = var.ip_access_list
   ip_access_list_enabled = length(var.ip_access_list) > 0
 
-  maintenance_window_enabled   = var.maintenance_window.enabled
-  maintenance_window_scheduled = var.maintenance_window.day_of_week != null && var.maintenance_window.hour_of_day != null
+  maintenance_window_enabled = var.maintenance_window.enabled
 }
 
 module "ip_access_list" {
@@ -43,7 +42,7 @@ module "ip_access_list" {
 
 module "maintenance_window" {
   source = "./modules/maintenance_window"
-  count  = (local.maintenance_window_enabled && local.maintenance_window_scheduled) ? 1 : 0
+  count  = local.maintenance_window_enabled ? 1 : 0
 
   project_id              = mongodbatlas_project.this.id
   day_of_week             = var.maintenance_window.day_of_week
