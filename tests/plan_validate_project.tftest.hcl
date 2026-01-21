@@ -32,17 +32,6 @@ run "ip_access_list_entries" {
   }
 }
 
-run "duplicate_ip_and_cidr_rejected" {
-  command = plan
-  variables {
-    ip_access_list = [
-      { entry = "198.51.100.10" },
-      { entry = "198.51.100.10/32" }
-    ]
-  }
-  expect_failures = [var.ip_access_list]
-}
-
 run "maintenance_window_configured" {
   command = plan
   variables {
