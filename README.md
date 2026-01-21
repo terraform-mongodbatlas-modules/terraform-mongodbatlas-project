@@ -195,21 +195,17 @@ Default: `{}`
 
 The following outputs are exported:
 
-### <a name="output_ip_access_list"></a> [ip\_access\_list](#output\_ip\_access\_list)
+### <a name="output_cluster_count"></a> [cluster\_count](#output\_cluster\_count)
 
-Description: Project IP access list entries.
+Description: MongoDB Atlas project cluster count.
 
-### <a name="output_project"></a> [project](#output\_project)
+### <a name="output_created_at"></a> [created\_at](#output\_created\_at)
 
-Description: MongoDB Atlas project details
+Description: MongoDB Atlas project creation time (RFC3339).
 
-### <a name="output_project_limits"></a> [project\_limits](#output\_project\_limits)
+### <a name="output_id"></a> [id](#output\_id)
 
-Description: All project limits returned by Atlas for the project. Limit name is the key, value is a map of limit details.
-
-### <a name="output_project_settings"></a> [project\_settings](#output\_project\_settings)
-
-Description: All project settings returned by Atlas for the project
+Description: MongoDB Atlas project ID.
 <!-- END_TF_DOCS -->
 
 ## License
