@@ -77,8 +77,8 @@ variable "maintenance_window" {
   description = "Maintenance window configuration for the Atlas project."
   type = object({
     enabled                 = optional(bool)
-    day_of_week             = number
-    hour_of_day             = number
+    day_of_week             = optional(number)
+    hour_of_day             = optional(number)
     defer                   = optional(bool)
     auto_defer              = optional(bool)
     auto_defer_once_enabled = optional(bool)
@@ -92,8 +92,8 @@ variable "maintenance_window" {
   validation {
     condition = (
       var.maintenance_window == null ||
-      !coalesce(var.maintenance_window.enabled, true) ||
-      (var.maintenance_window.day_of_week != null && var.maintenance_window.hour_of_day != null)
+      !coalesce(try(var.maintenance_window.enabled, null), true) ||
+      (try(var.maintenance_window.day_of_week, null) != null && try(var.maintenance_window.hour_of_day, null) != null)
     )
     error_message = "When maintenance_window.enabled is true, day_of_week and hour_of_day must both be set."
   }

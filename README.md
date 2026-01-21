@@ -189,8 +189,8 @@ Type:
 ```hcl
 object({
   enabled                 = optional(bool)
-  day_of_week             = number
-  hour_of_day             = number
+  day_of_week             = optional(number)
+  hour_of_day             = optional(number)
   defer                   = optional(bool)
   auto_defer              = optional(bool)
   auto_defer_once_enabled = optional(bool)
