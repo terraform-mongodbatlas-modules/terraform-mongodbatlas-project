@@ -74,7 +74,13 @@ variable "ip_access_list" {
 }
 
 variable "maintenance_window" {
-  description = "Maintenance window configuration for the Atlas project."
+  description = <<-EOT
+  Maintenance window configuration for the Atlas project.
+  - Typically, you don't need to manually configure a maintenance window; Atlas performs maintenance automatically in a rolling manner to preserve continuous availability for resilient applications.
+  https://www.mongodb.com/docs/atlas/tutorial/cluster-maintenance-window/
+  - To temporarily defer maintenance, use the Atlas CLI/API. See `atlas maintenanceWindows defer` documentation.
+  https://www.mongodb.com/docs/atlas/cli/current/command/atlas-maintenanceWindows-defer/#atlas-maintenancewindows-defer
+  EOT
   type = object({
     enabled                 = bool
     day_of_week             = optional(number)

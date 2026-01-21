@@ -183,6 +183,10 @@ Default: `[]`
 ### maintenance_window
 
 Maintenance window configuration for the Atlas project.
+- Typically, you don't need to manually configure a maintenance window; Atlas performs maintenance automatically in a rolling manner to preserve continuous availability for resilient applications.
+https://www.mongodb.com/docs/atlas/tutorial/cluster-maintenance-window/
+- To temporarily defer maintenance, use the Atlas CLI/API. See `atlas maintenanceWindows defer` documentation.
+https://www.mongodb.com/docs/atlas/cli/current/command/atlas-maintenanceWindows-defer/#atlas-maintenancewindows-defer
 
 Type:
 
