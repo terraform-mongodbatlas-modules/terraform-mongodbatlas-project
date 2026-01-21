@@ -48,7 +48,6 @@ module "maintenance_window" {
   project_id              = mongodbatlas_project.this.id
   day_of_week             = var.maintenance_window.day_of_week
   hour_of_day             = var.maintenance_window.hour_of_day
-  defer                   = var.maintenance_window.defer
   auto_defer              = var.maintenance_window.auto_defer
   auto_defer_once_enabled = var.maintenance_window.auto_defer_once_enabled
   protected_hours         = var.maintenance_window.protected_hours

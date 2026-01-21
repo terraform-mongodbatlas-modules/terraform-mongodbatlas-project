@@ -13,12 +13,6 @@ variable "hour_of_day" {
   description = "Hour of day in UTC for maintenance window (0-23)."
 }
 
-variable "defer" {
-  type        = bool
-  description = "Whether to defer maintenance to the next window."
-  default     = false
-}
-
 variable "auto_defer" {
   type        = bool
   description = "Whether Atlas can automatically defer maintenance beyond the scheduled window."

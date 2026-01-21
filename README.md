@@ -188,12 +188,11 @@ Type:
 
 ```hcl
 object({
-  enabled                 = optional(bool)
+  enabled                 = bool
   day_of_week             = optional(number)
   hour_of_day             = optional(number)
-  defer                   = optional(bool)
-  auto_defer              = optional(bool)
-  auto_defer_once_enabled = optional(bool)
+  auto_defer              = optional(bool, false)
+  auto_defer_once_enabled = optional(bool, false)
   protected_hours = optional(object({
     start_hour_of_day = number
     end_hour_of_day   = number
@@ -201,7 +200,13 @@ object({
 })
 ```
 
-Default: `null`
+Default:
+
+```json
+{
+  "enabled": false
+}
+```
 
 ### tags
 
@@ -231,11 +236,7 @@ Description: MongoDB Atlas project ID.
 
 ### <a name="output_maintenance_window"></a> [maintenance\_window](#output\_maintenance\_window)
 
-Description: Maintenance window computed details.
-
-### <a name="output_maintenance_window"></a> [maintenance\_window](#output\_maintenance\_window)
-
-Description: Maintenance window configuration if set.
+Description: Maintenance window details.
 <!-- END_TF_DOCS -->
 
 ## License

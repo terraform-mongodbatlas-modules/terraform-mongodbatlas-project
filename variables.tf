@@ -79,7 +79,6 @@ variable "maintenance_window" {
     enabled                 = bool
     day_of_week             = optional(number)
     hour_of_day             = optional(number)
-    defer                   = optional(bool, false)
     auto_defer              = optional(bool, false)
     auto_defer_once_enabled = optional(bool, false)
     protected_hours = optional(object({
