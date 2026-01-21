@@ -37,12 +37,3 @@ module "ip_access_list" {
   project_id = mongodbatlas_project.this.id
   entries    = local.ip_access_list_entries
 }
-
-data "mongodbatlas_project" "this" {
-  project_id = mongodbatlas_project.this.id
-
-  depends_on = [
-    mongodbatlas_project.this,
-    module.ip_access_list # required because limits such as "atlas.project.security.networkAccess.entries" may change when ip access list changes
-  ]
-}
