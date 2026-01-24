@@ -5,8 +5,13 @@ module "atlas_project" {
   org_id = var.org_id
 
   ip_access_list = [
-    { entry = "203.0.113.0/24", comment = "Office VPN" },
-    { entry = "198.51.100.10" }
+    {
+      source  = "203.0.113.0/24"
+      comment = "Office VPN"
+    },
+    {
+      source = "198.51.100.10"
+    }
   ]
 
   tags = {

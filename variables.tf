@@ -44,18 +44,20 @@ variable "limits" {
 
 variable "ip_access_list" {
   description = <<-EOT
-  IP access list entries for the Atlas project. Each "entry" maps to one of: cidrBlock, ipAddress, or
+  IP access list entries for the Atlas project. Each "source" maps to one of: cidrBlock, ipAddress, or
   awsSecurityGroup.
+  
+  Note: When using AWS security group IDs, the value must be known at plan time. If the ID is created in the same apply, Terraform will fail.
 
   Example:
   ip_access_list = [
-    { entry = "203.0.113.0/24", comment = "Office VPN" },
-    { entry = "198.51.100.10" },
-    { entry = "sg-0123456789abcdef0" }
+    { source = "203.0.113.0/24", comment = "Office VPN" },
+    { source = "198.51.100.10" },
+    { source = "sg-0123456789abcdef0" }
   ]
   EOT
   type = list(object({
-    entry   = string
+    source  = string
     comment = optional(string)
   }))
   default = []
@@ -63,13 +65,13 @@ variable "ip_access_list" {
   validation {
     condition = alltrue([
       for entry in var.ip_access_list : (
-        can(cidrhost(entry.entry, 0)) ||
-        can(regex("^sg-[0-9a-fA-F]+$", entry.entry)) ||
-        can(cidrhost("${entry.entry}/32", 0)) ||
-        can(cidrhost("${entry.entry}/128", 0))
+        can(cidrhost(entry.source, 0)) ||
+        can(regex("^sg-[0-9a-fA-F]+$", entry.source)) ||
+        can(cidrhost("${entry.source}/32", 0)) ||
+        can(cidrhost("${entry.source}/128", 0))
       )
     ])
-    error_message = "ip_access_list.entry values must be valid CIDR blocks, IP addresses, or AWS security group IDs (sg-...)."
+    error_message = "ip_access_list.source values must be valid CIDR blocks, IP addresses, or AWS security group IDs (sg-...)."
   }
 }
 

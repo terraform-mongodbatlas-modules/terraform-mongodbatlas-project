@@ -17,9 +17,10 @@ run "ip_access_list_entries" {
   command = plan
   variables {
     ip_access_list = [
-      { entry = "203.0.113.0/24", comment = "Office VPN" },
-      { entry = "198.51.100.10" },
-      { entry = "sg-0123456789abcdef0" }
+      { source = "203.0.113.0/24", comment = "Office VPN" },
+      { source = "198.51.100.10" },
+      { source = "sg-0123456789abcdef0" },
+      { source = "2001:0db8:0000:0000:0000:0000:0000:0001" }
     ]
   }
   assert {
@@ -27,8 +28,8 @@ run "ip_access_list_entries" {
     error_message = "Expected ip_access_list submodule to be instantiated"
   }
   assert {
-    condition     = length(module.ip_access_list[0].entries) == 3
-    error_message = "Expected three IP access list resources"
+    condition     = length(module.ip_access_list[0].entries) == 4
+    error_message = "Expected four IP access list resources"
   }
 }
 

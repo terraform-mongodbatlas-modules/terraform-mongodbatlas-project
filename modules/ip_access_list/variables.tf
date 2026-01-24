@@ -5,7 +5,7 @@ variable "project_id" {
 
 variable "entries" {
   type = list(object({
-    entry   = string
+    source  = string
     comment = optional(string)
   }))
   description = "IP access list entries to create."
@@ -14,10 +14,10 @@ variable "entries" {
   validation {
     condition = alltrue([
       for entry in var.entries : (
-        can(cidrhost(entry.entry, 0)) ||
-        can(regex("^sg-[0-9a-fA-F]+$", entry.entry)) ||
-        can(cidrhost("${entry.entry}/32", 0)) ||
-        can(cidrhost("${entry.entry}/128", 0))
+        can(cidrhost(entry.source, 0)) ||
+        can(regex("^sg-[0-9a-fA-F]+$", entry.source)) ||
+        can(cidrhost("${entry.source}/32", 0)) ||
+        can(cidrhost("${entry.source}/128", 0))
       )
     ])
     error_message = "Each entry must be a valid CIDR block, IP address, or AWS security group ID (sg-...)."
