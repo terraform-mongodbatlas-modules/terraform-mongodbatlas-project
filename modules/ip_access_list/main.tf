@@ -2,9 +2,9 @@ locals {
   normalized_entries = [
     for list_item in var.entries : {
       source_value = trimspace(list_item.source)
-      comment     = try(list_item.comment, null)
-      is_cidr     = can(cidrhost(trimspace(list_item.source), 0))
-      is_sg       = can(regex("^sg-[0-9a-fA-F]+$", trimspace(list_item.source)))
+      comment      = try(list_item.comment, null)
+      is_cidr      = can(cidrhost(trimspace(list_item.source), 0))
+      is_sg        = can(regex("^sg-[0-9a-fA-F]+$", trimspace(list_item.source)))
     }
   ]
 
