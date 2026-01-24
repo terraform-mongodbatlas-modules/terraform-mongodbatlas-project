@@ -48,3 +48,16 @@ run "maintenance_window_configured" {
     error_message = "Expected maintenance_window submodule to be instantiated"
   }
 }
+
+run "maintenance_window_disabled_default" {
+  command = plan
+  variables {
+    maintenance_window = {
+      enabled = false
+    }
+  }
+  assert {
+    condition     = length(module.maintenance_window) == 0
+    error_message = "Expected maintenance_window submodule to be disabled when enabled is false"
+  }
+}
