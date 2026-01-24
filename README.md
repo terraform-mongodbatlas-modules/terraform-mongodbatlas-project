@@ -159,21 +159,23 @@ Default: `{}`
 
 ### ip_access_list
 
-IP access list entries for the Atlas project. Each "entry" maps to one of: cidrBlock, ipAddress, or
+IP access list entries for the Atlas project. Each "source" maps to one of: cidrBlock, ipAddress, or
 awsSecurityGroup.
+
+Note: When using AWS security group IDs, the value must be known at plan time. If the ID is created in the same apply, Terraform will fail.
 
 Example:
 ip_access_list = [
-  { entry = "203.0.113.0/24", comment = "Office VPN" },
-  { entry = "198.51.100.10" },
-  { entry = "sg-0123456789abcdef0" }
+  { source = "203.0.113.0/24", comment = "Office VPN" },
+  { source = "198.51.100.10" },
+  { source = "sg-0123456789abcdef0" }
 ]
 
 Type:
 
 ```hcl
 list(object({
-  entry   = string
+  source  = string
   comment = optional(string)
 }))
 ```
