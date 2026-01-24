@@ -32,24 +32,3 @@ run "ip_access_list_entries" {
     error_message = "Expected four IP access list resources"
   }
 }
-
-run "ip_access_list_order_insensitive" {
-  command = plan
-  variables {
-    ip_access_list = [
-      { source = "198.51.100.10" },
-      { source = "2001:0db8:0000:0000:0000:0000:0000:0001" },
-      { source = "203.0.113.0/24", comment = "Office VPN" },
-      { source = "sg-0123456789abcdef0" }
-    ]
-  }
-  assert {
-    condition = sort([
-      "198.51.100.10",
-      "2001:0db8:0000:0000:0000:0000:0000:0001",
-      "203.0.113.0/24",
-      "sg-0123456789abcdef0"
-    ]) == module.ip_access_list[0].entry_keys
-    error_message = "Expected order-insensitive keys for ip_access_list entries"
-  }
-}

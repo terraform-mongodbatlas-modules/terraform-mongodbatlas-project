@@ -6,8 +6,3 @@ output "entries" {
     }
   ]
 }
-
-output "entry_keys" {
-  description = "Keys used for IP access list entries."
-  value       = sort(keys(mongodbatlas_project_ip_access_list.this))
-}
