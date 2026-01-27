@@ -1,5 +1,4 @@
 <!-- path-sync copy -n sdlc -->
-<!-- === OK_EDIT: path-sync header === -->
 # Contributing Guides
 
 This directory contains guides for contributors to the terraform-mongodbatlas-cluster module.

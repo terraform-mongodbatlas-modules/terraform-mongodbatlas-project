@@ -19,10 +19,23 @@ class WsVar:
     var_type: str = ""
 
 
+DEFAULT_REDACT_ATTRIBUTES: list[str] = [
+    "secret",
+    "password",
+    "token",
+    "credentials",
+    "private_key",
+    "client_secret",
+    "tenant_id",
+]
+
+
 @dataclass
 class SkipLines:
     substring_attributes: list[str] = field(default_factory=list)
     substring_values: list[str] = field(default_factory=list)
+    redact_attributes: list[str] = field(default_factory=list)
+    use_default_redact: bool = True
 
 
 @dataclass
@@ -32,17 +45,59 @@ class DumpConfig:
 
 @dataclass
 class PlanRegression:
+    """Configuration for a plan regression test.
+
+    Attributes:
+        address: The exact resource address after the example prefix.
+            Must be the full path as it appears in the terraform plan,
+            minus the `module.ex_{example_id}.` prefix.
+
+            For example, if the full plan address is:
+                module.ex_encryption.module.atlas_azure.module.encryption[0].azurerm_role_assignment.key_vault_crypto
+
+            The address should be:
+                module.atlas_azure.module.encryption[0].azurerm_role_assignment.key_vault_crypto
+
+            This ensures clear, unambiguous matching and makes it easy to find
+            resources in the plan output.
+
+        dump: Configuration for how to dump the resource values to YAML.
+    """
+
     address: str
     dump: DumpConfig = field(default_factory=DumpConfig)
 
 
 @dataclass
 class Example:
-    number: int
+    number: int | None = None
+    name: str | None = None
     var_groups: list[str] = field(default_factory=list)
     plan_regressions: list[PlanRegression] = field(default_factory=list)
 
+    def should_use_nested_snapshots(self) -> bool:
+        """Determine if snapshots for this example should use nested directory structure.
+
+        Returns True when there are multiple plan_regressions, indicating snapshots
+        should be organized in subdirectories (e.g., 11/resource1.yaml, 11/resource2.yaml)
+        rather than flat files (e.g., 01_resource.yaml).
+        """
+        return len(self.plan_regressions) > 1
+
+    @property
+    def identifier(self) -> str:
+        if self.name:
+            return self.name
+        if self.number is not None:
+            return f"{self.number:02d}"
+        raise ValueError("Example must have either name or number")
+
     def example_path(self, examples_dir: Path) -> Path:
+        if self.name:
+            path = examples_dir / self.name
+            if not path.exists():
+                raise ValueError(f"Example '{self.name}' not found in {examples_dir}")
+            return path
         for p in examples_dir.iterdir():
             if p.is_dir() and p.name.startswith(f"{self.number:02d}_"):
                 return p
@@ -50,6 +105,8 @@ class Example:
 
     def title_from_dir(self, examples_dir: Path) -> str:
         dir_name = self.example_path(examples_dir).name
+        if self.name:
+            return dir_name.replace("_", " ").title()
         return dir_name.split("_", 1)[1].replace("_", " ").title()
 
 
@@ -58,7 +115,8 @@ class WsConfig:
     examples: list[Example]
     var_groups: dict[str, list[WsVar]]
 
-    def skip_attributes(self) -> list[str]:
+    def redact_var_attributes(self) -> list[str]:
+        """Variable names that should be redacted (not skipped) in snapshots."""
         return [v.name for vs in self.var_groups.values() for v in vs]
 
     def exposed_vars(self) -> list[WsVar]:
@@ -78,7 +136,7 @@ class WsConfig:
             for var in self.var_groups.get(group_name, []):
                 if var.name in seen:
                     raise ValueError(
-                        f"Duplicate variable '{var.name}' in example {example.number:02d}: "
+                        f"Duplicate variable '{var.name}' in example {example.identifier}: "
                         f"defined in both '{seen[var.name]}' and '{group_name}'"
                     )
                 seen[var.name] = group_name
@@ -110,7 +168,8 @@ def parse_ws_config(ws_yaml_path: Path) -> WsConfig:
         ]
         examples.append(
             Example(
-                number=ex["number"],
+                number=ex.get("number"),
+                name=ex.get("name"),
                 var_groups=ex.get("var_groups", []),
                 plan_regressions=regressions,
             )
@@ -124,6 +183,8 @@ def _parse_dump_config(data: dict[str, Any]) -> DumpConfig:
         skip_lines=SkipLines(
             substring_attributes=skip.get("substring_attributes", []),
             substring_values=skip.get("substring_values", []),
+            redact_attributes=skip.get("redact_attributes", []),
+            use_default_redact=skip.get("use_default_redact", True),
         )
     )
 
