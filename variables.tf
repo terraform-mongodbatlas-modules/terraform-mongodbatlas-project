@@ -58,12 +58,12 @@ variable "ip_access_list" {
     { source = "sg-0123456789abcdef0" }
   ]`
   EOT
-  
+
   type = list(object({
     source  = string
     comment = optional(string)
   }))
-  
+
   default = []
 
   validation {

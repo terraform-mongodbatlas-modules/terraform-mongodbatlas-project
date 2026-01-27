@@ -79,13 +79,13 @@ Run 'just docs' to regenerate.
 
 ### name
 
-The name of the MongoDB Atlas project.
+Name of the MongoDB Atlas project.
 
 Type: `string`
 
 ### org_id
 
-The ID of the MongoDB Atlas organization in which to create the project.
+ID of the MongoDB Atlas organization associated with the project.
 
 Type: `string`
 
@@ -115,7 +115,7 @@ Default: `{}`
 
 ### project_owner_id
 
-Unique 24-hexadecimal digit string that identifies the Atlas user account to be granted the Project Owner role on the specified project.
+Unique 24-hexadecimal digit string that identifies the Atlas user account with the Project Owner role on the specified project.
 
 Type: `string`
 
@@ -145,10 +145,11 @@ Configure project resource limits. See the [Atlas project limits documentation](
 ### limits
 
 Optional Atlas project limits keyed by limit name. Limit name is the key, value is the limit value.
-For example,
-limits = {
+Example:
+
+`limits = {
   "atlas.project.deployment.clusters" = 100
-  }
+  }`
 
 Type: `map(number)`
 
@@ -159,17 +160,17 @@ Default: `{}`
 
 ### ip_access_list
 
-IP access list entries for the Atlas project. Each "source" maps to one of: cidrBlock, ipAddress, or
-awsSecurityGroup.
+List of IP access entries for the Atlas project. Each "source" maps to one of the following: `cidrBlock`, `ipAddress`, or `awsSecurityGroup`.
 
-Note: When using AWS security group IDs, the value must be known at plan time. If the ID is created in the same apply, Terraform will fail.
+Note: When using AWS security group IDs, the value must be known at plan time. If you create the ID in the same apply, Terraform fails.
 
 Example:
-ip_access_list = [
+
+`ip_access_list = [
   { source = "203.0.113.0/24", comment = "Office VPN" },
   { source = "198.51.100.10" },
   { source = "sg-0123456789abcdef0" }
-]
+]`
 
 Type:
 
