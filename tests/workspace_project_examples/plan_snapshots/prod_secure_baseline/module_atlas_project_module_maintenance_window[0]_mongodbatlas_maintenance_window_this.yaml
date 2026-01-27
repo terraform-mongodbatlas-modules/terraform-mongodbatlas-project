@@ -1,0 +1,7 @@
+auto_defer: false
+auto_defer_once_enabled: false
+day_of_week: 6
+hour_of_day: 2
+protected_hours:
+- end_hour_of_day: 23
+  start_hour_of_day: 18

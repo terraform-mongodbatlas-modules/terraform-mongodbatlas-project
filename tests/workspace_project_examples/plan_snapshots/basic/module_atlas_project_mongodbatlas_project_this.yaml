@@ -1,0 +1,12 @@
+is_extended_storage_sizes_enabled: true
+limits:
+- name: atlas.project.deployment.clusters
+  value: 50
+- name: atlas.project.security.databaseAccess.customRoles
+  value: 25
+org_id: <org_id>
+tags:
+  Environment: Development
+  ManagedBy: Terraform
+teams: []
+with_default_alerts_settings: true

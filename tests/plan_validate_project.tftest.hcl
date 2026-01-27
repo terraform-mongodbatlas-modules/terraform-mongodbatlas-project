@@ -61,3 +61,15 @@ run "maintenance_window_disabled_default" {
     error_message = "Expected maintenance_window submodule to be disabled when enabled is false"
   }
 }
+
+run "maintenance_window_enabled_requires_day_and_hour" {
+  command = plan
+  variables {
+    maintenance_window = {
+      enabled     = true
+      day_of_week = null
+      hour_of_day = null
+    }
+  }
+  expect_failures = [var.maintenance_window]
+}
