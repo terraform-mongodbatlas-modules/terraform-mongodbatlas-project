@@ -1,7 +1,7 @@
 # path-sync copy -n sdlc
 
 # Module-specific configuration
-PLAN_TEST_FILES := "-filter=tests/plan_validate_project.tftest.hcl -filter=modules/ip_access_list/tests/plan_validate_ip_access_list.tftest.hcl"
+PLAN_TEST_FILES := "-filter=tests/plan_validate_project.tftest.hcl -filter=tests/plan_validate_ip_access_list.tftest.hcl"
 
 # === DO_NOT_EDIT: path-sync standard ===
 set dotenv-load
