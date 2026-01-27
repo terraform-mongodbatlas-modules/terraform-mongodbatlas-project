@@ -1,5 +1,5 @@
 # path-sync copy -n sdlc
-"""Generate and update root README.md TOC and TABLES sections."""
+"""Generate and update root README.md sections (TOC, TABLES, GETTING_STARTED)."""
 
 import argparse
 import re
@@ -8,6 +8,23 @@ from pathlib import Path
 
 from docs import config_loader, doc_utils
 
+GETTING_STARTED_PATTERN = re.compile(
+    r"<!-- BEGIN_GETTING_STARTED -->\s*(.*?)\s*<!-- END_GETTING_STARTED -->", re.DOTALL
+)
+
+
+def downgrade_headers(content: str) -> str:
+    """Downgrade all headers (## and greater) by one level (e.g., ## -> ###, ### -> ####)."""
+    return re.sub(r"^(#{2,})", r"#\1", content, flags=re.MULTILINE)
+
+
+def extract_getting_started(template_text: str) -> str:
+    """Extract content between GETTING_STARTED markers, downgrading ## to ###."""
+    match = GETTING_STARTED_PATTERN.search(template_text)
+    if not match:
+        return ""
+    return downgrade_headers(match.group(1).strip()) + "\n"
+
 
 def find_example_folder(folder_id: str | int, examples_dir: Path) -> str | None:
     """Find example folder by numeric prefix (e.g., 01) or exact name match."""
@@ -15,9 +32,7 @@ def find_example_folder(folder_id: str | int, examples_dir: Path) -> str | None:
         if not folder.is_dir():
             continue
         # Try numeric prefix match (e.g., "01" -> "01_example_name")
-        if isinstance(folder_id, int) or (
-            isinstance(folder_id, str) and folder_id.isdigit()
-        ):
+        if isinstance(folder_id, int) or (isinstance(folder_id, str) and folder_id.isdigit()):
             prefix = int(folder_id)
             if folder.name.startswith(f"{prefix:02d}_"):
                 return folder.name
@@ -59,9 +74,7 @@ def generate_tables(tables: list[config_loader.TableConfig], examples_dir: Path)
     tables_output = []
     for table_config in tables:
         tables_output.append(f"## {table_config.name}\n")
-        header = " | ".join(
-            col.replace("_", " ").title() for col in table_config.columns
-        )
+        header = " | ".join(col.replace("_", " ").title() for col in table_config.columns)
         separator = " | ".join("---" for _ in table_config.columns)
         tables_output.append(header)
         tables_output.append(separator)
@@ -84,9 +97,7 @@ def generate_tables(tables: list[config_loader.TableConfig], examples_dir: Path)
                     cluster_type = row.cluster_type
                     if not cluster_type:
                         example_folder_path = examples_dir / folder_name
-                        cluster_type = extract_cluster_type_from_example(
-                            example_folder_path
-                        )
+                        cluster_type = extract_cluster_type_from_example(example_folder_path)
                     row_data.append(cluster_type)
                 elif col == "environment":
                     row_data.append(row.environment)
@@ -127,18 +138,15 @@ def main() -> None:
     parser = argparse.ArgumentParser(
         description="Generate and update root README.md TOC and TABLES sections"
     )
+    parser.add_argument("--dry-run", action="store_true", help="Preview without modifying")
+    parser.add_argument("--skip-toc", action="store_true", help="Skip updating TOC section")
+    parser.add_argument("--skip-tables", action="store_true", help="Skip updating TABLES section")
     parser.add_argument(
-        "--dry-run", action="store_true", help="Preview without modifying"
+        "--skip-getting-started",
+        action="store_true",
+        help="Skip updating GETTING_STARTED section",
     )
-    parser.add_argument(
-        "--skip-toc", action="store_true", help="Skip updating TOC section"
-    )
-    parser.add_argument(
-        "--skip-tables", action="store_true", help="Skip updating TABLES section"
-    )
-    parser.add_argument(
-        "--check", action="store_true", help="Check if documentation is up-to-date"
-    )
+    parser.add_argument("--check", action="store_true", help="Check if documentation is up-to-date")
     args = parser.parse_args()
 
     root_dir = Path.cwd()
@@ -196,6 +204,37 @@ def main() -> None:
         )
         print("ok TABLES generated")
         modified = True
+
+    if not args.skip_getting_started:
+        print("Generating GETTING_STARTED from example template...")
+        examples_cfg = config_loader.parse_examples_readme_config(config_dict)
+        template_path = root_dir / (examples_cfg.readme_template or "docs/example_readme.md")
+        if not template_path.exists():
+            print(f"Warning: template not found at {template_path}; skipping GETTING_STARTED")
+        else:
+            getting_started = extract_getting_started(template_path.read_text(encoding="utf-8"))
+            if getting_started:
+                getting_started = doc_utils.apply_template_vars(
+                    getting_started,
+                    examples_cfg.template_vars.vars,
+                    context_name="root",
+                    skip_rules=examples_cfg.template_vars.skip_rules,
+                )
+                readme_content = update_section(
+                    readme_content,
+                    "GETTING_STARTED",
+                    getting_started,
+                    "<!-- BEGIN_GETTING_STARTED -->",
+                    "<!-- END_GETTING_STARTED -->",
+                    doc_utils.generate_header_comment_for_section(
+                        description="This section",
+                        regenerate_command="just gen-readme",
+                    ),
+                )
+                print("ok GETTING_STARTED generated")
+                modified = True
+            else:
+                print("Warning: No GETTING_STARTED markers found in template")
 
     if args.check:
         if readme_content != original_readme_content:

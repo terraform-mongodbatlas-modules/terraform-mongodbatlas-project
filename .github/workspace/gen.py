@@ -40,8 +40,12 @@ def parse_include_examples(value: str, config: models.WsConfig) -> list[models.E
         return config.examples
     if value == "none":
         return []
-    numbers = {int(n.strip()) for n in value.split(",")}
-    return [ex for ex in config.examples if ex.number in numbers]
+    filters = {f.strip() for f in value.split(",")}
+    return [
+        ex
+        for ex in config.examples
+        if ex.identifier in filters or (ex.number is not None and str(ex.number) in filters)
+    ]
 
 
 def generate_modules_tf(
@@ -55,8 +59,8 @@ def generate_modules_tf(
     for ex in examples:
         example_path = ex.example_path(examples_dir)
         title = ex.title_from_dir(examples_dir)
-        lines.append(f"# Example {ex.number:02d}: {title}")
-        lines.append(f'module "ex_{ex.number:02d}" {{')
+        lines.append(f"# Example {ex.identifier}: {title}")
+        lines.append(f'module "ex_{ex.identifier}" {{')
         lines.append(f'  source = "{rel_examples}/{example_path.name}"')
         for var in config.vars_for_example(ex):
             val = f"var.{var.name}" if var.expose_in_workspace else var.module_value
@@ -73,23 +77,30 @@ def generate_pytest_file(config: models.WsConfig) -> str:
         "import pytest",
         "",
         f'ACTUAL_DIR = Path(__file__).parent / "{PLAN_SNAPSHOTS_ACTUAL_DIR}"',
+        f'EXPECTED_DIR = Path(__file__).parent / "{PLAN_SNAPSHOTS_DIR}"',
         "",
+        "# (example_id, sanitized_address, nested)",
         "TEST_CASES = [",
     ]
     for ex in config.examples:
+        nested = ex.should_use_nested_snapshots()
         for reg in ex.plan_regressions:
-            name = f"{ex.number:02d}_{models.sanitize_address(reg.address)}"
-            lines.append(f'    "{name}",')
+            sanitized = models.sanitize_address(reg.address)
+            lines.append(f"    ({repr(ex.identifier)}, {repr(sanitized)}, {nested}),")
     lines.extend(
         [
             "]",
             "",
             "",
-            '@pytest.mark.parametrize("name", TEST_CASES)',
-            "def test_plan_snapshot(name: str, file_regression) -> None:",
-            '    actual_file = ACTUAL_DIR / f"{name}.yaml"',
+            '@pytest.mark.parametrize("example_id,address,nested", TEST_CASES)',
+            "def test_plan_snapshot(",
+            "    example_id: str, address: str, nested: bool, file_regression",
+            ") -> None:",
+            '    subpath = f"{example_id}/{address}" if nested else f"{example_id}_{address}"',
+            '    actual_file = ACTUAL_DIR / f"{subpath}.yaml"',
+            '    expected_file = EXPECTED_DIR / f"{subpath}.yaml"',
             "    assert actual_file.exists(), f'Actual file not found: {actual_file}'",
-            '    file_regression.check(actual_file.read_text(), basename=name, extension=".yaml")',
+            "    file_regression.check(actual_file.read_text(), fullpath=expected_file)",
             "",
         ]
     )

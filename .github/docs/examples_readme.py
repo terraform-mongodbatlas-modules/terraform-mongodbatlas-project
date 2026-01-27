@@ -14,10 +14,17 @@ def load_template(template_path: Path) -> str:
     return template_path.read_text(encoding="utf-8")
 
 
-def get_example_name_from_config(folder_number: int, config: dict) -> str | None:
+def get_example_name_from_config(
+    folder_name: str, folder_number: int | None, config: dict
+) -> str | None:
+    folder_name_lower = folder_name.lower()
     for table in config.get("tables", []):
         for example_row in table.get("example_rows", []):
-            if example_row.get("folder") == folder_number:
+            # Match by folder_name (string, case-insensitive) or folder (numeric prefix)
+            config_folder_name = example_row.get("folder_name", "")
+            if config_folder_name.lower() == folder_name_lower or (
+                folder_number is not None and example_row.get("folder") == folder_number
+            ):
                 name = example_row.get("name", "")
                 title_suffix = example_row.get("title_suffix", "")
                 if title_suffix:
@@ -28,11 +35,10 @@ def get_example_name_from_config(folder_number: int, config: dict) -> str | None
 
 def get_example_name(folder_name: str, config: dict) -> str:
     match = re.match(r"^(\d+)_", folder_name)
-    if match:
-        folder_number = int(match.group(1))
-        config_name = get_example_name_from_config(folder_number, config)
-        if config_name:
-            return config_name
+    folder_number = int(match.group(1)) if match else None
+    config_name = get_example_name_from_config(folder_name, folder_number, config)
+    if config_name:
+        return config_name
     name_without_number = re.sub(r"^\d+_", "", folder_name)
     return name_without_number.replace("_", " ").title()
 
@@ -70,7 +76,7 @@ def transform_main_tf_for_registry(
     main_tf_content: str, registry_source: str, version: str | None = None
 ) -> str:
     transformed = re.sub(
-        r'source\s*=\s*"\.\.\/\.\."',
+        r'source\s*=\s*"\.\.\/\.\.\/?"',
         f'source  = "{registry_source}"',
         main_tf_content,
     )
@@ -115,18 +121,6 @@ def generate_code_snippet(
     return snippet
 
 
-def should_skip_template_var(
-    example_name: str, var_key: str, skip_patterns: list[str] | None = None
-) -> bool:
-    if not skip_patterns:
-        return False
-    example_name_lower = example_name.lower()
-    for pattern in skip_patterns:
-        if pattern.lower() in example_name_lower and var_key.startswith("production"):
-            return True
-    return False
-
-
 def generate_readme(
     template: str,
     example_name: str,
@@ -135,7 +129,7 @@ def generate_readme(
     template_vars: dict[str, str],
     version: str | None = None,
     additional_files: list[str] | None = None,
-    skip_var_patterns: list[str] | None = None,
+    skip_rules: list[config_loader.SkipRule] | None = None,
 ) -> str:
     header_comment = (
         doc_utils.generate_header_comment(
@@ -147,10 +141,12 @@ def generate_readme(
     content = template.replace("{{ .NAME }}", example_name)
     code_snippet = generate_code_snippet(example_dir, registry_source, version, additional_files)
     content = content.replace("{{ .CODE_SNIPPET }}", code_snippet)
-    for key, value in sorted(template_vars.items()):
-        if should_skip_template_var(example_name, key, skip_var_patterns):
-            value = ""
-        content = content.replace(f"{{{{ .{key.upper()} }}}}", value.rstrip("\n"))
+    content = doc_utils.apply_template_vars(
+        content,
+        template_vars,
+        context_name=example_name,
+        skip_rules=skip_rules,
+    )
     lines = content.split("\n")
     if lines and lines[0].strip().startswith("<!--") and "used to generate" in lines[0]:
         content = "\n".join(lines[1:])
@@ -171,11 +167,37 @@ def generate_versions_tf(base_versions_tf: str, provider_config: str) -> str:
 
 
 def find_example_folders(examples_dir: Path) -> list[Path]:
+    """Find and sort example folders within a directory.
+
+    An example folder is any subdirectory of ``examples_dir`` that contains a
+    ``main.tf`` file. The returned list is sorted so that:
+
+    * Folders with a leading numeric prefix in the form ``NN_name`` (for example
+      ``01_basic``) appear first, ordered by the numeric value of the prefix.
+    * Remaining folders without such a prefix appear afterwards, ordered
+      alphabetically by their directory name.
+
+    Args:
+        examples_dir: Directory containing example subfolders to scan.
+
+    Returns:
+        A list of paths to example folders under ``examples_dir``, sorted with
+        numeric-prefixed folders first (by numeric value) and all others
+        alphabetically by name.
+    """
     folders = []
-    for item in sorted(examples_dir.iterdir()):
-        if item.is_dir() and re.match(r"^\d+_", item.name):
+    for item in examples_dir.iterdir():
+        if item.is_dir() and (item / "main.tf").exists():
             folders.append(item)
-    return folders
+
+    # Sort: numeric-prefixed first (by number), then alphabetically
+    def sort_key(p: Path) -> tuple[int, int, str]:
+        match = re.match(r"^(\d+)_", p.name)
+        if match:
+            return (0, int(match.group(1)), p.name)
+        return (1, 0, p.name)
+
+    return sorted(folders, key=sort_key)
 
 
 def should_skip_example(folder_name: str, skip_list: list[str] | None) -> bool:
@@ -229,7 +251,7 @@ def process_example(
             examples_readme_config.template_vars.vars,
             version,
             examples_readme_config.code_snippet_files.additional,
-            examples_readme_config.template_vars.skip_if_name_contains,
+            examples_readme_config.template_vars.skip_rules,
         )
         if check and readme_path.exists():
             existing_content = readme_path.read_text(encoding="utf-8")

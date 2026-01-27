@@ -1,6 +1,5 @@
 # path-sync copy -n sdlc
 
-# === OK_EDIT: path-sync header ===
 # Module-specific configuration
 # No plan tests yet - add filters here when tests are created
 PLAN_TEST_FILES := ""
@@ -44,6 +43,7 @@ lint:
 
 py-check:
     {{uv_gh}} ruff check .github
+    {{uv_gh}} ruff format --check .github
 
 py-fix:
     {{uv_gh}} ruff check --fix .github
