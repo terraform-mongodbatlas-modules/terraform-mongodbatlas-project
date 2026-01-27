@@ -147,9 +147,11 @@ Configure project resource limits. See the [Atlas project limits documentation](
 Optional Atlas project limits keyed by limit name. Limit name is the key, value is the limit value.
 Example:
 
-`limits = {
+```hcl
+limits = {
   "atlas.project.deployment.clusters" = 100
-  }`
+}
+```
 
 Type: `map(number)`
 
@@ -166,11 +168,13 @@ Note: When using AWS security group IDs, the value must be known at plan time. I
 
 Example:
 
-`ip_access_list = [
+```hcl
+ip_access_list = [
   { source = "203.0.113.0/24", comment = "Office VPN" },
   { source = "198.51.100.10" },
   { source = "sg-0123456789abcdef0" }
-]`
+]
+```
 
 Type:
 
@@ -186,10 +190,8 @@ Default: `[]`
 ### maintenance_window
 
 Maintenance window configuration for the Atlas project.
-- Typically, you don't need to manually configure a maintenance window; Atlas performs maintenance automatically in a rolling manner to preserve continuous availability for resilient applications.
-https://www.mongodb.com/docs/atlas/tutorial/cluster-maintenance-window/
-- To temporarily defer maintenance, use the Atlas CLI/API. See `atlas maintenanceWindows defer` documentation.
-https://www.mongodb.com/docs/atlas/cli/current/command/atlas-maintenanceWindows-defer/#atlas-maintenancewindows-defer
+- Typically, you don't need to manually configure a maintenance window. Atlas performs maintenance automatically in a rolling manner to preserve continuous availability for resilient applications. See [Cluster Maintenance Window](https://www.mongodb.com/docs/atlas/tutorial/cluster-maintenance-window/) in the MongoDB Atlas documentation for more information.
+- To temporarily defer maintenance, use the Atlas CLI/API. See [Atlas `maintenanceWindows` defer](https://www.mongodb.com/docs/atlas/cli/current/command/atlas-maintenanceWindows-defer/#atlas-maintenancewindows-defer) in the MongoDB Atlas documentation for more information.
 
 Type:
 
