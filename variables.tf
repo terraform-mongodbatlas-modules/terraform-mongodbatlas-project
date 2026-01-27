@@ -75,6 +75,37 @@ variable "ip_access_list" {
   }
 }
 
+variable "maintenance_window" {
+  description = <<-EOT
+  Maintenance window configuration for the Atlas project.
+  - Typically, you don't need to manually configure a maintenance window; Atlas performs maintenance automatically in a rolling manner to preserve continuous availability for resilient applications.
+  https://www.mongodb.com/docs/atlas/tutorial/cluster-maintenance-window/
+  - To temporarily defer maintenance, use the Atlas CLI/API. See `atlas maintenanceWindows defer` documentation.
+  https://www.mongodb.com/docs/atlas/cli/current/command/atlas-maintenanceWindows-defer/#atlas-maintenancewindows-defer
+  EOT
+  type = object({
+    enabled                 = bool
+    day_of_week             = optional(number)
+    hour_of_day             = optional(number)
+    auto_defer              = optional(bool, false)
+    auto_defer_once_enabled = optional(bool, false)
+    protected_hours = optional(object({
+      start_hour_of_day = number
+      end_hour_of_day   = number
+    }))
+  })
+  default  = { enabled = false }
+  nullable = false
+
+  validation {
+    condition = (
+      !var.maintenance_window.enabled ||
+      (var.maintenance_window.day_of_week != null && var.maintenance_window.hour_of_day != null)
+    )
+    error_message = "When maintenance_window.enabled is true, day_of_week and hour_of_day must both be set."
+  }
+}
+
 variable "with_default_alerts_settings" {
   type        = bool
   description = "Flag that indicates whether to create the project with default alert settings."

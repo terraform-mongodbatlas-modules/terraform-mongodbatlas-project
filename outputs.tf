@@ -12,3 +12,8 @@ output "cluster_count" {
   description = "MongoDB Atlas project cluster count."
   value       = mongodbatlas_project.this.cluster_count
 }
+
+output "maintenance_window" {
+  description = "Maintenance window details."
+  value       = length(module.maintenance_window) > 0 ? module.maintenance_window[0].maintenance_window : null
+}

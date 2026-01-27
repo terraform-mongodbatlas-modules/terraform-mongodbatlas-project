@@ -55,13 +55,13 @@ The following requirements are needed by this module:
 
 - <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) (>= 1.9)
 
-- <a name="requirement_mongodbatlas"></a> [mongodbatlas](#requirement\_mongodbatlas) (>= 2.0)
+- <a name="requirement_mongodbatlas"></a> [mongodbatlas](#requirement\_mongodbatlas) (~> 2.1)
 
 ## Providers
 
 The following providers are used by this module:
 
-- <a name="provider_mongodbatlas"></a> [mongodbatlas](#provider\_mongodbatlas) (>= 2.0)
+- <a name="provider_mongodbatlas"></a> [mongodbatlas](#provider\_mongodbatlas) (~> 2.1)
 
 ## Resources
 
@@ -182,6 +182,38 @@ list(object({
 
 Default: `[]`
 
+### maintenance_window
+
+Maintenance window configuration for the Atlas project.
+- Typically, you don't need to manually configure a maintenance window; Atlas performs maintenance automatically in a rolling manner to preserve continuous availability for resilient applications.
+https://www.mongodb.com/docs/atlas/tutorial/cluster-maintenance-window/
+- To temporarily defer maintenance, use the Atlas CLI/API. See `atlas maintenanceWindows defer` documentation.
+https://www.mongodb.com/docs/atlas/cli/current/command/atlas-maintenanceWindows-defer/#atlas-maintenancewindows-defer
+
+Type:
+
+```hcl
+object({
+  enabled                 = bool
+  day_of_week             = optional(number)
+  hour_of_day             = optional(number)
+  auto_defer              = optional(bool, false)
+  auto_defer_once_enabled = optional(bool, false)
+  protected_hours = optional(object({
+    start_hour_of_day = number
+    end_hour_of_day   = number
+  }))
+})
+```
+
+Default:
+
+```json
+{
+  "enabled": false
+}
+```
+
 ### tags
 
 Map of tags to assign to the project.
@@ -207,6 +239,10 @@ Description: MongoDB Atlas project creation time (RFC3339).
 ### <a name="output_id"></a> [id](#output\_id)
 
 Description: MongoDB Atlas project ID.
+
+### <a name="output_maintenance_window"></a> [maintenance\_window](#output\_maintenance\_window)
+
+Description: Maintenance window details.
 <!-- END_TF_DOCS -->
 
 ## License

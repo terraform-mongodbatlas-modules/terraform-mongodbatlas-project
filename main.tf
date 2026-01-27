@@ -28,6 +28,8 @@ resource "mongodbatlas_project" "this" {
 locals {
   ip_access_list_entries = var.ip_access_list
   ip_access_list_enabled = length(var.ip_access_list) > 0
+
+  maintenance_window_enabled = var.maintenance_window.enabled
 }
 
 module "ip_access_list" {
@@ -36,4 +38,16 @@ module "ip_access_list" {
 
   project_id = mongodbatlas_project.this.id
   entries    = local.ip_access_list_entries
+}
+
+module "maintenance_window" {
+  source = "./modules/maintenance_window"
+  count  = local.maintenance_window_enabled ? 1 : 0
+
+  project_id              = mongodbatlas_project.this.id
+  day_of_week             = var.maintenance_window.day_of_week
+  hour_of_day             = var.maintenance_window.hour_of_day
+  auto_defer              = var.maintenance_window.auto_defer
+  auto_defer_once_enabled = var.maintenance_window.auto_defer_once_enabled
+  protected_hours         = var.maintenance_window.protected_hours
 }

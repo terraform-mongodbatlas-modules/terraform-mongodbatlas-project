@@ -32,3 +32,32 @@ run "ip_access_list_entries" {
     error_message = "Expected four IP access list resources"
   }
 }
+
+run "maintenance_window_configured" {
+  command = plan
+  variables {
+    maintenance_window = {
+      enabled     = true
+      day_of_week = 7
+      hour_of_day = 3
+      auto_defer  = false
+    }
+  }
+  assert {
+    condition     = length(module.maintenance_window) == 1
+    error_message = "Expected maintenance_window submodule to be instantiated"
+  }
+}
+
+run "maintenance_window_disabled_default" {
+  command = plan
+  variables {
+    maintenance_window = {
+      enabled = false
+    }
+  }
+  assert {
+    condition     = length(module.maintenance_window) == 0
+    error_message = "Expected maintenance_window submodule to be disabled when enabled is false"
+  }
+}
