@@ -3,7 +3,7 @@ WARNING: This file is auto-generated. Do not edit directly.
 Changes will be overwritten when documentation is regenerated.
 Run 'just gen-examples' to regenerate.
 -->
-# Prod Secure Baseline
+# Production Secure Baseline with Maintenance Window
 
 ## Pre Requirements
 
