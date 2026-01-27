@@ -114,7 +114,7 @@ variable "with_default_alerts_settings" {
 
 variable "region_usage_restrictions" {
   type        = string
-  description = "Set to GOV_REGIONS_ONLY to restrict project to government regions. Defaults to standard regions. Cannot mix government and standard regions in the same project. See [MongoDB Atlas for Government](https://www.mongodb.com/docs/atlas/government/api/#creating-a-project)."
+  description = "Set to `GOV_REGIONS_ONLY` to restrict project to government regions. Defaults to standard regions. Cannot mix government and standard regions in the same project. See [MongoDB Atlas for Government](https://www.mongodb.com/docs/atlas/government/api/#creating-a-project)."
   default     = null
 }
 
