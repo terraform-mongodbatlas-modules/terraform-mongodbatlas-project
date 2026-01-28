@@ -9,6 +9,7 @@ Changes will be overwritten when documentation is regenerated.
 Run 'just gen-readme' to regenerate. -->
 - [Public Preview Note](#public-preview-note)
 - [Disclaimer](#disclaimer)
+- [Getting Started](#getting-started)
 - [Examples](#examples)
 - [Requirements](#requirements)
 - [Providers](#providers)
@@ -41,7 +42,9 @@ Run 'just gen-readme' to regenerate. -->
 ### Prerequisites
 
 If you are familiar with Terraform and already have an organization configured in MongoDB Atlas, go to [commands](#commands).
+
 To use MongoDB Atlas with Terraform, ensure you meet the following requirements:
+
 1. Install [Terraform](https://developer.hashicorp.com/terraform/install) to be able to run `terraform` [commands](#commands).
 2. [Sign in](https://account.mongodb.com/account/login) or [create](https://account.mongodb.com/account/register) your MongoDB Atlas Account.
 3. Configure your [authentication](https://registry.terraform.io/providers/mongodb/mongodbatlas/latest/docs#authentication) method.
@@ -57,6 +60,7 @@ terraform apply -var-file vars.tfvars
 # cleanup
 terraform destroy -var-file vars.tfvars
 ```
+
 <!-- END_GETTING_STARTED -->
 <!-- BEGIN_TABLES -->
 <!-- @generated
