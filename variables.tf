@@ -1,18 +1,18 @@
 variable "name" {
   type        = string
-  description = "The name of the MongoDB Atlas project."
+  description = "Name of the MongoDB Atlas project."
   nullable    = false
 }
 
 variable "org_id" {
   type        = string
-  description = "The ID of the MongoDB Atlas organization in which to create the project."
+  description = "ID of the MongoDB Atlas organization associated with the project."
   nullable    = false
 }
 
 variable "project_owner_id" {
   type        = string
-  description = "Unique 24-hexadecimal digit string that identifies the Atlas user account to be granted the Project Owner role on the specified project."
+  description = "Unique 24-hexadecimal digit string that identifies the Atlas user account with the Project Owner role on the specified project."
   default     = null
 }
 
@@ -32,10 +32,15 @@ variable "project_settings" {
 variable "limits" {
   description = <<-EOT
   Optional Atlas project limits keyed by limit name. Limit name is the key, value is the limit value. 
+  
   For example, 
+  
+  ```hcl
   limits = {
     "atlas.project.deployment.clusters" = 100
-    }
+  }
+  ```
+  
   EOT
 
   type    = map(number)
@@ -44,22 +49,26 @@ variable "limits" {
 
 variable "ip_access_list" {
   description = <<-EOT
-  IP access list entries for the Atlas project. Each "source" maps to one of: cidrBlock, ipAddress, or
-  awsSecurityGroup.
+  IP access list of entries for the Atlas project. Each "source" maps to one of the following: `cidrBlock`, `ipAddress`, or `awsSecurityGroup`.
   
-  Note: When using AWS security group IDs, the value must be known at plan time. If the ID is created in the same apply, Terraform will fail.
+  Note: When using AWS security group IDs, the value must be known at plan time. If you create the ID in the same `apply` command, Terraform fails.
 
-  Example:
+  For example,
+  
+  ```hcl
   ip_access_list = [
     { source = "203.0.113.0/24", comment = "Office VPN" },
     { source = "198.51.100.10" },
     { source = "sg-0123456789abcdef0" }
   ]
+  ```
   EOT
+
   type = list(object({
     source  = string
     comment = optional(string)
   }))
+
   default = []
 
   validation {
@@ -78,10 +87,8 @@ variable "ip_access_list" {
 variable "maintenance_window" {
   description = <<-EOT
   Maintenance window configuration for the Atlas project.
-  - Typically, you don't need to manually configure a maintenance window; Atlas performs maintenance automatically in a rolling manner to preserve continuous availability for resilient applications.
-  https://www.mongodb.com/docs/atlas/tutorial/cluster-maintenance-window/
-  - To temporarily defer maintenance, use the Atlas CLI/API. See `atlas maintenanceWindows defer` documentation.
-  https://www.mongodb.com/docs/atlas/cli/current/command/atlas-maintenanceWindows-defer/#atlas-maintenancewindows-defer
+  - Typically, you don't need to manually configure a maintenance window. Atlas performs maintenance automatically in a rolling manner to preserve continuous availability for resilient applications. See [Cluster Maintenance Window](https://www.mongodb.com/docs/atlas/tutorial/cluster-maintenance-window/) in the MongoDB Atlas documentation for more information.
+  - To temporarily defer maintenance, use the Atlas CLI/API. See [Atlas `maintenanceWindows` defer](https://www.mongodb.com/docs/atlas/cli/current/command/atlas-maintenanceWindows-defer/#atlas-maintenancewindows-defer) in the MongoDB Atlas documentation for more information.
   EOT
   type = object({
     enabled                 = bool
