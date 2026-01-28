@@ -147,6 +147,7 @@ Configure project resource limits. See the [Atlas project limits documentation](
 ### limits
 
 Optional Atlas project limits keyed by limit name. Limit name is the key, value is the limit value.
+
 Example:
 
 ```hcl
