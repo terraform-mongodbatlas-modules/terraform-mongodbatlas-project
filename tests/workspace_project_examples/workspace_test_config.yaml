@@ -1,0 +1,47 @@
+examples:
+  - name: basic
+    var_groups: [basic]
+    plan_regressions:
+      - address: module.atlas_project.mongodbatlas_project.this
+      - address: module.atlas_project.module.ip_access_list[0].mongodbatlas_project_ip_access_list.this["198.51.100.10"]
+      - address: module.atlas_project.module.ip_access_list[0].mongodbatlas_project_ip_access_list.this["203.0.113.0/24"]
+
+  - name: dev_with_allowlist
+    var_groups: [dev_with_allowlist]
+    plan_regressions:
+      - address: module.atlas_project.mongodbatlas_project.this
+      - address: module.atlas_project.module.ip_access_list[0].mongodbatlas_project_ip_access_list.this["198.51.100.10"]
+      - address: module.atlas_project.module.ip_access_list[0].mongodbatlas_project_ip_access_list.this["203.0.113.0/24"]
+
+  - name: prod_secure_baseline
+    var_groups: [prod_secure_baseline]
+    plan_regressions:
+      - address: module.atlas_project.mongodbatlas_project.this
+      - address: module.atlas_project.module.ip_access_list[0].mongodbatlas_project_ip_access_list.this["198.51.100.10"]
+      - address: module.atlas_project.module.ip_access_list[0].mongodbatlas_project_ip_access_list.this["203.0.113.0/24"]
+      - address: module.atlas_project.module.maintenance_window[0].mongodbatlas_maintenance_window.this
+
+var_groups:
+  basic:
+    - name: org_id
+      expose_in_workspace: false
+      module_value: var.org_id
+    - name: project_name
+      expose_in_workspace: false
+      module_value: local.project_name_basic
+
+  dev_with_allowlist:
+    - name: org_id
+      expose_in_workspace: false
+      module_value: var.org_id
+    - name: project_name
+      expose_in_workspace: false
+      module_value: local.project_name_dev
+
+  prod_secure_baseline:
+    - name: org_id
+      expose_in_workspace: false
+      module_value: var.org_id
+    - name: project_name
+      expose_in_workspace: false
+      module_value: local.project_name_prod

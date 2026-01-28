@@ -7,6 +7,10 @@ variables {
 run "ip_access_list_duplicate_entries" {
   command = plan
 
+  module {
+    source = "./modules/ip_access_list"
+  }
+
   variables {
     entries = [
       { source = "203.0.113.0" },

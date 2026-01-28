@@ -40,7 +40,9 @@ Run 'just gen-readme' to regenerate. -->
 
 Feature | Name
 --- | ---
-Basic | [Basic Project Setup](./examples/basic)
+Project Setup | [Basic Project with Settings and Limits](./examples/basic)
+IP Access List | [Development Project with IP Allowlist](./examples/dev_with_allowlist)
+Production Baseline | [Production Secure Baseline with Maintenance Window](./examples/prod_secure_baseline)
 
 <!-- END_TABLES -->
 <!-- BEGIN_TF_DOCS -->
@@ -131,7 +133,7 @@ Default: `true`
 
 ### region_usage_restrictions
 
-Optional - set value to GOV_REGIONS_ONLY, Designates that this project can be used for government regions only.  If not set the project will default to standard regions.   You cannot deploy clusters across government and standard regions in the same project. AWS is the only cloud provider for AtlasGov.  For more information see [MongoDB Atlas for Government](https://www.mongodb.com/docs/atlas/government/api/#creating-a-project).
+Set to `GOV_REGIONS_ONLY` to restrict project to government regions. Defaults to standard regions. Cannot mix government and standard regions in the same project. See [MongoDB Atlas for Government](https://www.mongodb.com/docs/atlas/government/api/#creating-a-project).
 
 Type: `string`
 

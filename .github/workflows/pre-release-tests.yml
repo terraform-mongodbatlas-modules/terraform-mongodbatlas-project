@@ -1,0 +1,78 @@
+name: Pre-Release Tests
+run-name: "Pre-Release: examples=${{ inputs.include_examples }}, provider=${{ inputs.provider_ref }}${{ inputs.skip_tftest && ', skip_tftest' || '' }}"
+
+on:
+  workflow_dispatch:
+    inputs:
+      include_examples:
+        description: 'Examples to test (all or comma-separated list)'
+        required: false
+        type: string
+        default: 'all'
+      provider_ref:
+        description: 'Provider git ref (registry = published, default = default branch)'
+        required: false
+        type: string
+        default: 'registry'
+      skip_tftest:
+        description: 'Skip the tftest-all job'
+        required: false
+        type: boolean
+        default: false
+
+env:
+  MONGODB_ATLAS_ORG_ID: ${{ secrets.MONGODB_ATLAS_ORG_ID }}
+  MONGODB_ATLAS_CLIENT_ID: ${{ secrets.MONGODB_ATLAS_CLIENT_ID }}
+  MONGODB_ATLAS_CLIENT_SECRET: ${{ secrets.MONGODB_ATLAS_CLIENT_SECRET }}
+  MONGODB_ATLAS_BASE_URL: ${{ secrets.MONGODB_ATLAS_BASE_URL }}
+
+jobs:
+  tftest-all:
+    name: All Terraform Tests
+    if: ${{ !inputs.skip_tftest }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - uses: ./.github/actions/setup
+        with:
+          just: 'true'
+          terraform: 'true'
+          uv: 'true'
+      - name: Setup provider (default branch)
+        uses: ./.github/actions/setup-provider-dev
+        if: inputs.provider_ref == 'default'
+      - name: Setup provider (${{ inputs.provider_ref }})
+        uses: ./.github/actions/setup-provider-dev
+        if: inputs.provider_ref != 'registry' && inputs.provider_ref != 'default'
+        with:
+          provider-ref: ${{ inputs.provider_ref }}
+      - run: just tftest-all
+
+  apply-and-destroy:
+    name: Apply & Destroy Examples
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - uses: ./.github/actions/setup
+        with:
+          just: 'true'
+          uv: 'true'
+          terraform: 'true'
+      - name: Setup provider (default branch)
+        uses: ./.github/actions/setup-provider-dev
+        if: inputs.provider_ref == 'default'
+      - name: Setup provider (${{ inputs.provider_ref }})
+        uses: ./.github/actions/setup-provider-dev
+        if: inputs.provider_ref != 'registry' && inputs.provider_ref != 'default'
+        with:
+          provider-ref: ${{ inputs.provider_ref }}
+      - run: just dev-vars-org "${MONGODB_ATLAS_ORG_ID}"
+      - name: Apply examples
+        env:
+          INCLUDE_EXAMPLES: ${{ inputs.include_examples }}
+        run: just apply-examples --auto-approve -e "$INCLUDE_EXAMPLES" --var-file $(pwd)/tests/workspace_project_examples/dev.tfvars
+      - name: Destroy examples
+        if: always()
+        env:
+          INCLUDE_EXAMPLES: ${{ inputs.include_examples }}
+        run: just destroy-examples --auto-approve -e "$INCLUDE_EXAMPLES" --var-file $(pwd)/tests/workspace_project_examples/dev.tfvars
