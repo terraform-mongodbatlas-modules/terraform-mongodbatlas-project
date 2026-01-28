@@ -48,7 +48,7 @@ To use MongoDB Atlas with Terraform, ensure you meet the following requirements:
 1. Install [Terraform](https://developer.hashicorp.com/terraform/install) to be able to run `terraform` [commands](#commands).
 2. [Sign in](https://account.mongodb.com/account/login) or [create](https://account.mongodb.com/account/register) your MongoDB Atlas Account.
 3. Configure your [authentication](https://registry.terraform.io/providers/mongodb/mongodbatlas/latest/docs#authentication) method.
-4. Use an existing [MongoDB Atlas organization](https://www.mongodb.com/docs/atlas/access/manage-organizations/) and ensure you have permissions to create projects.
+4. Use an existing [MongoDB Atlas organization](https://www.mongodb.com/docs/atlas/access/orgs-create-view-edit-delete/) and ensure you have permissions to create projects.
 
 ### Commands
 
@@ -62,6 +62,89 @@ terraform destroy -var-file vars.tfvars
 ```
 
 <!-- END_GETTING_STARTED -->
+
+### Step-by-Step: Create a Basic Atlas Project
+
+Follow these steps to set up a simple Atlas project using this module.
+
+1. Create your Terraform files.
+
+   You can copy the files directly from the ones provided in this module:
+
+    - [examples/basic/main.tf](examples/basic/main.tf)
+    - [examples/basic/variables.tf](examples/basic/variables.tf)
+    - [examples/basic/outputs.tf](examples/basic/outputs.tf)
+    - [examples/basic/versions.tf](examples/basic/versions.tf)
+
+      The following code example shows a basic example of a `main.tf` file configuration:
+
+      ```hcl
+      module "atlas_project" {
+        source  = "terraform-mongodbatlas-modules/project/mongodbatlas"
+
+        name   = var.project_name
+        org_id = var.org_id
+
+        # Optional settings (safe defaults shown)
+        project_settings = {
+          is_extended_storage_sizes_enabled = true
+        }
+
+        # Optional limits (adjust as needed)
+        limits = {
+          "atlas.project.deployment.clusters"                 = 50,
+          "atlas.project.security.databaseAccess.customRoles" = 25,
+        }
+
+        # Optional IP access list (example entries)
+        ip_access_list = [
+          { source = "203.0.113.0/24", comment = "Office VPN" },
+          { source = "198.51.100.10" },
+        ]
+
+        # Optional tags
+        tags = {
+          Environment = "Development"
+          ManagedBy   = "Terraform"
+        }
+      }
+      ```
+
+2. Prepare your [variable](#required-variables) values.
+
+   Create a `vars.tfvars` file with the values you must provide at `apply` time:
+
+      ```hcl
+      project_name = "my-atlas-project"
+      org_id       = "YOUR_ORG_ID" # e.g., 65def6ce0f722a1507105aa5
+      ```
+
+   See [Project Settings](#project-settings) for information on additional parameters you can configure.
+
+3. Initialize and apply your configuration.
+
+    ```sh
+    terraform init
+    terraform apply -var-file vars.tfvars
+    ```
+
+4. Review outputs to confirm your project details.
+
+    ```sh
+    terraform output
+    ```
+
+   You should see values such as `cluster_count`, `created_at`, `id`, and `maintenance_window`.
+
+5. Iterate or clean up your configuration.
+
+- To add features (limits, IP allowlist, maintenance window), edit the `main.tf` file and re-run the `terraform apply` command.
+- To remove the resources, use the Getting Started cleanup command:
+
+    ```sh
+    terraform destroy -var-file vars.tfvars
+    ```
+
 <!-- BEGIN_TABLES -->
 <!-- @generated
 WARNING: This section is auto-generated. Do not edit directly.
