@@ -33,7 +33,7 @@ variable "limits" {
   description = <<-EOT
   Optional Atlas project limits keyed by limit name. Limit name is the key, value is the limit value. 
   
-  Example: 
+  For example, 
   
   ```hcl
   limits = {
@@ -49,11 +49,11 @@ variable "limits" {
 
 variable "ip_access_list" {
   description = <<-EOT
-  List of IP access entries for the Atlas project. Each "source" maps to one of the following: `cidrBlock`, `ipAddress`, or `awsSecurityGroup`.
+  IP access list of entries for the Atlas project. Each "source" maps to one of the following: `cidrBlock`, `ipAddress`, or `awsSecurityGroup`.
   
   Note: When using AWS security group IDs, the value must be known at plan time. If you create the ID in the same apply, Terraform fails.
 
-  Example:
+  For example,
   
   ```hcl
   ip_access_list = [
