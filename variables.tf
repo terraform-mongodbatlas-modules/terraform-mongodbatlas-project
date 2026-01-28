@@ -32,6 +32,7 @@ variable "project_settings" {
 variable "limits" {
   description = <<-EOT
   Optional Atlas project limits keyed by limit name. Limit name is the key, value is the limit value. 
+  
   Example: 
   
   ```hcl
