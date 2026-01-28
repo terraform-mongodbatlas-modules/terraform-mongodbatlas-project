@@ -63,7 +63,7 @@ terraform destroy -var-file vars.tfvars
 
 <!-- END_GETTING_STARTED -->
 
-### Step-by-Step: Create a Basic Atlas Project
+### Create a Basic Atlas Project
 
 Follow these steps to set up a simple Atlas project using this module.
 
@@ -76,39 +76,39 @@ Follow these steps to set up a simple Atlas project using this module.
     - [examples/basic/outputs.tf](examples/basic/outputs.tf)
     - [examples/basic/versions.tf](examples/basic/versions.tf)
 
-      The following code example shows a basic example of a `main.tf` file configuration:
+    The following code example shows a basic example of a `main.tf` file configuration:
 
-      ```hcl
-      module "atlas_project" {
-        source  = "terraform-mongodbatlas-modules/project/mongodbatlas"
+    ```hcl
+    module "atlas_project" {
+      source  = "terraform-mongodbatlas-modules/project/mongodbatlas"
 
-        name   = var.project_name
-        org_id = var.org_id
+      name   = var.project_name
+      org_id = var.org_id
 
-        # Optional settings (safe defaults shown)
-        project_settings = {
-          is_extended_storage_sizes_enabled = true
-        }
-
-        # Optional limits (adjust as needed)
-        limits = {
-          "atlas.project.deployment.clusters"                 = 50,
-          "atlas.project.security.databaseAccess.customRoles" = 25,
-        }
-
-        # Optional IP access list (example entries)
-        ip_access_list = [
-          { source = "203.0.113.0/24", comment = "Office VPN" },
-          { source = "198.51.100.10" },
-        ]
-
-        # Optional tags
-        tags = {
-          Environment = "Development"
-          ManagedBy   = "Terraform"
-        }
+      # Optional settings (safe defaults shown)
+      project_settings = {
+        is_extended_storage_sizes_enabled = true
       }
-      ```
+
+      # Optional limits (adjust as needed)
+      limits = {
+        "atlas.project.deployment.clusters"                 = 50,
+        "atlas.project.security.databaseAccess.customRoles" = 25,
+      }
+
+      # Optional IP access list (example entries)
+      ip_access_list = [
+        { source = "203.0.113.0/24", comment = "Office VPN" },
+        { source = "198.51.100.10" },
+      ]
+
+      # Optional tags
+      tags = {
+        Environment = "Development"
+        ManagedBy   = "Terraform"
+      }
+    }
+    ```
 
 2. Prepare your [variable](#required-variables) values.
 
