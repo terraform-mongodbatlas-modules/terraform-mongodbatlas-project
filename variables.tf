@@ -51,7 +51,7 @@ variable "ip_access_list" {
   description = <<-EOT
   IP access list of entries for the Atlas project. Each "source" maps to one of the following: `cidrBlock`, `ipAddress`, or `awsSecurityGroup`.
   
-  Note: When using AWS security group IDs, the value must be known at plan time. If you create the ID in the same apply, Terraform fails.
+  Note: When using AWS security group IDs, the value must be known at plan time. If you create the ID in the same `apply` command, Terraform fails.
 
   For example,
   
