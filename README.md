@@ -71,10 +71,10 @@ Follow these steps to set up a simple Atlas project using this module.
 
    You can copy the files directly from the ones provided in this module:
 
-    - [examples/basic/main.tf](examples/basic/main.tf)
-    - [examples/basic/variables.tf](examples/basic/variables.tf)
-    - [examples/basic/outputs.tf](examples/basic/outputs.tf)
-    - [examples/basic/versions.tf](examples/basic/versions.tf)
+    - [examples/basic/main.tf](https://github.com/terraform-mongodbatlas-modules/terraform-mongodbatlas-project/blob/v0.1.0/examples/basic/main.tf)
+    - [examples/basic/variables.tf](https://github.com/terraform-mongodbatlas-modules/terraform-mongodbatlas-project/blob/v0.1.0/examples/basic/variables.tf)
+    - [examples/basic/outputs.tf](https://github.com/terraform-mongodbatlas-modules/terraform-mongodbatlas-project/blob/v0.1.0/examples/basic/outputs.tf)
+    - [examples/basic/versions.tf](https://github.com/terraform-mongodbatlas-modules/terraform-mongodbatlas-project/blob/v0.1.0/examples/basic/versions.tf)
 
     The following code example shows a basic example of a `main.tf` file configuration:
 
@@ -154,9 +154,9 @@ Run 'just gen-readme' to regenerate. -->
 
 Feature | Name
 --- | ---
-Project Setup | [Basic Project with Settings and Limits](./examples/basic)
-IP Access List | [Development Project with IP Allowlist](./examples/dev_with_allowlist)
-Production Baseline | [Production Secure Baseline with Maintenance Window](./examples/prod_secure_baseline)
+Project Setup | [Basic Project with Settings and Limits](https://github.com/terraform-mongodbatlas-modules/terraform-mongodbatlas-project/blob/v0.1.0/examples/basic)
+IP Access List | [Development Project with IP Allowlist](https://github.com/terraform-mongodbatlas-modules/terraform-mongodbatlas-project/blob/v0.1.0/examples/dev_with_allowlist)
+Production Baseline | [Production Secure Baseline with Maintenance Window](https://github.com/terraform-mongodbatlas-modules/terraform-mongodbatlas-project/blob/v0.1.0/examples/prod_secure_baseline)
 
 <!-- END_TABLES -->
 <!-- BEGIN_TF_DOCS -->
@@ -367,4 +367,4 @@ Description: Maintenance window details.
 
 ## License
 
-See [LICENSE](LICENSE) for full details.
+See [LICENSE](https://github.com/terraform-mongodbatlas-modules/terraform-mongodbatlas-project/blob/v0.1.0/LICENSE) for full details.
