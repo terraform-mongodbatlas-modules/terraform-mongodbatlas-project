@@ -7,4 +7,9 @@ terraform {
       version = "~> 2.1"
     }
   }
+
+  provider_meta "mongodbatlas" {
+    module_name    = "project"
+    module_version = "local"
+  }
 }
