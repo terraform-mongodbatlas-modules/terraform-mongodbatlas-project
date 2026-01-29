@@ -9,7 +9,7 @@ terraform {
   }
   provider_meta "mongodbatlas" {
     module_name    = "project"
-    module_version = "0.1.0"
+    module_version = "local"
   }
 }
 
