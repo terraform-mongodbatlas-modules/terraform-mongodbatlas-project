@@ -1,4 +1,3 @@
-<!-- path-sync copy -n sdlc -->
 ## Description
 
 Please include a summary of the fix/feature/change, including any relevant motivation and context.
