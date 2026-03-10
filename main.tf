@@ -23,6 +23,10 @@ resource "mongodbatlas_project" "this" {
   }
 
   tags = var.tags
+
+  lifecycle {
+    ignore_changes = [teams] # `teams` is deprecated in the project resource and not module-managed, ignoring it to avoid plan diffs on import.
+  }
 }
 
 locals {

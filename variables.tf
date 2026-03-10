@@ -128,5 +128,5 @@ variable "region_usage_restrictions" {
 variable "tags" {
   type        = map(string)
   description = "Map of tags to assign to the project."
-  default     = {}
+  default     = null
 }
