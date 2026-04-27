@@ -340,7 +340,7 @@ Map of tags to assign to the project.
 
 Type: `map(string)`
 
-Default: `{}`
+Default: `null`
 
 <!-- END_TF_INPUTS_RAW -->
 
