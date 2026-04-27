@@ -116,7 +116,7 @@ variable "maintenance_window" {
 variable "with_default_alerts_settings" {
   type        = bool
   description = "Flag that indicates whether to create the project with default alert settings."
-  default     = true
+  default     = false
 }
 
 variable "region_usage_restrictions" {

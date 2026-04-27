@@ -4,6 +4,8 @@ module "atlas_project" {
   name   = var.project_name
   org_id = var.org_id
 
+  with_default_alerts_settings = true
+
   project_settings = {
     is_data_explorer_enabled          = false
     is_performance_advisor_enabled    = true

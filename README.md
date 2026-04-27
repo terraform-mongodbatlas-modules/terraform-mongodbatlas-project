@@ -243,7 +243,7 @@ Flag that indicates whether to create the project with default alert settings.
 
 Type: `bool`
 
-Default: `true`
+Default: `false`
 
 ### region_usage_restrictions
 

@@ -4,4 +4,4 @@ tags:
   Environment: Development
   ManagedBy: Terraform
 teams: []
-with_default_alerts_settings: true
+with_default_alerts_settings: false
