@@ -23,6 +23,10 @@ resource "mongodbatlas_project" "this" {
   }
 
   tags = var.tags
+
+  lifecycle {
+    ignore_changes = [teams]
+  }
 }
 
 locals {

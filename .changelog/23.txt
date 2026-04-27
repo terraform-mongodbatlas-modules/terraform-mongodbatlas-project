@@ -1,0 +1,7 @@
+```release-note:breaking-change
+variable/tags: Changes default from `{}` to `null` to prevent plan diff on import
+```
+
+```release-note:enhancement
+module: Ignores `teams` attribute on project resource as it is deprecated and not module-managed
+```
