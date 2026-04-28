@@ -14,7 +14,7 @@ Run 'just gen-readme' to regenerate. -->
 - [Requirements](#requirements)
 - [Providers](#providers)
 - [Resources](#resources)
-- [Required Variables](#required-variables)
+- [Project Management](#project-management)
 - [Project Settings](#project-settings)
 - [Project Limits](#project-limits)
 - [Optional Variables](#optional-variables)
@@ -184,6 +184,7 @@ The following providers are used by this module:
 The following resources are used by this module:
 
 - [mongodbatlas_project.this](https://registry.terraform.io/providers/mongodb/mongodbatlas/latest/docs/resources/project) (resource)
+- [mongodbatlas_project.this](https://registry.terraform.io/providers/mongodb/mongodbatlas/latest/docs/data-sources/project) (data source)
 
 <!-- BEGIN_TF_INPUTS_RAW -->
 <!-- @generated
@@ -191,24 +192,40 @@ WARNING: This grouped inputs section is auto-generated. Do not edit directly.
 Changes will be overwritten when documentation is regenerated.
 Run 'just docs' to regenerate.
 -->
-## Required Variables
+## Project Management
+
+The module operates in two modes depending on whether `project_id` is set:
+- **Managed mode**: set `name` and `org_id`. The module creates and owns the Atlas project resource.
+- **Reference mode**: set `project_id`. The module skips project creation and manages only standalone resources (maintenance window, IP access list, etc.) against an existing project.
 
 ### name
 
-Name of the MongoDB Atlas project.
+Name of the MongoDB Atlas project. Required when project_id is not set.
 
 Type: `string`
+
+Default: `null`
 
 ### org_id
 
-ID of the MongoDB Atlas organization associated with the project.
+ID of the MongoDB Atlas organization. Required when project_id is not set.
 
 Type: `string`
+
+Default: `null`
+
+### project_id
+
+ID of an existing Atlas project. When set, the module operates in reference mode: the project resource is not created and only standalone resources are managed.
+
+Type: `string`
+
+Default: `null`
 
 
 ## Project Settings
 
-Configure Atlas project feature settings.
+Configure Atlas project feature settings. Managed mode only.
 
 ### project_settings
 
@@ -256,7 +273,7 @@ Default: `null`
 
 ## Project Limits
 
-Configure project resource limits. See the [Atlas project limits documentation](https://www.mongodb.com/docs/atlas/reference/api-resources-spec/v2/#tag/Projects/operation/setProjectLimit) for details.
+Configure project resource limits. Managed mode only. See the [Atlas project limits documentation](https://www.mongodb.com/docs/atlas/reference/api-resources-spec/v2/#tag/Projects/operation/setProjectLimit) for details.
 
 ### limits
 

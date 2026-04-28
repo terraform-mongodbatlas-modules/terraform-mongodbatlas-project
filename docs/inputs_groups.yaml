@@ -1,17 +1,22 @@
 sections:
-  - id: required
-    title: "Required Variables"
+  - id: project_management
+    title: "Project Management"
     level: 2
+    description: |
+      The module operates in two modes depending on whether `project_id` is set:
+      - **Managed mode**: set `name` and `org_id`. The module creates and owns the Atlas project resource.
+      - **Reference mode**: set `project_id`. The module skips project creation and manages only standalone resources (maintenance window, IP access list, etc.) against an existing project.
     match:
       names:
         - name
         - org_id
+        - project_id
 
   - id: project_settings
     title: "Project Settings"
     level: 2
     description: |
-      Configure Atlas project feature settings.
+      Configure Atlas project feature settings. Managed mode only.
     match:
       names:
         - project_settings
@@ -23,7 +28,7 @@ sections:
     title: "Project Limits"
     level: 2
     description: |
-      Configure project resource limits. See the [Atlas project limits documentation](https://www.mongodb.com/docs/atlas/reference/api-resources-spec/v2/#tag/Projects/operation/setProjectLimit) for details.
+      Configure project resource limits. Managed mode only. See the [Atlas project limits documentation](https://www.mongodb.com/docs/atlas/reference/api-resources-spec/v2/#tag/Projects/operation/setProjectLimit) for details.
     match:
       names:
         - limits
