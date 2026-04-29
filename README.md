@@ -340,17 +340,17 @@ Type:
 ```hcl
 object({
   datadog = optional(list(object({
-    log_types = list(string)
+    log_types = set(string)
     api_key   = string
     region    = string
   })))
   splunk = optional(list(object({
-    log_types = list(string)
+    log_types = set(string)
     hec_token = string
     hec_url   = string
   })))
   otel = optional(list(object({
-    log_types = list(string)
+    log_types = set(string)
     endpoint  = string
     headers   = list(object({ name = string, value = string }))
   })))
