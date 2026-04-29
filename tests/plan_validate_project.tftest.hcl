@@ -62,6 +62,38 @@ run "maintenance_window_disabled_default" {
   }
 }
 
+run "default_feature_set_invalid_value" {
+  command = plan
+  variables {
+    default_feature_set = "INVALID"
+  }
+  expect_failures = [var.default_feature_set]
+}
+
+run "default_feature_set_standard" {
+  command = plan
+  variables {
+    default_feature_set = "STANDARD"
+  }
+  # default_feature_set is unused in v1, we only verify that the project is created.
+  assert {
+    condition     = length(mongodbatlas_project.this) == 1
+    error_message = "Expected project to be created"
+  }
+}
+
+run "default_feature_set_recommended" {
+  command = plan
+  variables {
+    default_feature_set = "RECOMMENDED"
+  }
+  # default_feature_set is unused in v1, we only verify that the project is created.
+  assert {
+    condition     = length(mongodbatlas_project.this) == 1
+    error_message = "Expected project to be created"
+  }
+}
+
 run "maintenance_window_enabled_requires_day_and_hour" {
   command = plan
   variables {

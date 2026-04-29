@@ -1,0 +1,3 @@
+```release-note:enhancement
+variable/default_feature_set: Adds mechanism to control which module features with default values are automatically enabled
+```
