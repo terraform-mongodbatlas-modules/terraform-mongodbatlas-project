@@ -1,13 +1,64 @@
+variable "project_id" {
+  type        = string
+  description = "ID of an existing Atlas project. When set, the module operates in reference mode: the project resource is not created and only standalone resources are managed."
+  default     = null
+
+  validation {
+    condition     = var.project_id != null || var.name != null
+    error_message = "name is required when project_id is not set."
+  }
+
+  validation {
+    condition     = var.project_id != null || var.org_id != null
+    error_message = "org_id is required when project_id is not set."
+  }
+
+  validation {
+    condition     = !(var.project_id != null && var.name != null)
+    error_message = "name cannot be set when project_id is set (reference mode)."
+  }
+
+  validation {
+    condition     = !(var.project_id != null && var.org_id != null)
+    error_message = "org_id cannot be set when project_id is set (reference mode)."
+  }
+
+  validation {
+    condition     = var.project_id == null || length(var.limits) == 0
+    error_message = "limits cannot be set when project_id is set (reference mode)."
+  }
+
+  validation {
+    condition     = var.project_id == null || length([for k, v in var.project_settings : k if v != null]) == 0
+    error_message = "project_settings cannot be set when project_id is set (reference mode)."
+  }
+
+  validation {
+    condition     = var.project_id == null || var.project_owner_id == null
+    error_message = "project_owner_id cannot be set when project_id is set (reference mode)."
+  }
+
+  validation {
+    condition     = var.project_id == null || var.region_usage_restrictions == null
+    error_message = "region_usage_restrictions cannot be set when project_id is set (reference mode)."
+  }
+
+  validation {
+    condition     = var.project_id == null || var.tags == null
+    error_message = "tags cannot be set when project_id is set (reference mode)."
+  }
+}
+
 variable "name" {
   type        = string
-  description = "Name of the MongoDB Atlas project."
-  nullable    = false
+  description = "Name of the MongoDB Atlas project. Required when project_id is not set."
+  default     = null
 }
 
 variable "org_id" {
   type        = string
-  description = "ID of the MongoDB Atlas organization associated with the project."
-  nullable    = false
+  description = "ID of the MongoDB Atlas organization. Required when project_id is not set."
+  default     = null
 }
 
 variable "project_owner_id" {

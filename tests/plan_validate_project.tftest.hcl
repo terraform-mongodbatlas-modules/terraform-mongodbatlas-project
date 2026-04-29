@@ -8,7 +8,7 @@ variables {
 run "minimal_project" {
   command = plan
   assert {
-    condition     = mongodbatlas_project.this.name == var.name
+    condition     = mongodbatlas_project.this[0].name == var.name
     error_message = "Expected project name to match input"
   }
 }

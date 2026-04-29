@@ -1,16 +1,16 @@
 output "id" {
   description = "MongoDB Atlas project ID."
-  value       = mongodbatlas_project.this.id
+  value       = local.project_id
 }
 
 output "created_at" {
   description = "MongoDB Atlas project creation time (RFC3339)."
-  value       = mongodbatlas_project.this.created
+  value       = local.project_created_at
 }
 
 output "cluster_count" {
   description = "MongoDB Atlas project cluster count."
-  value       = mongodbatlas_project.this.cluster_count
+  value       = local.project_cluster_count
 }
 
 output "maintenance_window" {

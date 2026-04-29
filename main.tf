@@ -1,4 +1,6 @@
 resource "mongodbatlas_project" "this" {
+  count = var.project_id == null ? 1 : 0
+
   name   = var.name
   org_id = var.org_id
 
@@ -29,7 +31,21 @@ resource "mongodbatlas_project" "this" {
   }
 }
 
+data "mongodbatlas_project" "this" {
+  count      = var.project_id != null ? 1 : 0
+  project_id = var.project_id
+}
+
+moved {
+  from = mongodbatlas_project.this
+  to   = mongodbatlas_project.this[0]
+}
+
 locals {
+  project_id            = var.project_id != null ? var.project_id : mongodbatlas_project.this[0].id
+  project_created_at    = var.project_id != null ? data.mongodbatlas_project.this[0].created : mongodbatlas_project.this[0].created
+  project_cluster_count = var.project_id != null ? data.mongodbatlas_project.this[0].cluster_count : mongodbatlas_project.this[0].cluster_count
+
   ip_access_list_entries = var.ip_access_list
   ip_access_list_enabled = length(var.ip_access_list) > 0
 
@@ -40,7 +56,7 @@ module "ip_access_list" {
   source = "./modules/ip_access_list"
   count  = local.ip_access_list_enabled ? 1 : 0
 
-  project_id = mongodbatlas_project.this.id
+  project_id = local.project_id
   entries    = local.ip_access_list_entries
 }
 
@@ -48,7 +64,7 @@ module "maintenance_window" {
   source = "./modules/maintenance_window"
   count  = local.maintenance_window_enabled ? 1 : 0
 
-  project_id              = mongodbatlas_project.this.id
+  project_id              = local.project_id
   day_of_week             = var.maintenance_window.day_of_week
   hour_of_day             = var.maintenance_window.hour_of_day
   auto_defer              = var.maintenance_window.auto_defer
