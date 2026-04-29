@@ -21,6 +21,13 @@ examples:
       - address: module.atlas_project.module.ip_access_list[0].mongodbatlas_project_ip_access_list.this["203.0.113.0/24"]
       - address: module.atlas_project.module.maintenance_window[0].mongodbatlas_maintenance_window.this
 
+  - name: alerts
+    var_groups: [alerts]
+    plan_regressions:
+      - address: module.atlas_project.mongodbatlas_project.this[0]
+      - address: mongodbatlas_alert_configuration.no_primary
+      - address: mongodbatlas_alert_configuration.disk_partition
+
 var_groups:
   basic:
     - name: org_id
@@ -45,3 +52,11 @@ var_groups:
     - name: project_name
       expose_in_workspace: false
       module_value: local.project_name_prod
+
+  alerts:
+    - name: org_id
+      expose_in_workspace: false
+      module_value: var.org_id
+    - name: project_name
+      expose_in_workspace: false
+      module_value: local.project_name_alerts
