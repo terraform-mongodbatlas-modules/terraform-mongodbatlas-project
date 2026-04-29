@@ -33,4 +33,6 @@ locals {
   project_name_dev = "test-ws-dev-${random_string.suffix.id}"
   # tflint-ignore: terraform_unused_declarations
   project_name_prod = "test-ws-prod-${random_string.suffix.id}"
+  # tflint-ignore: terraform_unused_declarations
+  project_name_alerts = "test-ws-alerts-${random_string.suffix.id}"
 }

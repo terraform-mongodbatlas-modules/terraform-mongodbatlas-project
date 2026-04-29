@@ -1,0 +1,3 @@
+```release-note:enhancement
+examples/alerts: Demonstrates how to create alerts for a module-managed project
+```
