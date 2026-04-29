@@ -1,0 +1,16 @@
+enabled: true
+event_type: OUTSIDE_METRIC_THRESHOLD
+matcher: []
+metric_threshold_config:
+- metric_name: DISK_PARTITION_SPACE_PERCENT_USED
+  operator: GREATER_THAN
+  threshold: 90
+  units: RAW
+notification:
+- delay_min: 0
+  email_enabled: true
+  interval_min: 60
+  roles:
+  - GROUP_OWNER
+  type_name: GROUP
+threshold_config: []

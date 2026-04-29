@@ -28,3 +28,6 @@ tables:
       - folder_name: prod_secure_baseline
         feature: Production Baseline
         name: Production Secure Baseline with Maintenance Window
+      - folder_name: alerts
+        feature: Alert Configuration
+        name: Alert Configuration for a Module-managed Project

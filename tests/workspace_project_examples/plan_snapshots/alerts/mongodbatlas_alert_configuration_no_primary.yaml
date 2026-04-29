@@ -1,0 +1,12 @@
+enabled: true
+event_type: NO_PRIMARY
+matcher: []
+metric_threshold_config: []
+notification:
+- delay_min: 0
+  email_enabled: true
+  interval_min: 5
+  roles:
+  - GROUP_OWNER
+  type_name: GROUP
+threshold_config: []

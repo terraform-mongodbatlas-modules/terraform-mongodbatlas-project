@@ -11,6 +11,7 @@ NOTES:
 
 ENHANCEMENTS:
 
+* examples/alerts: Demonstrates how to create alerts for a module-managed project ([#26](https://github.com/terraform-mongodbatlas-modules/terraform-mongodbatlas-project/pull/26))
 * module: Ignores `teams` attribute on project resource as it is deprecated and not module-managed ([#23](https://github.com/terraform-mongodbatlas-modules/terraform-mongodbatlas-project/pull/23))
 * variable/project_id: Adds reference mode support. When set, the module manages standalone resources for an existing Atlas project without managing the project resource ([#25](https://github.com/terraform-mongodbatlas-modules/terraform-mongodbatlas-project/pull/25))
 
