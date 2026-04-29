@@ -295,6 +295,20 @@ Default: `{}`
 
 ## Optional Variables
 
+### default_feature_set
+
+Controls which module features with default values are automatically enabled.
+
+- **`RECOMMENDED`** (default): features that have module defaults and do not require additional
+  customer input are automatically enabled. Upgrading the module version adopts new best
+  practices without any configuration changes. Minor version upgrades may introduce plan changes (new resources).
+- **`STANDARD`**: features with module defaults are not automatically enabled. Only Atlas
+  defaults apply. Minor version upgrades do not introduce plan changes.
+
+Type: `string`
+
+Default: `"RECOMMENDED"`
+
 ### ip_access_list
 
 IP access list of entries for the Atlas project. Each "source" maps to one of the following: `cidrBlock`, `ipAddress`, or `awsSecurityGroup`.
