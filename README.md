@@ -171,13 +171,13 @@ The following requirements are needed by this module:
 
 - <a name="requirement_terraform"></a> [terraform](https://developer.hashicorp.com/terraform/install) (>= 1.9)
 
-- <a name="requirement_mongodbatlas"></a> [mongodbatlas](https://registry.terraform.io/providers/mongodb/mongodbatlas/latest/docs) (~> 2.1)
+- <a name="requirement_mongodbatlas"></a> [mongodbatlas](https://registry.terraform.io/providers/mongodb/mongodbatlas/latest/docs) (~> 2.8)
 
 ## Providers
 
 The following providers are used by this module:
 
-- <a name="provider_mongodbatlas"></a> [mongodbatlas](https://registry.terraform.io/providers/mongodb/mongodbatlas/latest/docs) (~> 2.1)
+- <a name="provider_mongodbatlas"></a> [mongodbatlas](https://registry.terraform.io/providers/mongodb/mongodbatlas/latest/docs) (~> 2.8)
 
 ## Resources
 
@@ -321,6 +321,43 @@ list(object({
 
 Default: `[]`
 
+### log_integration
+
+Log integration configuration for exporting Atlas logs to Datadog, Splunk, and/or OTel collectors.
+For CSP integrations (AWS, Azure & GCP), use their respective MongoDB Atlas modules.
+
+Each list entry creates one `mongodbatlas_log_integration` resource of the corresponding list type.
+`log_types` is always required - valid values: MONGOD, MONGOS, MONGOD_AUDIT, MONGOS_AUDIT.
+
+Type-specific fields:
+- `datadog`: `api_key` (sensitive) and `region` (US1, US3, US5, EU, AP1, AP2, US1_FED).
+- `splunk`: `hec_token` (sensitive) and `hec_url`.
+- `otel`: `endpoint` and `headers` (sensitive, max 10 headers and 2 KB).
+
+Type:
+
+```hcl
+object({
+  datadog = optional(list(object({
+    log_types = list(string)
+    api_key   = string
+    region    = string
+  })))
+  splunk = optional(list(object({
+    log_types = list(string)
+    hec_token = string
+    hec_url   = string
+  })))
+  otel = optional(list(object({
+    log_types = list(string)
+    endpoint  = string
+    headers   = list(object({ name = string, value = string }))
+  })))
+})
+```
+
+Default: `null`
+
 ### maintenance_window
 
 Maintenance window configuration for the Atlas project.
@@ -376,6 +413,10 @@ Description: MongoDB Atlas project creation time (RFC3339).
 ### <a name="output_id"></a> [id](#output\_id)
 
 Description: MongoDB Atlas project ID.
+
+### <a name="output_log_integration"></a> [log\_integration](#output\_log\_integration)
+
+Description: Log integration IDs, types, and log types.
 
 ### <a name="output_maintenance_window"></a> [maintenance\_window](#output\_maintenance\_window)
 

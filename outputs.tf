@@ -17,3 +17,8 @@ output "maintenance_window" {
   description = "Maintenance window details."
   value       = length(module.maintenance_window) > 0 ? module.maintenance_window[0].maintenance_window : null
 }
+
+output "log_integration" {
+  description = "Log integration IDs, types, and log types."
+  value       = length(module.log_integration) > 0 ? module.log_integration[0].log_integration : []
+}

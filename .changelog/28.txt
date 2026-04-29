@@ -1,0 +1,11 @@
+```release-note:enhancement
+submodule/log_integration: Adds log integration submodule for exporting Atlas logs to Datadog, Splunk, and/or OTel collectors via mongodbatlas_log_integration
+```
+
+```release-note:enhancement
+variable/log_integration: Adds log integration support for exporting Atlas logs to Datadog, Splunk, and/or OTel collectors
+```
+
+```release-note:note
+provider/mongodbatlas: Requires minimum version 2.8.0 for mongodbatlas_log_integration resource support
+```

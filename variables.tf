@@ -181,3 +181,36 @@ variable "tags" {
   description = "Map of tags to assign to the project."
   default     = null
 }
+
+variable "log_integration" {
+  description = <<-EOT
+    Log integration configuration for exporting Atlas logs to Datadog, Splunk, and/or OTel collectors.
+    For CSP integrations (AWS, Azure & GCP), use their respective MongoDB Atlas modules.
+
+    Each list entry creates one `mongodbatlas_log_integration` resource of the corresponding list type.
+    `log_types` is always required - valid values: MONGOD, MONGOS, MONGOD_AUDIT, MONGOS_AUDIT.
+
+    Type-specific fields:
+    - `datadog`: `api_key` (sensitive) and `region` (US1, US3, US5, EU, AP1, AP2, US1_FED).
+    - `splunk`: `hec_token` (sensitive) and `hec_url`.
+    - `otel`: `endpoint` and `headers` (sensitive, max 10 headers and 2 KB).
+  EOT
+  type = object({
+    datadog = optional(list(object({
+      log_types = list(string)
+      api_key   = string
+      region    = string
+    })))
+    splunk = optional(list(object({
+      log_types = list(string)
+      hec_token = string
+      hec_url   = string
+    })))
+    otel = optional(list(object({
+      log_types = list(string)
+      endpoint  = string
+      headers   = list(object({ name = string, value = string }))
+    })))
+  })
+  default = null
+}
