@@ -49,6 +49,15 @@ run "reference_mode_complete" {
     ip_access_list = [
       { source = "203.0.113.0/24", comment = "Office VPN" },
     ]
+    log_integration = {
+      otel = [
+        {
+          log_types = ["MONGOD"]
+          endpoint  = "https://otel.example.com:4318"
+          headers   = [{ name = "Authorization", value = "Bearer token" }]
+        }
+      ]
+    }
   }
   assert {
     condition     = length(mongodbatlas_project.this) == 0
@@ -65,6 +74,10 @@ run "reference_mode_complete" {
   assert {
     condition     = length(module.ip_access_list) == 1
     error_message = "Expected ip_access_list submodule to be instantiated"
+  }
+  assert {
+    condition     = length(module.log_integration) == 1
+    error_message = "Expected log_integration submodule to be instantiated"
   }
 }
 

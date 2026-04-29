@@ -50,6 +50,11 @@ locals {
   ip_access_list_enabled = length(var.ip_access_list) > 0
 
   maintenance_window_enabled = var.maintenance_window.enabled
+
+  log_integration_datadog = var.log_integration != null ? coalesce(var.log_integration.datadog, []) : []
+  log_integration_splunk  = var.log_integration != null ? coalesce(var.log_integration.splunk, []) : []
+  log_integration_otel    = var.log_integration != null ? coalesce(var.log_integration.otel, []) : []
+  log_integration_enabled = length(local.log_integration_datadog) > 0 || length(local.log_integration_splunk) > 0 || length(local.log_integration_otel) > 0
 }
 
 module "ip_access_list" {
@@ -70,4 +75,14 @@ module "maintenance_window" {
   auto_defer              = var.maintenance_window.auto_defer
   auto_defer_once_enabled = var.maintenance_window.auto_defer_once_enabled
   protected_hours         = var.maintenance_window.protected_hours
+}
+
+module "log_integration" {
+  source = "./modules/log_integration"
+  count  = local.log_integration_enabled ? 1 : 0
+
+  project_id = local.project_id
+  datadog    = local.log_integration_datadog
+  splunk     = local.log_integration_splunk
+  otel       = local.log_integration_otel
 }
