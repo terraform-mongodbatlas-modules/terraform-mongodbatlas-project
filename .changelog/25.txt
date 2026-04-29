@@ -1,3 +1,7 @@
 ```release-note:enhancement
 variable/project_id: Adds reference mode support. When set, the module manages standalone resources for an existing Atlas project without managing the project resource
 ```
+
+```release-note:note
+module: Changes the project resource address from `mongodbatlas_project.this` to `mongodbatlas_project.this[0]`. No action required, a `moved` block handles this automatically
+```

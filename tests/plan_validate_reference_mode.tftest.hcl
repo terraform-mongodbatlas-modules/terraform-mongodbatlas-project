@@ -21,7 +21,19 @@ run "reference_mode_minimal" {
   }
   assert {
     condition     = length(data.mongodbatlas_project.this) == 1
-    error_message = "Expected data source to be used in reference mode"
+    error_message = "Expected data source in reference mode"
+  }
+  assert {
+    condition     = output.id == var.project_id
+    error_message = "Expected id output to match project_id input"
+  }
+  assert {
+    condition     = output.cluster_count == 2
+    error_message = "Expected cluster_count output from data source"
+  }
+  assert {
+    condition     = output.created_at == "2026-01-01T00:00:00Z"
+    error_message = "Expected created_at output from data source"
   }
 }
 
@@ -44,7 +56,7 @@ run "reference_mode_complete" {
   }
   assert {
     condition     = length(data.mongodbatlas_project.this) == 1
-    error_message = "Expected data source to be used in reference mode"
+    error_message = "Expected data source in reference mode"
   }
   assert {
     condition     = length(module.maintenance_window) == 1
