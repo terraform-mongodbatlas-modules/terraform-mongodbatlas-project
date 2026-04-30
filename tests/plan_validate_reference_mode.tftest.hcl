@@ -58,6 +58,11 @@ run "reference_mode_complete" {
         }
       ]
     }
+    backup_compliance_policy = {
+      authorized_email           = "security@example.com"
+      authorized_user_first_name = "Jane"
+      authorized_user_last_name  = "Doe"
+    }
   }
   assert {
     condition     = length(mongodbatlas_project.this) == 0
@@ -78,6 +83,10 @@ run "reference_mode_complete" {
   assert {
     condition     = length(module.log_integration) == 1
     error_message = "Expected log_integration submodule to be instantiated"
+  }
+  assert {
+    condition     = length(module.backup_compliance_policy) == 1
+    error_message = "Expected backup_compliance_policy submodule to be instantiated"
   }
 }
 

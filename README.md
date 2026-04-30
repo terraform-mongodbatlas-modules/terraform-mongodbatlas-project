@@ -295,6 +295,53 @@ Default: `{}`
 
 ## Optional Variables
 
+### backup_compliance_policy
+
+Backup compliance policy configuration. When set, creates a `mongodbatlas_backup_compliance_policy` resource.
+Architecture Center recommended defaults are applied unless disabled via `skip_default_policy_items`.
+Policy items provided in `policy_items` override the default for that frequency type.
+
+Valid `frequency_type` values are: "ondemand", "hourly", "daily", "weekly", "monthly" and "yearly".
+Each frequency type may appear at most once.
+
+Default policy items:
+- hourly: every 6 hours, retained 7 days
+- daily: every day, retained 7 days
+- weekly: every Saturday, retained 4 weeks
+- monthly: last day of month, retained 12 months
+- yearly: every December 1st, retained 1 year
+
+`pit_enabled` defaults to `false`. When set to `true`, `restore_window_days` is required.
+
+**NOTE:** Once a Backup Compliance Policy is enabled, no user, regardless of role, can disable the
+Backup Compliance Policy via Terraform, or any other method, without contacting MongoDB Support.
+
+Type:
+
+```hcl
+object({
+  authorized_email           = string
+  authorized_user_first_name = string
+  authorized_user_last_name  = string
+
+  copy_protection_enabled    = optional(bool, false)
+  encryption_at_rest_enabled = optional(bool, false)
+  pit_enabled                = optional(bool, false)
+  restore_window_days        = optional(number)
+
+  skip_default_policy_items = optional(bool, false)
+
+  policy_items = optional(list(object({
+    frequency_type     = string
+    frequency_interval = number
+    retention_unit     = string
+    retention_value    = number
+  })))
+})
+```
+
+Default: `null`
+
 ### default_feature_set
 
 Controls which module features with default values are automatically enabled.
@@ -416,6 +463,10 @@ Default: `null`
 ## Outputs
 
 The following outputs are exported:
+
+### <a name="output_backup_compliance_policy_items"></a> [backup\_compliance\_policy\_items](#output\_backup\_compliance\_policy\_items)
+
+Description: Effective backup compliance policy items.
 
 ### <a name="output_cluster_count"></a> [cluster\_count](#output\_cluster\_count)
 

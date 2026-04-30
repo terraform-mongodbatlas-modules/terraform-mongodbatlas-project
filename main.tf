@@ -55,6 +55,8 @@ locals {
   log_integration_splunk  = var.log_integration != null ? coalesce(var.log_integration.splunk, []) : []
   log_integration_otel    = var.log_integration != null ? coalesce(var.log_integration.otel, []) : []
   log_integration_enabled = length(local.log_integration_datadog) > 0 || length(local.log_integration_splunk) > 0 || length(local.log_integration_otel) > 0
+
+  bcp_enabled = var.backup_compliance_policy != null
 }
 
 module "ip_access_list" {
@@ -75,6 +77,22 @@ module "maintenance_window" {
   auto_defer              = var.maintenance_window.auto_defer
   auto_defer_once_enabled = var.maintenance_window.auto_defer_once_enabled
   protected_hours         = var.maintenance_window.protected_hours
+}
+
+module "backup_compliance_policy" {
+  source = "./modules/backup_compliance_policy"
+  count  = local.bcp_enabled ? 1 : 0
+
+  project_id                 = local.project_id
+  authorized_email           = var.backup_compliance_policy.authorized_email
+  authorized_user_first_name = var.backup_compliance_policy.authorized_user_first_name
+  authorized_user_last_name  = var.backup_compliance_policy.authorized_user_last_name
+  copy_protection_enabled    = var.backup_compliance_policy.copy_protection_enabled
+  encryption_at_rest_enabled = var.backup_compliance_policy.encryption_at_rest_enabled
+  pit_enabled                = var.backup_compliance_policy.pit_enabled
+  restore_window_days        = var.backup_compliance_policy.restore_window_days
+  policy_items               = var.backup_compliance_policy.policy_items
+  skip_default_policy_items  = var.backup_compliance_policy.skip_default_policy_items
 }
 
 module "log_integration" {

@@ -13,6 +13,65 @@ run "minimal_project" {
   }
 }
 
+run "complete_project" {
+  command = plan
+  variables {
+    project_settings = {
+      is_data_explorer_enabled          = false
+      is_extended_storage_sizes_enabled = true
+    }
+    limits = {
+      "atlas.project.deployment.clusters" = 10
+    }
+    maintenance_window = {
+      enabled     = true
+      day_of_week = 7
+      hour_of_day = 2
+    }
+    ip_access_list = [
+      { source = "203.0.113.0/24", comment = "Office VPN" },
+    ]
+    log_integration = {
+      otel = [
+        {
+          log_types = ["MONGOD", "MONGOD_AUDIT"]
+          endpoint  = "https://otel.example.com:4318"
+          headers   = [{ name = "Authorization", value = "Bearer token" }]
+        }
+      ]
+    }
+    backup_compliance_policy = {
+      authorized_email           = "security@example.com"
+      authorized_user_first_name = "Jane"
+      authorized_user_last_name  = "Doe"
+    }
+    tags = {
+      Environment = "production"
+    }
+  }
+  assert {
+    condition     = length(mongodbatlas_project.this) == 1
+    error_message = "Expected project resource to be created"
+  }
+  assert {
+    condition     = length(module.maintenance_window) == 1
+    error_message = "Expected maintenance_window submodule to be instantiated"
+  }
+  assert {
+    condition     = length(module.ip_access_list) == 1
+    error_message = "Expected ip_access_list submodule to be instantiated"
+  }
+  assert {
+    condition     = length(module.log_integration) == 1
+    error_message = "Expected log_integration submodule to be instantiated"
+  }
+  assert {
+    condition     = length(module.backup_compliance_policy) == 1
+    error_message = "Expected backup_compliance_policy submodule to be instantiated"
+  }
+}
+
+
 run "ip_access_list_entries" {
   command = plan
   variables {
@@ -62,6 +121,18 @@ run "maintenance_window_disabled_default" {
   }
 }
 
+run "maintenance_window_enabled_requires_day_and_hour" {
+  command = plan
+  variables {
+    maintenance_window = {
+      enabled     = true
+      day_of_week = null
+      hour_of_day = null
+    }
+  }
+  expect_failures = [var.maintenance_window]
+}
+
 run "default_feature_set_invalid_value" {
   command = plan
   variables {
@@ -92,16 +163,4 @@ run "default_feature_set_recommended" {
     condition     = length(mongodbatlas_project.this) == 1
     error_message = "Expected project to be created"
   }
-}
-
-run "maintenance_window_enabled_requires_day_and_hour" {
-  command = plan
-  variables {
-    maintenance_window = {
-      enabled     = true
-      day_of_week = null
-      hour_of_day = null
-    }
-  }
-  expect_failures = [var.maintenance_window]
 }
