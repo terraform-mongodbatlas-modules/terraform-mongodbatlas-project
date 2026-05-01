@@ -53,6 +53,7 @@ class ExampleRow(BaseModel):
     folder: int | None = None
     folder_name: str = ""
     title_suffix: str = ""
+    description: str = ""
 
     def model_post_init(self, _context) -> None:
         if self.folder is None and self.folder_name == "":
@@ -75,6 +76,7 @@ class TableConfig:
     example_rows: list[ExampleRow] = field(default_factory=list)
     auto_columns: dict[str, AutoColumnConfig] = field(default_factory=dict)
     readme_template: str = ""
+    intro: str = ""
 
 
 def load_examples_config(config_path: Path | None = None) -> dict:
