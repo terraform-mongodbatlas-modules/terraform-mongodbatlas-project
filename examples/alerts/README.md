@@ -5,6 +5,8 @@ Run 'just gen-examples' to regenerate.
 -->
 # Alert Configuration for a Module-managed Project
 
+The Alert Configuration example creates alert configurations alongside a module-managed project. The two alerts included in the example ("No partition" and "Disk partition usage") are based on the [MongoDB Atlas recommended alert configurations](https://www.mongodb.com/docs/atlas/architecture/current/monitoring-alerts/).
+
 <!-- BEGIN_GETTING_STARTED -->
 ## Prerequisites
 

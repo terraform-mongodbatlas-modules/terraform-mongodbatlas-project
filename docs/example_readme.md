@@ -1,6 +1,8 @@
 <!-- This file is used to generate the examples/README.md files -->
 # {{ .NAME }}
 
+{{ .DESCRIPTION }}
+
 <!-- BEGIN_GETTING_STARTED -->
 ## Prerequisites
 

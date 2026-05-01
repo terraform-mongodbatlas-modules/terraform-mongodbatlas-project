@@ -22,12 +22,20 @@ tables:
       - folder_name: basic
         feature: Project Setup
         name: Basic Project with Settings and Limits
+        description: The Basic Project example creates an Atlas project with custom settings, limits, an IP access list, and tags.
       - folder_name: dev_with_allowlist
         feature: IP Access List
         name: Development Project with IP Allowlist
+        description: The Development Project with IP Allowlist example creates a minimal project with an IP access list for development environments.
       - folder_name: prod_secure_baseline
         feature: Production Baseline
         name: Production Secure Baseline with Maintenance Window
+        description: The Production Secure Baseline example creates a project with restrictive settings, higher limits, and a maintenance window with protected hours.
       - folder_name: alerts
         feature: Alert Configuration
         name: Alert Configuration for a Module-managed Project
+        description: The Alert Configuration example creates alert configurations alongside a module-managed project. The two alerts included in the example ("No partition" and "Disk partition usage") are based on the [MongoDB Atlas recommended alert configurations](https://www.mongodb.com/docs/atlas/architecture/current/monitoring-alerts/).
+      - folder_name: log_integration
+        feature: Log Integration
+        name: Log Integration with Datadog, Splunk, and OTel
+        description: The Log Integration example exports Atlas logs to Datadog, Splunk, and an OpenTelemetry collector.

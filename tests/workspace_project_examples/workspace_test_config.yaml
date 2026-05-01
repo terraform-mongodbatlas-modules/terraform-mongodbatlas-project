@@ -28,6 +28,15 @@ examples:
       - address: mongodbatlas_alert_configuration.no_primary
       - address: mongodbatlas_alert_configuration.disk_partition
 
+  - name: log_integration
+    var_groups: [log_integration]
+    sensitive_output: true
+    plan_regressions:
+      - address: module.atlas_project.mongodbatlas_project.this[0]
+      - address: module.atlas_project.module.log_integration[0].mongodbatlas_log_integration.datadog[0]
+      - address: module.atlas_project.module.log_integration[0].mongodbatlas_log_integration.splunk[0]
+      - address: module.atlas_project.module.log_integration[0].mongodbatlas_log_integration.otel[0]
+
 var_groups:
   basic:
     - name: org_id
@@ -60,3 +69,29 @@ var_groups:
     - name: project_name
       expose_in_workspace: false
       module_value: local.project_name_alerts
+
+  log_integration:
+    - name: org_id
+      expose_in_workspace: false
+      module_value: var.org_id
+    - name: project_name
+      expose_in_workspace: false
+      module_value: local.project_name_log_integration
+    - name: datadog_api_key
+      expose_in_workspace: false
+      module_value: '"test-datadog-api-key"'
+    - name: datadog_region
+      expose_in_workspace: false
+      module_value: '"US1"'
+    - name: splunk_hec_token
+      expose_in_workspace: false
+      module_value: '"test-splunk-hec-token"'
+    - name: splunk_hec_url
+      expose_in_workspace: false
+      module_value: '"https://splunk.example.com:8088"'
+    - name: otel_endpoint
+      expose_in_workspace: false
+      module_value: '"https://otel-collector.example.com:4318"'
+    - name: otel_auth_header
+      expose_in_workspace: false
+      module_value: '"Bearer test-otel-token"'
