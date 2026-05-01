@@ -1,0 +1,7 @@
+```release-note:enhancement
+submodule/backup_compliance_policy: Adds backup compliance policy submodule to manage `mongodbatlas_backup_compliance_policy` with Architecture Center defaults
+```
+
+```release-note:enhancement
+variable/backup_compliance_policy: Adds backup compliance policy support with Architecture Center defaults
+```

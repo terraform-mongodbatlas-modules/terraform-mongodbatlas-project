@@ -22,3 +22,8 @@ output "log_integration" {
   description = "Log integration IDs, types, and log types."
   value       = length(module.log_integration) > 0 ? module.log_integration[0].log_integration : []
 }
+
+output "backup_compliance_policy_items" {
+  description = "Effective backup compliance policy items."
+  value       = length(module.backup_compliance_policy) > 0 ? module.backup_compliance_policy[0].policy_items : []
+}
