@@ -7,16 +7,14 @@ locals {
     yearly  = { frequency_interval = 12, retention_unit = "years", retention_value = 1 }
   }
 
-  user_items = var.policy_items
-
-  user_items_by_type = { for i in local.user_items : i.frequency_type => i }
-
-  ondemand = lookup(local.user_items_by_type, "ondemand", null)
-  hourly   = var.skip_default_policy_items ? lookup(local.user_items_by_type, "hourly", null) : coalesce(lookup(local.user_items_by_type, "hourly", null), local.defaults.hourly)
-  daily    = var.skip_default_policy_items ? lookup(local.user_items_by_type, "daily", null) : coalesce(lookup(local.user_items_by_type, "daily", null), local.defaults.daily)
-  weekly   = var.skip_default_policy_items ? lookup(local.user_items_by_type, "weekly", null) : coalesce(lookup(local.user_items_by_type, "weekly", null), local.defaults.weekly)
-  monthly  = var.skip_default_policy_items ? lookup(local.user_items_by_type, "monthly", null) : coalesce(lookup(local.user_items_by_type, "monthly", null), local.defaults.monthly)
-  yearly   = var.skip_default_policy_items ? lookup(local.user_items_by_type, "yearly", null) : coalesce(lookup(local.user_items_by_type, "yearly", null), local.defaults.yearly)
+  user_items_by_type = { for i in var.policy_items : i.frequency_type => i }
+  effective_by_type  = var.skip_default_policy_items ? local.user_items_by_type : merge(local.defaults, local.user_items_by_type)
+  ondemand           = lookup(local.effective_by_type, "ondemand", null)
+  hourly             = lookup(local.effective_by_type, "hourly", null)
+  daily              = lookup(local.effective_by_type, "daily", null)
+  weekly             = lookup(local.effective_by_type, "weekly", null)
+  monthly            = lookup(local.effective_by_type, "monthly", null)
+  yearly             = lookup(local.effective_by_type, "yearly", null)
 }
 
 resource "mongodbatlas_backup_compliance_policy" "this" {

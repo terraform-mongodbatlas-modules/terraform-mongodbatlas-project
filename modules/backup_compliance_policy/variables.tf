@@ -49,13 +49,13 @@ variable "policy_items" {
     retention_unit     = string
     retention_value    = number
   }))
-  description = "User-provided policy items. Each frequency_type may appear at most once. Overrides the Architecture Center default for that frequency_type."
+  description = "User-provided policy items. Each frequency_type may appear at most once. Overrides the default for that frequency_type."
   default     = []
   nullable    = false
 }
 
 variable "skip_default_policy_items" {
   type        = bool
-  description = "When true, disable Architecture Center default policy items. Only user-provided policy_items are applied."
+  description = "When true, disable default policy items. Only user-provided policy_items are applied."
   default     = false
 }

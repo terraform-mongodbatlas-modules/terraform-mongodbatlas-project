@@ -298,7 +298,7 @@ Default: `{}`
 ### backup_compliance_policy
 
 Backup compliance policy configuration. When set, creates a `mongodbatlas_backup_compliance_policy` resource.
-Architecture Center recommended defaults are applied unless disabled via `skip_default_policy_items`.
+Default policy items are applied unless disabled via `skip_default_policy_items`.
 Policy items provided in `policy_items` override the default for that frequency type.
 
 Valid `frequency_type` values are: "ondemand", "hourly", "daily", "weekly", "monthly" and "yearly".
@@ -315,6 +315,7 @@ Default policy items:
 
 **NOTE:** Once a Backup Compliance Policy is enabled, no user, regardless of role, can disable the
 Backup Compliance Policy via Terraform, or any other method, without contacting MongoDB Support.
+See [Backup Compliance Policy Prohibited Actions and Considerations](https://www.mongodb.com/docs/atlas/backup/cloud-backup/backup-compliance-policy/#configure-a-backup-compliance-policy).
 
 Type:
 
