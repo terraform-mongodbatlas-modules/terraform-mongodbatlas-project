@@ -116,8 +116,9 @@ variable "ip_access_list" {
   EOT
 
   type = list(object({
-    source  = string
-    comment = optional(string)
+    source                    = string
+    comment                   = optional(string)
+    skip_allow_all_validation = optional(bool, false)
   }))
 
   default = []
@@ -132,6 +133,14 @@ variable "ip_access_list" {
       )
     ])
     error_message = "ip_access_list.source values must be valid CIDR blocks, IP addresses, or AWS security group IDs (sg-...)."
+  }
+
+  validation {
+
+    condition = alltrue([
+      for entry in var.ip_access_list : (entry.skip_allow_all_validation || !contains(["0.0.0.0/0", "::/0"], entry.source))
+    ])
+    error_message = "ip_access_list entries with source 0.0.0.0/0 or ::/0 are not allowed. Set skip_allow_all_validation = true on the entry to suppress this error."
   }
 }
 

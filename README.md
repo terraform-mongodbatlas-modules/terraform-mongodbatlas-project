@@ -377,8 +377,9 @@ Type:
 
 ```hcl
 list(object({
-  source  = string
-  comment = optional(string)
+  source                    = string
+  comment                   = optional(string)
+  skip_allow_all_validation = optional(bool, false)
 }))
 ```
 
