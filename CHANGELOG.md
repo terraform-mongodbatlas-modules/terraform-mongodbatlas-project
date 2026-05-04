@@ -2,6 +2,7 @@
 
 BREAKING CHANGES:
 
+* variable/ip_access_list: Adds validation that rejects allow-all entries ("0.0.0.0/0" & "::/0"), suppressible via skip_allow_all_validation ([#31](https://github.com/terraform-mongodbatlas-modules/terraform-mongodbatlas-project/pull/31))
 * variable/tags: Changes default from `{}` to `null` to prevent plan diff on import ([#23](https://github.com/terraform-mongodbatlas-modules/terraform-mongodbatlas-project/pull/23))
 * variable/with_default_alerts_settings: Changes default from `true` to `false`. If using the default value, set `with_default_alerts_settings = true` explicitly to avoid a plan error ([#24](https://github.com/terraform-mongodbatlas-modules/terraform-mongodbatlas-project/pull/24))
 
