@@ -5,6 +5,8 @@ Run 'just gen-examples' to regenerate.
 -->
 # Basic Project with Settings and Limits
 
+The Basic Project example creates an Atlas project with custom settings, limits, an IP access list, and tags.
+
 <!-- BEGIN_GETTING_STARTED -->
 ## Prerequisites
 

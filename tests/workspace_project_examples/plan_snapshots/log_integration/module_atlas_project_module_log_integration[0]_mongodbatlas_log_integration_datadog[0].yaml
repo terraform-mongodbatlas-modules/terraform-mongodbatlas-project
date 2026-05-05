@@ -1,0 +1,5 @@
+api_key: test-datadog-api-key
+log_types:
+- MONGOS
+region: US1
+type: DATADOG_LOG_EXPORT

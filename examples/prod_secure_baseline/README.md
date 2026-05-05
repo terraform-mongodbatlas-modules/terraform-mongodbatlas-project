@@ -5,6 +5,8 @@ Run 'just gen-examples' to regenerate.
 -->
 # Production Secure Baseline with Maintenance Window
 
+The Production Secure Baseline example creates a project with restrictive settings, higher limits, and a maintenance window with protected hours.
+
 <!-- BEGIN_GETTING_STARTED -->
 ## Prerequisites
 

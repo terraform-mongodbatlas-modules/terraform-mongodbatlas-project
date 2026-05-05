@@ -3,9 +3,9 @@ WARNING: This file is auto-generated. Do not edit directly.
 Changes will be overwritten when documentation is regenerated.
 Run 'just gen-examples' to regenerate.
 -->
-# Development Project with IP Allowlist
+# Log Integration with Datadog, Splunk, and OTel
 
-The Development Project with IP Allowlist example creates a minimal project with an IP access list for development environments.
+The Log Integration example exports Atlas logs to Datadog, Splunk, and an OpenTelemetry collector.
 
 <!-- BEGIN_GETTING_STARTED -->
 ## Prerequisites
@@ -43,19 +43,28 @@ module "atlas_project" {
   name   = var.project_name
   org_id = var.org_id
 
-  ip_access_list = [
-    {
-      source  = "203.0.113.0/24"
-      comment = "Office VPN"
-    },
-    {
-      source = "198.51.100.10"
-    }
-  ]
-
-  tags = {
-    Environment = "Development"
-    ManagedBy   = "Terraform"
+  log_integration = {
+    splunk = [
+      {
+        log_types = ["MONGOD"]
+        hec_token = var.splunk_hec_token
+        hec_url   = var.splunk_hec_url
+      },
+    ]
+    datadog = [
+      {
+        log_types = ["MONGOS"]
+        api_key   = var.datadog_api_key
+        region    = var.datadog_region
+      },
+    ]
+    otel = [
+      {
+        log_types = ["MONGOD_AUDIT", "MONGOS_AUDIT"]
+        endpoint  = var.otel_endpoint
+        headers   = [{ name = "Authorization", value = var.otel_auth_header }]
+      },
+    ]
   }
 }
 ```

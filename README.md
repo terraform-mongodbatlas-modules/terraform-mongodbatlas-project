@@ -158,6 +158,7 @@ Project Setup | [Basic Project with Settings and Limits](./examples/basic)
 IP Access List | [Development Project with IP Allowlist](./examples/dev_with_allowlist)
 Production Baseline | [Production Secure Baseline with Maintenance Window](./examples/prod_secure_baseline)
 Alert Configuration | [Alert Configuration for a Module-managed Project](./examples/alerts)
+Log Integration | [Log Integration with Datadog, Splunk, and OTel](./examples/log_integration)
 
 <!-- END_TABLES -->
 <!-- BEGIN_TF_DOCS -->

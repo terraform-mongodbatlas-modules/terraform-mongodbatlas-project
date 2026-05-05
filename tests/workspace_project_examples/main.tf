@@ -28,11 +28,13 @@ resource "random_string" "suffix" {
 
 locals {
   # tflint-ignore: terraform_unused_declarations
-  project_name_basic = "test-ws-basic-${random_string.suffix.id}"
+  project_name_basic = "test-acc-tf-p-basic-${random_string.suffix.id}"
   # tflint-ignore: terraform_unused_declarations
-  project_name_dev = "test-ws-dev-${random_string.suffix.id}"
+  project_name_dev = "test-acc-tf-p-dev-${random_string.suffix.id}"
   # tflint-ignore: terraform_unused_declarations
-  project_name_prod = "test-ws-prod-${random_string.suffix.id}"
+  project_name_prod = "test-acc-tf-p-prod-${random_string.suffix.id}"
   # tflint-ignore: terraform_unused_declarations
-  project_name_alerts = "test-ws-alerts-${random_string.suffix.id}"
+  project_name_alerts = "test-acc-tf-p-alerts-${random_string.suffix.id}"
+  # tflint-ignore: terraform_unused_declarations
+  project_name_log_integration = "test-acc-tf-p-log-integration-${random_string.suffix.id}"
 }

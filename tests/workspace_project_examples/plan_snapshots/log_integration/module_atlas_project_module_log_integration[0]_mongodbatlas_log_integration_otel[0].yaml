@@ -1,0 +1,8 @@
+log_types:
+- MONGOD_AUDIT
+- MONGOS_AUDIT
+otel_endpoint: <otel_endpoint>
+otel_supplied_headers:
+- name: Authorization
+  value: Bearer test-otel-token
+type: OTEL_LOG_EXPORT
