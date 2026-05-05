@@ -1,0 +1,3 @@
+```release-note:enhancement
+examples/reference_mode: Demonstrates how to manage standalone resources of an existing Atlas project without managing the project resource
+```

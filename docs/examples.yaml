@@ -35,6 +35,10 @@ tables:
         feature: Alert Configuration
         name: Alert Configuration for a Module-managed Project
         description: The Alert Configuration example creates alert configurations alongside a module-managed project. The two alerts included in the example ("No partition" and "Disk partition usage") are based on the [MongoDB Atlas recommended alert configurations](https://www.mongodb.com/docs/atlas/architecture/current/monitoring-alerts/).
+      - folder_name: reference_mode
+        feature: Reference Mode
+        name: Reference Mode (Existing Project)
+        description: The Reference Mode example manages standalone resources of an existing Atlas project without managing the project resource.
       - folder_name: log_integration
         feature: Log Integration
         name: Log Integration with Datadog, Splunk, and OTel
