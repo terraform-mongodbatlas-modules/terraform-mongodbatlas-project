@@ -16,9 +16,15 @@ examples_readme:
 
 tables:
   - name: Examples
+    intro: |
+      The following examples show common configurations you can copy and adapt. Start with the [basic](./examples/basic) example for a minimal setup. To manage features on an existing Atlas project without taking over the project resource, see the [reference_mode](./examples/reference_mode) example.
     columns: ["feature", "name"]
     link_column: name
     example_rows:
+      - folder_name: reference_mode
+        feature: Reference Mode
+        name: Reference Mode (Existing Project)
+        description: The Reference Mode example manages standalone resources of an existing Atlas project without managing the project resource.
       - folder_name: basic
         feature: Project Setup
         name: Basic Project with Settings and Limits
@@ -35,10 +41,6 @@ tables:
         feature: Alert Configuration
         name: Alert Configuration for a Module-managed Project
         description: The Alert Configuration example creates alert configurations alongside a module-managed project. The two alerts included in the example ("No partition" and "Disk partition usage") are based on the [MongoDB Atlas recommended alert configurations](https://www.mongodb.com/docs/atlas/architecture/current/monitoring-alerts/).
-      - folder_name: reference_mode
-        feature: Reference Mode
-        name: Reference Mode (Existing Project)
-        description: The Reference Mode example manages standalone resources of an existing Atlas project without managing the project resource.
       - folder_name: log_integration
         feature: Log Integration
         name: Log Integration with Datadog, Splunk, and OTel
