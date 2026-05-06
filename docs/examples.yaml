@@ -17,7 +17,7 @@ examples_readme:
 tables:
   - name: Examples
     intro: |
-      The following examples show common configurations you can copy and adapt. Start with the [basic](./examples/basic) example for a minimal setup. To manage features on an existing Atlas project without taking over the project resource, see the [reference_mode](./examples/reference_mode) example.
+      The following examples show common configurations you can copy and adapt. Start with the [basic example](./examples/basic) for a minimal setup. To manage features on an existing Atlas project without taking over the project resource, see the [reference mode example](./examples/reference_mode).
     columns: ["feature", "name"]
     link_column: name
     example_rows:
@@ -26,7 +26,7 @@ tables:
         name: Reference Mode (Existing Project)
         description: The Reference Mode example manages standalone resources of an existing Atlas project without managing the project resource.
       - folder_name: basic
-        feature: Project Setup
+        feature: Basic Project Setup
         name: Basic Project with Settings and Limits
         description: The Basic Project example creates an Atlas project with custom settings, limits, an IP access list, and tags.
       - folder_name: dev_with_allowlist
