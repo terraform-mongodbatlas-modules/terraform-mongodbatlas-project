@@ -15,6 +15,7 @@ ENHANCEMENTS:
 
 * examples/alerts: Demonstrates how to create alerts for a module-managed project ([#26](https://github.com/terraform-mongodbatlas-modules/terraform-mongodbatlas-project/pull/26))
 * examples/log_integration: Demonstrates how to export Atlas logs to Datadog, Splunk and OpenTelemetry collectors ([#33](https://github.com/terraform-mongodbatlas-modules/terraform-mongodbatlas-project/pull/33))
+* examples/reference_mode: Demonstrates how to manage standalone resources of an existing Atlas project without managing the project resource ([#34](https://github.com/terraform-mongodbatlas-modules/terraform-mongodbatlas-project/pull/34))
 * module: Ignores `teams` attribute on project resource as it is deprecated and not module-managed ([#23](https://github.com/terraform-mongodbatlas-modules/terraform-mongodbatlas-project/pull/23))
 * submodule/backup_compliance_policy: Adds backup compliance policy submodule to manage `mongodbatlas_backup_compliance_policy` with Architecture Center defaults ([#30](https://github.com/terraform-mongodbatlas-modules/terraform-mongodbatlas-project/pull/30))
 * submodule/log_integration: Adds log integration submodule for exporting Atlas logs to Datadog, Splunk, and/or OTel collectors via mongodbatlas_log_integration ([#28](https://github.com/terraform-mongodbatlas-modules/terraform-mongodbatlas-project/pull/28))
