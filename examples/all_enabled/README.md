@@ -5,7 +5,7 @@ Run 'just gen-examples' to regenerate.
 -->
 # All Features Enabled
 
-The All Features Enabled example creates an Atlas project with all features enabled.
+The All Features Enabled example creates an Atlas project with all the features enabled.
 
 <!-- BEGIN_GETTING_STARTED -->
 ## Prerequisites

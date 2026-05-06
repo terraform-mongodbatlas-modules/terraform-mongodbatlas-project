@@ -5,7 +5,7 @@ Run 'just gen-examples' to regenerate.
 -->
 # All Features Disabled
 
-The All Features Disabled example creates an Atlas project with all features disabled.
+The All Features Disabled example creates an Atlas project with all the features disabled.
 
 <!-- BEGIN_GETTING_STARTED -->
 ## Prerequisites
@@ -43,6 +43,7 @@ module "atlas_project" {
   name   = var.project_name
   org_id = var.org_id
 
+  # Do not enable features with module defaults.
   default_feature_set = "STANDARD"
 
   project_settings = {
