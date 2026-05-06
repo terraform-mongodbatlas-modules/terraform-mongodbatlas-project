@@ -37,4 +37,8 @@ locals {
   project_name_alerts = "test-acc-tf-p-alerts-${random_string.suffix.id}"
   # tflint-ignore: terraform_unused_declarations
   project_name_log_integration = "test-acc-tf-p-log-integration-${random_string.suffix.id}"
+  # tflint-ignore: terraform_unused_declarations
+  project_name_all_enabled = "test-acc-tf-p-all-enabled-${random_string.suffix.id}"
+  # tflint-ignore: terraform_unused_declarations
+  project_name_all_disabled = "test-acc-tf-p-all-disabled-${random_string.suffix.id}"
 }

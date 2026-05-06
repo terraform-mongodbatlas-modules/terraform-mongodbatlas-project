@@ -1,0 +1,28 @@
+authorized_email: security-admin@example.com
+authorized_user_first_name: Jane
+authorized_user_last_name: Doe
+copy_protection_enabled: true
+encryption_at_rest_enabled: false
+on_demand_policy_item: []
+pit_enabled: true
+policy_item_daily:
+- frequency_interval: 1
+  retention_unit: days
+  retention_value: 7
+policy_item_hourly:
+- frequency_interval: 6
+  retention_unit: days
+  retention_value: 7
+policy_item_monthly:
+- frequency_interval: 40
+  retention_unit: months
+  retention_value: 12
+policy_item_weekly:
+- frequency_interval: 6
+  retention_unit: weeks
+  retention_value: 4
+policy_item_yearly:
+- frequency_interval: 12
+  retention_unit: years
+  retention_value: 1
+restore_window_days: 7
