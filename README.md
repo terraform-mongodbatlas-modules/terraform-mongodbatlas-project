@@ -152,9 +152,13 @@ Changes will be overwritten when documentation is regenerated.
 Run 'just gen-readme' to regenerate. -->
 ## Examples
 
+The following examples show common configurations you can copy and adapt. Start with the [basic example](./examples/basic) for a minimal setup. To manage features on an existing Atlas project without taking over the project resource, see the [reference mode example](./examples/reference_mode).
+
+
 Feature | Name
 --- | ---
-Project Setup | [Basic Project with Settings and Limits](./examples/basic)
+Reference Mode | [Reference Mode (Existing Project)](./examples/reference_mode)
+Basic Project Setup | [Basic Project with Settings and Limits](./examples/basic)
 IP Access List | [Development Project with IP Allowlist](./examples/dev_with_allowlist)
 Production Baseline | [Production Secure Baseline with Maintenance Window](./examples/prod_secure_baseline)
 Alert Configuration | [Alert Configuration for a Module-managed Project](./examples/alerts)
