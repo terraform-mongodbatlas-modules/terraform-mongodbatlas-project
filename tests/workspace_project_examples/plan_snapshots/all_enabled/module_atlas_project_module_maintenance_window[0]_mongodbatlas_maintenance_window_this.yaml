@@ -1,0 +1,5 @@
+auto_defer: false
+auto_defer_once_enabled: false
+day_of_week: 7
+hour_of_day: 2
+protected_hours: []

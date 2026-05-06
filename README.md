@@ -163,6 +163,8 @@ IP Access List | [Development Project with IP Allowlist](./examples/dev_with_all
 Production Baseline | [Production Secure Baseline with Maintenance Window](./examples/prod_secure_baseline)
 Alert Configuration | [Alert Configuration for a Module-managed Project](./examples/alerts)
 Log Integration | [Log Integration with Datadog, Splunk, and OTel](./examples/log_integration)
+All Features Enabled | [All Features Enabled](./examples/all_enabled)
+All Features Disabled | [All Features Disabled](./examples/all_disabled)
 
 <!-- END_TABLES -->
 <!-- BEGIN_TF_DOCS -->

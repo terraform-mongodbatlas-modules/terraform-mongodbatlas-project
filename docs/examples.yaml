@@ -45,3 +45,11 @@ tables:
         feature: Log Integration
         name: Log Integration with Datadog, Splunk, and OTel
         description: The Log Integration example exports Atlas logs to Datadog, Splunk, and an OpenTelemetry collector.
+      - folder_name: all_enabled
+        feature: All Features Enabled
+        name: All Features Enabled
+        description: The All Features Enabled example creates an Atlas project with all the features enabled.
+      - folder_name: all_disabled
+        feature: All Features Disabled
+        name: All Features Disabled
+        description: The All Features Disabled example creates an Atlas project with all the features disabled.

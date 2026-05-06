@@ -1,0 +1,7 @@
+```release-note:enhancement
+examples/all_enabled: Demonstrates how to create a project with all features enabled
+```
+
+```release-note:enhancement
+examples/all_disabled: Demonstrates how to create a project with all features disabled
+```

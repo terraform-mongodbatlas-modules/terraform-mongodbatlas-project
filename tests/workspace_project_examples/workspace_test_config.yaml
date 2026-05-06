@@ -37,6 +37,22 @@ examples:
       - address: module.atlas_project.module.log_integration[0].mongodbatlas_log_integration.splunk[0]
       - address: module.atlas_project.module.log_integration[0].mongodbatlas_log_integration.otel[0]
 
+  - name: all_enabled
+    var_groups: [all_enabled]
+    sensitive_output: true
+    plan_regressions:
+      - address: module.atlas_project.mongodbatlas_project.this[0]
+      - address: module.atlas_project.module.maintenance_window[0].mongodbatlas_maintenance_window.this
+      - address: module.atlas_project.module.ip_access_list[0].mongodbatlas_project_ip_access_list.this["198.51.100.10"]
+      - address: module.atlas_project.module.ip_access_list[0].mongodbatlas_project_ip_access_list.this["203.0.113.0/24"]
+      - address: module.atlas_project.module.backup_compliance_policy[0].mongodbatlas_backup_compliance_policy.this
+      - address: module.atlas_project.module.log_integration[0].mongodbatlas_log_integration.otel[0]
+
+  - name: all_disabled
+    var_groups: [all_disabled]
+    plan_regressions:
+      - address: module.atlas_project.mongodbatlas_project.this[0]
+
 var_groups:
   basic:
     - name: org_id
@@ -95,3 +111,34 @@ var_groups:
     - name: otel_auth_header
       expose_in_workspace: false
       module_value: '"Bearer test-otel-token"'
+
+  all_enabled:
+    - name: org_id
+      expose_in_workspace: false
+      module_value: var.org_id
+    - name: project_name
+      expose_in_workspace: false
+      module_value: local.project_name_all_enabled
+    - name: bcp_authorized_email
+      expose_in_workspace: false
+      module_value: '"security-admin@example.com"'
+    - name: bcp_authorized_user_first_name
+      expose_in_workspace: false
+      module_value: '"Jane"'
+    - name: bcp_authorized_user_last_name
+      expose_in_workspace: false
+      module_value: '"Doe"'
+    - name: otel_endpoint
+      expose_in_workspace: false
+      module_value: '"https://otel-collector.example.com:4318"'
+    - name: otel_auth_header
+      expose_in_workspace: false
+      module_value: '"Bearer test-otel-token"'
+
+  all_disabled:
+    - name: org_id
+      expose_in_workspace: false
+      module_value: var.org_id
+    - name: project_name
+      expose_in_workspace: false
+      module_value: local.project_name_all_disabled
