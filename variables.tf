@@ -82,16 +82,17 @@ variable "project_settings" {
 
 variable "limits" {
   description = <<-EOT
-  Optional Atlas project limits keyed by limit name. Limit name is the key, value is the limit value. 
-  
-  For example, 
-  
+  Optional Atlas project limits keyed by limit name. Limit name is the key, value is the limit value.
+  See the [Atlas project limits documentation](https://www.mongodb.com/docs/atlas/reference/api-resources-spec/v2/#tag/Projects/operation/setProjectLimit) for available limit names.
+
+  For example,
+
   ```hcl
   limits = {
     "atlas.project.deployment.clusters" = 100
   }
   ```
-  
+
   EOT
 
   type    = map(number)
