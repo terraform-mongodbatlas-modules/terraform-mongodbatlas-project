@@ -261,8 +261,10 @@ def render_grouped_markdown(variables: list[Variable], sections: list[dict[str, 
 
         section_vars = grouped.get(title, [])
         if not section_vars:
-            lines.append("_No variables in this section yet._")
-            lines.append("")
+            match_config = section.get("match") or {}
+            if match_config.get("names"):
+                lines.append("_No variables in this section yet._")
+                lines.append("")
             continue
 
         match = section.get("match", {}) or {}

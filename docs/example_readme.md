@@ -17,6 +17,8 @@ To use MongoDB Atlas with Terraform, ensure you meet the following requirements:
 
 ## Commands
 
+Run the following commands to initialize and apply the module:
+
 ```sh
 terraform init # this will download the required providers and create a `terraform.lock.hcl` file.
 # configure authentication env-vars (MONGODB_ATLAS_XXX)

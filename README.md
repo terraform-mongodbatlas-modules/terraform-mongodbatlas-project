@@ -7,7 +7,7 @@ This Terraform module creates and manages a MongoDB Atlas Project with configura
 WARNING: This section is auto-generated. Do not edit directly.
 Changes will be overwritten when documentation is regenerated.
 Run 'just gen-readme' to regenerate. -->
-- [Public Preview Note](#public-preview-note)
+- [Support](#support)
 - [Disclaimer](#disclaimer)
 - [Getting Started](#getting-started)
 - [Examples](#examples)
@@ -22,14 +22,14 @@ Run 'just gen-readme' to regenerate. -->
 - [License](#license)
 <!-- END_TOC -->
 
-## Public Preview Note
+## Support
 
-The MongoDB Atlas Project Module (Public Preview) simplifies Atlas project management and embeds MongoDB's best practices as intelligent defaults. This preview validates that these patterns meet the needs of most workloads without constant maintenance or rework. We welcome your feedback and contributions during this preview phase. MongoDB formally supports this module from its v1 release onwards.
+The MongoDB Atlas Project Module simplifies Atlas project management and embeds MongoDB's best practices as intelligent defaults. Starting with v1, MongoDB formally supports this module with a two-year stability commitment: no required breaking changes before September 2028. See [CONTRIBUTING.md](CONTRIBUTING.md) to report issues or contribute.
 
 <!-- BEGIN_DISCLAIMER -->
 ## Disclaimer
 
-One of this project's primary objectives is to provide durable modules that support non-breaking migration and upgrade paths. The v0 release (public preview) of the MongoDB Atlas Project Module focuses on gathering feedback and refining the design. Upgrades from v0 to v1 may not be seamless. We plan to deliver a finalized v1 release early next year with long term upgrade support.  
+One of this project's primary objectives is to provide durable modules that support non-breaking migration and upgrade paths. If you are upgrading from v0.x, see the [Upgrade Guide](docs/v0.2.0-upgrade-guide.md) for breaking changes and required actions.
 
 <!-- END_DISCLAIMER -->
 ## Getting Started
@@ -51,6 +51,8 @@ To use MongoDB Atlas with Terraform, ensure you meet the following requirements:
 4. Use an existing [MongoDB Atlas organization](https://www.mongodb.com/docs/atlas/access/orgs-create-view-edit-delete/) and ensure you have permissions to create projects.
 
 ### Commands
+
+Run the following commands to initialize and apply the module:
 
 ```sh
 terraform init # this will download the required providers and create a `terraform.lock.hcl` file.
@@ -110,7 +112,7 @@ Follow these steps to set up a simple Atlas project using this module.
     }
     ```
 
-2. Prepare your [variable](#required-variables) values.
+2. Prepare your variable values.
 
    Create a `vars.tfvars` file with the values you must provide at `apply` time:
 
@@ -138,12 +140,12 @@ Follow these steps to set up a simple Atlas project using this module.
 
 5. Iterate or clean up your configuration.
 
-- To add features (limits, IP allowlist, maintenance window), edit the `main.tf` file and re-run the `terraform apply` command.
-- To remove the resources, use the Getting Started cleanup command:
+    - To add features (limits, IP allowlist, maintenance window), edit the `main.tf` file and re-run the `terraform apply` command.
+    - To remove the resources, use the Getting Started cleanup command:
 
-    ```sh
-    terraform destroy -var-file vars.tfvars
-    ```
+        ```sh
+        terraform destroy -var-file vars.tfvars
+        ```
 
 <!-- BEGIN_TABLES -->
 <!-- @generated
@@ -202,11 +204,13 @@ Run 'just docs' to regenerate.
 -->
 ## Project Management
 
-The module operates in two modes depending on whether `project_id` is set:
-- **Managed mode**: set `name` and `org_id`. The module creates and owns the Atlas project resource.
-- **Reference mode**: set `project_id`. The module skips project creation and manages only standalone resources (maintenance window, IP access list, etc.) against an existing project.
+The module operates in two modes depending on whether `project_id` is set.
 
-### name
+### Managed Mode
+
+Set `name` and `org_id`. The module creates and owns the Atlas project resource.
+
+#### name
 
 Name of the MongoDB Atlas project. Required when project_id is not set.
 
@@ -214,7 +218,7 @@ Type: `string`
 
 Default: `null`
 
-### org_id
+#### org_id
 
 ID of the MongoDB Atlas organization. Required when project_id is not set.
 
@@ -222,7 +226,12 @@ Type: `string`
 
 Default: `null`
 
-### project_id
+
+### Reference Mode
+
+Set `project_id`. The module skips project creation and manages only standalone resources (maintenance window, IP access list, etc.) against an existing project.
+
+#### project_id
 
 ID of an existing Atlas project. When set, the module operates in reference mode: the project resource is not created and only standalone resources are managed.
 
@@ -359,6 +368,9 @@ Controls which module features with default values are automatically enabled.
   practices without any configuration changes. Minor version upgrades may introduce plan changes (new resources).
 - **`STANDARD`**: features with module defaults are not automatically enabled. Only Atlas
   defaults apply. Minor version upgrades do not introduce plan changes.
+
+In v1 of this module, `default_feature_set` has no effect. All v1 features require explicit inputs.
+Future module versions will add features with module-level defaults.
 
 Type: `string`
 
