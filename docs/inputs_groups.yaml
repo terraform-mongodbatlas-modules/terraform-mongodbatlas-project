@@ -3,25 +3,13 @@ sections:
     title: "Project Management"
     level: 2
     description: |
-      The module operates in two modes depending on whether `project_id` is set.
-
-  - id: managed_mode
-    title: "Managed Mode"
-    level: 3
-    description: |
-      Set `name` and `org_id`. The module creates and owns the Atlas project resource.
+      The module operates in two modes depending on whether `project_id` is set:
+      - **Managed mode**: set `name` and `org_id`. The module creates and owns the Atlas project resource.
+      - **Reference mode**: set `project_id`. The module skips project creation and manages only standalone resources (maintenance window, IP access list, etc.) against an existing project.
     match:
       names:
         - name
         - org_id
-
-  - id: reference_mode
-    title: "Reference Mode"
-    level: 3
-    description: |
-      Set `project_id`. The module skips project creation and manages only standalone resources (maintenance window, IP access list, etc.) against an existing project.
-    match:
-      names:
         - project_id
 
   - id: project_settings

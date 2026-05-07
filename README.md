@@ -204,13 +204,11 @@ Run 'just docs' to regenerate.
 -->
 ## Project Management
 
-The module operates in two modes depending on whether `project_id` is set.
+The module operates in two modes depending on whether `project_id` is set:
+- **Managed mode**: set `name` and `org_id`. The module creates and owns the Atlas project resource.
+- **Reference mode**: set `project_id`. The module skips project creation and manages only standalone resources (maintenance window, IP access list, etc.) against an existing project.
 
-### Managed Mode
-
-Set `name` and `org_id`. The module creates and owns the Atlas project resource.
-
-#### name
+### name
 
 Name of the MongoDB Atlas project. Required when project_id is not set.
 
@@ -218,7 +216,7 @@ Type: `string`
 
 Default: `null`
 
-#### org_id
+### org_id
 
 ID of the MongoDB Atlas organization. Required when project_id is not set.
 
@@ -226,12 +224,7 @@ Type: `string`
 
 Default: `null`
 
-
-### Reference Mode
-
-Set `project_id`. The module skips project creation and manages only standalone resources (maintenance window, IP access list, etc.) against an existing project.
-
-#### project_id
+### project_id
 
 ID of an existing Atlas project. When set, the module operates in reference mode: the project resource is not created and only standalone resources are managed.
 
