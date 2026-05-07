@@ -10,7 +10,7 @@ examples_readme:
   versions_tf:
     add: |
       provider "mongodbatlas" {}
-    skip_if_name_contains: []
+    skip_if_name_contains: ["cluster destruction"]
     generate_when_missing_only: false
     force_generate: false
 
@@ -49,3 +49,7 @@ tables:
         feature: All Features Disabled
         name: All Features Disabled
         description: The All Features Disabled example creates an Atlas project with all the features disabled.
+      - folder_name: bcp_cluster_destroy
+        feature: Cluster Destruction with BCP
+        name: Cluster Destruction with Backup Compliance Policy
+        description: The Cluster Destruction with BCP example shows how to destroy a cluster when a Backup Compliance Policy is active using the `skip_destroy` flag on the [backup schedule resource](https://registry.terraform.io/providers/mongodb/mongodbatlas/latest/docs/resources/cloud_backup_schedule).

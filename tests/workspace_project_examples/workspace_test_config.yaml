@@ -41,6 +41,14 @@ examples:
       - address: module.atlas_project.module.backup_compliance_policy[0].mongodbatlas_backup_compliance_policy.this
       - address: module.atlas_project.module.log_integration[0].mongodbatlas_log_integration.otel[0]
 
+  - name: bcp_cluster_destroy
+    var_groups: [bcp_cluster_destroy]
+    plan_regressions:
+      - address: module.atlas_project.mongodbatlas_project.this[0]
+      - address: module.atlas_project.module.backup_compliance_policy[0].mongodbatlas_backup_compliance_policy.this
+      - address: mongodbatlas_advanced_cluster.this
+      - address: mongodbatlas_cloud_backup_schedule.this
+
   - name: all_disabled
     var_groups: [all_disabled]
     plan_regressions:
@@ -119,6 +127,26 @@ var_groups:
     - name: otel_auth_header
       expose_in_workspace: false
       module_value: '"Bearer test-otel-token"'
+
+  bcp_cluster_destroy:
+    - name: org_id
+      expose_in_workspace: false
+      module_value: var.org_id
+    - name: project_name
+      expose_in_workspace: false
+      module_value: local.project_name_bcp_cluster_destroy
+    - name: cluster_name
+      expose_in_workspace: false
+      module_value: '"test-cluster"'
+    - name: bcp_authorized_email
+      expose_in_workspace: false
+      module_value: '"security-admin@example.com"'
+    - name: bcp_authorized_user_first_name
+      expose_in_workspace: false
+      module_value: '"Jane"'
+    - name: bcp_authorized_user_last_name
+      expose_in_workspace: false
+      module_value: '"Doe"'
 
   all_disabled:
     - name: org_id
