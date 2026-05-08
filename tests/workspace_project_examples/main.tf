@@ -41,6 +41,4 @@ locals {
   project_name_all_enabled = "test-acc-tf-p-all-enabled-${random_string.suffix.id}"
   # tflint-ignore: terraform_unused_declarations
   project_name_all_disabled = "test-acc-tf-p-all-disabled-${random_string.suffix.id}"
-  # tflint-ignore: terraform_unused_declarations
-  project_name_bcp_cluster_destroy = "test-acc-tf-p-bcp-cluster-destroy-${random_string.suffix.id}"
 }
