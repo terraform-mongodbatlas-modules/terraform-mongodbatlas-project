@@ -48,8 +48,8 @@ module "atlas_project" {
   }
 
   limits = {
-    "atlas.project.deployment.clusters"                 = 50,
-    "atlas.project.security.databaseAccess.customRoles" = 25,
+    "atlas.project.deployment.clusters"                 = 50
+    "atlas.project.security.databaseAccess.customRoles" = 25
   }
 
   ip_access_list = [

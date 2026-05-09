@@ -29,10 +29,6 @@ tables:
         feature: Basic Project Setup
         name: Basic Project with Settings and Limits
         description: The Basic Project example creates an Atlas project with custom settings, limits, an IP access list, and tags.
-      - folder_name: dev_with_allowlist
-        feature: IP Access List
-        name: Development Project with IP Allowlist
-        description: The Development Project with IP Allowlist example creates a minimal project with an IP access list for development environments.
       - folder_name: prod_secure_baseline
         feature: Production Baseline
         name: Production Secure Baseline with Maintenance Window
