@@ -91,7 +91,7 @@ The module operates in two modes depending on whether `project_id` is set:
 - **Managed mode**: set `name` and `org_id`. The module creates and owns the Atlas project resource.
 - **Reference mode**: set `project_id`. The module skips project creation and manages only standalone resources (maintenance window, IP access list, backup compliance policy, log integrations) against an existing project.
 
-**Required Atlas role:** `Organization Project Creator` to create a new project.
+**Required Atlas role:** `Organization Project Creator` to create a new project (Managed mode).
 
 ### name
 
@@ -120,7 +120,7 @@ Default: `null`
 
 ## Project Settings
 
-Configure Atlas project feature settings and ownership. Managed mode only.
+Configures Atlas project feature settings and ownership. Managed mode only.
 
 **Required Atlas role:** `Project Owner`.
 
@@ -170,7 +170,7 @@ Default: `null`
 
 ## Project Limits
 
-Configure project resource limits. Managed mode only. See the [Atlas project limits documentation](https://www.mongodb.com/docs/atlas/reference/api-resources-spec/v2/#tag/Projects/operation/setProjectLimit) for details.
+Configures project resource limits. Managed mode only. See the [Atlas project limits documentation](https://www.mongodb.com/docs/atlas/reference/api-resources-spec/v2/#tag/Projects/operation/setProjectLimit) for details.
 
 **Required Atlas role:** `Project Owner`.
 
@@ -272,7 +272,7 @@ Default: `[]`
 
 The Backup Compliance Policy (BCP) enforces minimum backup retention requirements across all clusters in the project. [Architecture Center recommended](https://www.mongodb.com/docs/atlas/architecture/current/backups/) policy items are applied by default and can be overridden per frequency type or disabled entirely via `skip_default_policy_items`.
 
-**NOTE:** Once a Backup Compliance Policy is enabled, no user, regardless of role, can disable the Backup Compliance Policy via Terraform, or any other method, without contacting MongoDB Support. See [Backup Compliance Policy Prohibited Actions and Considerations](https://www.mongodb.com/docs/atlas/backup/cloud-backup/backup-compliance-policy/#configure-a-backup-compliance-policy).
+**IMPORTANT:** Once a Backup Compliance Policy is enabled, no user, regardless of role, can disable the Backup Compliance Policy via Terraform, or any other method, without contacting MongoDB Support. See [Backup Compliance Policy Prohibited Actions and Considerations](https://www.mongodb.com/docs/atlas/backup/cloud-backup/backup-compliance-policy/#configure-a-backup-compliance-policy).
 
 **Required Atlas role:** `Project Owner`.
 
@@ -327,7 +327,7 @@ Default: `null`
 
 ## Log Integration
 
-Log integration exports Atlas operational and audit logs to Datadog, Splunk, or OpenTelemetry collectors. For CSP integrations, use the respective MongoDB Atlas module instead: [AWS](https://registry.terraform.io/modules/terraform-mongodbatlas-modules/atlas-aws), [Azure](https://registry.terraform.io/modules/terraform-mongodbatlas-modules/atlas-azure), [GCP](https://registry.terraform.io/modules/terraform-mongodbatlas-modules/atlas-gcp).
+Log integration exports Atlas operational and audit logs to Datadog, Splunk, or OpenTelemetry collectors. For CSP integrations, use the respective MongoDB Atlas module instead: [AWS](https://registry.terraform.io/modules/terraform-mongodbatlas-modules/atlas-aws), [Azure](https://registry.terraform.io/modules/terraform-mongodbatlas-modules/atlas-azure), or [GCP](https://registry.terraform.io/modules/terraform-mongodbatlas-modules/atlas-gcp).
 
 **Required Atlas role:** `Project Owner`.
 
