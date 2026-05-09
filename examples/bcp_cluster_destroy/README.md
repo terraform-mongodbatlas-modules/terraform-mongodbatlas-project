@@ -89,7 +89,6 @@ resource "mongodbatlas_cloud_backup_schedule" "this" {
 
   # Allows the resource destruction to succeed when a Backup Compliance Policy is active.
   # The schedule is retained in Atlas and removed when the cluster is deleted.
-  # Without this flag, `terraform destroy` would fail.
   skip_destroy = true
 }
 ```

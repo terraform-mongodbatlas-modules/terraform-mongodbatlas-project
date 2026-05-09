@@ -50,6 +50,7 @@ Alert Configuration | [Alert Configuration for a Module-managed Project](./examp
 Log Integration | [Log Integration with Datadog, Splunk, and OTel](./examples/log_integration)
 All Features Enabled | [All Features Enabled](./examples/all_enabled)
 All Features Disabled | [All Features Disabled](./examples/all_disabled)
+Cluster Destruction with BCP | [Cluster Destruction with Backup Compliance Policy](./examples/bcp_cluster_destroy)
 
 <!-- END_TABLES -->
 <!-- BEGIN_TF_DOCS -->
@@ -271,6 +272,7 @@ Default: `[]`
 ## Backup Compliance Policy
 
 The Backup Compliance Policy (BCP) enforces minimum backup retention requirements across all clusters in the project. [Architecture Center recommended](https://www.mongodb.com/docs/atlas/architecture/current/backups/) policy items are applied by default and can be overridden per frequency type or disabled entirely via `skip_default_policy_items`.
+To destroy clusters when a BCP is active, see the [Cluster Destruction with BCP example](./examples/bcp_cluster_destroy).
 
 **IMPORTANT:** Once a Backup Compliance Policy is enabled, no user, regardless of role, can disable the Backup Compliance Policy via Terraform, or any other method, without contacting MongoDB Support. See [Backup Compliance Policy Prohibited Actions and Considerations](https://www.mongodb.com/docs/atlas/backup/cloud-backup/backup-compliance-policy/#configure-a-backup-compliance-policy).
 
