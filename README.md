@@ -7,13 +7,7 @@ Use this Terraform module to create and manage MongoDB Atlas projects with confi
 WARNING: This section is auto-generated. Do not edit directly.
 Changes will be overwritten when documentation is regenerated.
 Run 'just gen-readme' to regenerate. -->
-<<<<<<< HEAD
-- [Support](#support)
-- [Disclaimer](#disclaimer)
-- [Getting Started](#getting-started)
-=======
 - [Module Commitment](#module-commitment)
->>>>>>> origin/main
 - [Examples](#examples)
 - [Requirements](#requirements)
 - [Providers](#providers)
@@ -31,138 +25,11 @@ Run 'just gen-readme' to regenerate. -->
 - [License](#license)
 <!-- END_TOC -->
 
-<<<<<<< HEAD
-## Support
-
-The MongoDB Atlas Project Module simplifies Atlas project management and embeds MongoDB's best practices as intelligent defaults. Starting with v1, MongoDB guarantees two-year stability for this module with no breaking changes until September 2028. See [CONTRIBUTING.md](CONTRIBUTING.md) to report issues or contribute.
-
-<!-- BEGIN_DISCLAIMER -->
-## Disclaimer
-
-One of this project's primary objectives is to provide durable modules that support non-breaking migration and upgrade paths. If you are upgrading from v0.x, see the [Upgrade Guide](docs/v0.2.0-upgrade-guide.md) for breaking changes and required actions.
-
-<!-- END_DISCLAIMER -->
-## Getting Started
-
-<!-- BEGIN_GETTING_STARTED -->
-<!-- @generated
-WARNING: This section is auto-generated. Do not edit directly.
-Changes will be overwritten when documentation is regenerated.
-Run 'just gen-readme' to regenerate. -->
-### Prerequisites
-
-If you are familiar with Terraform and already have an organization configured in MongoDB Atlas, go to [commands](#commands).
-
-To use MongoDB Atlas with Terraform, ensure you meet the following requirements:
-
-1. Install [Terraform](https://developer.hashicorp.com/terraform/install) to run `terraform` [commands](#commands).
-2. [Sign in](https://account.mongodb.com/account/login) to or [create](https://account.mongodb.com/account/register) your MongoDB Atlas Account.
-3. Configure your [authentication](https://registry.terraform.io/providers/mongodb/mongodbatlas/latest/docs#authentication) method.
-4. Use an existing [MongoDB Atlas organization](https://www.mongodb.com/docs/atlas/access/orgs-create-view-edit-delete/) and ensure you have permissions to create projects.
-
-### Commands
-
-Run the following commands to initialize and apply the module:
-
-```sh
-terraform init # this will download the required providers and create a `terraform.lock.hcl` file.
-# configure authentication env-vars (MONGODB_ATLAS_XXX)
-# configure your `vars.tfvars` with required variables
-terraform apply -var-file vars.tfvars
-# cleanup
-terraform destroy -var-file vars.tfvars
-```
-
-<!-- END_GETTING_STARTED -->
-
-### Create a Basic Atlas Project
-
-Follow these steps to set up a simple Atlas project using this module.
-
-1. Create your Terraform files.
-
-   You can copy the files directly from the ones provided in this module:
-
-    - [examples/basic/main.tf](examples/basic/main.tf)
-    - [examples/basic/variables.tf](examples/basic/variables.tf)
-    - [examples/basic/outputs.tf](examples/basic/outputs.tf)
-    - [examples/basic/versions.tf](examples/basic/versions.tf)
-
-    The following code example shows a basic example of a `main.tf` file configuration:
-
-    ```hcl
-    module "atlas_project" {
-      source  = "terraform-mongodbatlas-modules/project/mongodbatlas"
-
-      name   = var.project_name
-      org_id = var.org_id
-
-      # Optional settings (safe defaults shown)
-      project_settings = {
-        is_extended_storage_sizes_enabled = true
-      }
-
-      # Optional limits (adjust as needed)
-      limits = {
-        "atlas.project.deployment.clusters"                 = 50,
-        "atlas.project.security.databaseAccess.customRoles" = 25,
-      }
-
-      # Optional IP access list (example entries)
-      ip_access_list = [
-        { source = "203.0.113.0/24", comment = "Office VPN" },
-        { source = "198.51.100.10" },
-      ]
-
-      # Optional tags
-      tags = {
-        Environment = "Development"
-        ManagedBy   = "Terraform"
-      }
-    }
-    ```
-
-2. Prepare your variable values.
-
-   Create a `vars.tfvars` file with the values you must provide at `apply` time:
-
-      ```hcl
-      project_name = "my-atlas-project"
-      org_id       = "YOUR_ORG_ID" # e.g., 65def6ce0f722a1507105aa5
-      ```
-
-   See [Project Settings](#project-settings) for information on additional parameters you can configure.
-
-3. Initialize and apply your configuration.
-
-    ```sh
-    terraform init
-    terraform apply -var-file vars.tfvars
-    ```
-
-4. Review outputs to confirm your project details.
-
-    ```sh
-    terraform output
-    ```
-
-   You should see values such as `cluster_count`, `created_at`, `id`, and `maintenance_window`.
-
-5. Iterate or clean up your configuration.
-
-    - To add features (limits, IP allowlist, maintenance window), edit the `main.tf` file and re-run the `terraform apply` command.
-    - To remove the resources, use the Getting Started cleanup command:
-
-        ```sh
-        terraform destroy -var-file vars.tfvars
-        ```
-=======
 ## Module Commitment
 
 MongoDB formally supports this module, including bug fixes, security patches, and backward-compatible enhancements. The v1 release carries a two-year stability commitment: no breaking changes through May 2028 (at the earliest).
 
 **Note:** This module defaults to `default_feature_set = "RECOMMENDED"`. In `RECOMMENDED` mode, future module features that include defaults and require no additional input are automatically activated when you upgrade the module version. Set `default_feature_set = "STANDARD"` to opt out: new features are never automatically activated, and minor version upgrades do not introduce plan changes. See [default_feature_set](#default_feature_set) for details.
->>>>>>> origin/main
 
 <!-- BEGIN_TABLES -->
 <!-- @generated
@@ -464,44 +331,7 @@ Default: `null`
 
 Log integration exports Atlas operational and audit logs to Datadog, Splunk, or OpenTelemetry collectors. For CSP integrations, use the respective MongoDB Atlas module instead: [AWS](https://registry.terraform.io/modules/terraform-mongodbatlas-modules/atlas-aws), [Azure](https://registry.terraform.io/modules/terraform-mongodbatlas-modules/atlas-azure), or [GCP](https://registry.terraform.io/modules/terraform-mongodbatlas-modules/atlas-gcp).
 
-<<<<<<< HEAD
-In v1 of this module, `default_feature_set` has no effect. All v1 features require explicit inputs.
-Future module versions will add features with module-level defaults.
-
-Type: `string`
-
-Default: `"RECOMMENDED"`
-
-### ip_access_list
-
-IP access list of entries for the Atlas project. Each "source" maps to one of the following: `cidrBlock`, `ipAddress`, or `awsSecurityGroup`.
-
-Note: When using AWS security group IDs, the value must be known at plan time. If you create the ID in the same `apply` command, Terraform fails.
-
-For example,
-
-```hcl
-ip_access_list = [
-  { source = "203.0.113.0/24", comment = "Office VPN" },
-  { source = "198.51.100.10" },
-  { source = "sg-0123456789abcdef0" }
-]
-```
-
-Type:
-
-```hcl
-list(object({
-  source                    = string
-  comment                   = optional(string)
-  skip_allow_all_validation = optional(bool, false)
-}))
-```
-
-Default: `[]`
-=======
 **Required Atlas role:** `Project Owner`.
->>>>>>> origin/main
 
 ### log_integration
 
