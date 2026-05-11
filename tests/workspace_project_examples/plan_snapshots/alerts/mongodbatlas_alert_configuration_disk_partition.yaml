@@ -2,7 +2,8 @@ enabled: true
 event_type: OUTSIDE_METRIC_THRESHOLD
 matcher: []
 metric_threshold_config:
-- metric_name: DISK_PARTITION_SPACE_PERCENT_USED
+- metric_name: DISK_PARTITION_SPACE_USED_DATA
+  mode: AVERAGE
   operator: GREATER_THAN
   threshold: 90
   units: RAW
