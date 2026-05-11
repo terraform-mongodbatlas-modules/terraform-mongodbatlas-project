@@ -34,7 +34,7 @@ Run 'just gen-readme' to regenerate. -->
 <<<<<<< HEAD
 ## Support
 
-The MongoDB Atlas Project Module simplifies Atlas project management and embeds MongoDB's best practices as intelligent defaults. Starting with v1, MongoDB formally supports this module with a two-year stability commitment: no required breaking changes before September 2028. See [CONTRIBUTING.md](CONTRIBUTING.md) to report issues or contribute.
+The MongoDB Atlas Project Module simplifies Atlas project management and embeds MongoDB's best practices as intelligent defaults. Starting with v1, MongoDB guarantees two-year stability for this module with no breaking changes until September 2028. See [CONTRIBUTING.md](CONTRIBUTING.md) to report issues or contribute.
 
 <!-- BEGIN_DISCLAIMER -->
 ## Disclaimer

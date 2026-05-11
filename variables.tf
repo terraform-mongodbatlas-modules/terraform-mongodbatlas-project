@@ -185,7 +185,7 @@ variable "default_feature_set" {
     - **`STANDARD`**: features with module defaults are not automatically enabled. Only Atlas
       defaults apply. Minor version upgrades do not introduce plan changes.
 
-    In v1 of this module, `default_feature_set` has no effect. All v1 features require explicit inputs. 
+    In v1 of this module, `default_feature_set` has no effect. All v1 features require explicit inputs.
     Future module versions will add features with module-level defaults.
   EOT
   type        = string
