@@ -5,7 +5,9 @@ sections:
     description: |
       The module operates in two modes depending on whether `project_id` is set:
       - **Managed mode**: set `name` and `org_id`. The module creates and owns the Atlas project resource.
-      - **Reference mode**: set `project_id`. The module skips project creation and manages only standalone resources (maintenance window, IP access list, etc.) against an existing project.
+      - **Reference mode**: set `project_id`. The module skips project creation and manages only standalone resources (maintenance window, IP access list, backup compliance policy, log integrations) against an existing project.
+
+      **Required Atlas role:** `Organization Project Creator` to create a new project (Managed mode).
     match:
       names:
         - name
@@ -16,7 +18,9 @@ sections:
     title: "Project Settings"
     level: 2
     description: |
-      Configure Atlas project feature settings. Managed mode only.
+      Configures Atlas project feature settings and ownership. Managed mode only.
+
+      **Required Atlas role:** `Project Owner`.
     match:
       names:
         - project_settings
@@ -28,10 +32,63 @@ sections:
     title: "Project Limits"
     level: 2
     description: |
-      Configure project resource limits. Managed mode only. See the [Atlas project limits documentation](https://www.mongodb.com/docs/atlas/reference/api-resources-spec/v2/#tag/Projects/operation/setProjectLimit) for details.
+      Configures project resource limits. Managed mode only. See the [Atlas project limits documentation](https://www.mongodb.com/docs/atlas/reference/api-resources-spec/v2/#tag/Projects/operation/setProjectLimit) for details.
+
+      **Required Atlas role:** `Project Owner`.
     match:
       names:
         - limits
+
+  - id: maintenance_window
+    title: "Maintenance Window"
+    level: 2
+    description: |
+      The maintenance window controls when Atlas performs scheduled maintenance. In most cases, Atlas runs maintenance in a rolling manner to preserve cluster availability — manual configuration is optional.
+
+      To temporarily defer a scheduled maintenance event, use the Atlas CLI or API. See [`atlas maintenanceWindows defer`](https://www.mongodb.com/docs/atlas/cli/current/command/atlas-maintenanceWindows-defer/) for details.
+
+      **Required Atlas role:** `Project Owner`.
+    match:
+      names:
+        - maintenance_window
+
+  - id: ip_access_list
+    title: "IP Access List"
+    level: 2
+    description: |
+      The IP access list controls which IP addresses and CIDR blocks can connect to the Atlas project. Each entry maps to a CIDR block, a single IP address, or an AWS security group ID.
+
+      Entries with source `0.0.0.0/0` or `::/0` are blocked by default. Set `skip_allow_all_validation = true` on the entry to suppress this check.
+
+      **Required Atlas role:** `Project Network Access Manager`.
+    match:
+      names:
+        - ip_access_list
+
+  - id: backup_compliance_policy
+    title: "Backup Compliance Policy"
+    level: 2
+    description: |
+      The Backup Compliance Policy (BCP) enforces minimum backup retention requirements across all clusters in the project. [Architecture Center recommended](https://www.mongodb.com/docs/atlas/architecture/current/backups/) policy items are applied by default and can be overridden per frequency type or disabled entirely via `skip_default_policy_items`.
+      To destroy clusters when a BCP is active, see the [Cluster Destruction with BCP example](./examples/bcp_cluster_destroy).
+      
+      **IMPORTANT:** Once a Backup Compliance Policy is enabled, no user, regardless of role, can disable the Backup Compliance Policy via Terraform, or any other method, without contacting MongoDB Support. See [Backup Compliance Policy Prohibited Actions and Considerations](https://www.mongodb.com/docs/atlas/backup/cloud-backup/backup-compliance-policy/#configure-a-backup-compliance-policy).
+
+      **Required Atlas role:** `Project Owner`.
+    match:
+      names:
+        - backup_compliance_policy
+
+  - id: log_integration
+    title: "Log Integration"
+    level: 2
+    description: |
+      Log integration exports Atlas operational and audit logs to Datadog, Splunk, or OpenTelemetry collectors. For CSP integrations, use the respective MongoDB Atlas module instead: [AWS](https://registry.terraform.io/modules/terraform-mongodbatlas-modules/atlas-aws), [Azure](https://registry.terraform.io/modules/terraform-mongodbatlas-modules/atlas-azure), or [GCP](https://registry.terraform.io/modules/terraform-mongodbatlas-modules/atlas-gcp).
+
+      **Required Atlas role:** `Project Owner`.
+    match:
+      names:
+        - log_integration
 
   - id: optional
     title: "Optional Variables"

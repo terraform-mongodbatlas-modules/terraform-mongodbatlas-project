@@ -10,7 +10,7 @@ examples_readme:
   versions_tf:
     add: |
       provider "mongodbatlas" {}
-    skip_if_name_contains: []
+    skip_if_name_contains: ["cluster destruction"]
     generate_when_missing_only: false
     force_generate: false
 
@@ -29,10 +29,6 @@ tables:
         feature: Basic Project Setup
         name: Basic Project with Settings and Limits
         description: The Basic Project example creates an Atlas project with custom settings, limits, an IP access list, and tags.
-      - folder_name: dev_with_allowlist
-        feature: IP Access List
-        name: Development Project with IP Allowlist
-        description: The Development Project with IP Allowlist example creates a minimal project with an IP access list for development environments.
       - folder_name: prod_secure_baseline
         feature: Production Baseline
         name: Production Secure Baseline with Maintenance Window
@@ -53,3 +49,7 @@ tables:
         feature: All Features Disabled
         name: All Features Disabled
         description: The All Features Disabled example creates an Atlas project with all the features disabled.
+      - folder_name: bcp_cluster_destroy
+        feature: Cluster Destruction with BCP
+        name: Cluster Destruction with Backup Compliance Policy (BCP)
+        description: The Cluster Destruction with [Backup Compliance Policy](https://www.mongodb.com/docs/atlas/backup/cloud-backup/backup-compliance-policy/) example shows how to destroy a cluster when a BCP is active using the `skip_destroy` flag on the [backup schedule resource](https://registry.terraform.io/providers/mongodb/mongodbatlas/latest/docs/resources/cloud_backup_schedule). An active BCP prevents the deletion of backup schedules. Setting `skip_destroy = true` on the schedule resource removes it from the Terraform state on destroy without calling the Atlas API. The schedule is then removed in Atlas together with the cluster.

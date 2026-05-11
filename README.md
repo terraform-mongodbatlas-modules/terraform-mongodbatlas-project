@@ -1,15 +1,19 @@
 # MongoDB Atlas Project Terraform Module
 
-This Terraform module creates and manages a MongoDB Atlas Project with configurable settings.
+Use this Terraform module to create and manage MongoDB Atlas projects with configurable settings, access controls, backup compliance policies, and log integrations. The module includes recommended defaults based on MongoDB best practices. This module is officially maintained by MongoDB. For questions, open a support request or a [GitHub issue](https://github.com/terraform-mongodbatlas-modules/terraform-mongodbatlas-project/issues).
 
 <!-- BEGIN_TOC -->
 <!-- @generated
 WARNING: This section is auto-generated. Do not edit directly.
 Changes will be overwritten when documentation is regenerated.
 Run 'just gen-readme' to regenerate. -->
+<<<<<<< HEAD
 - [Support](#support)
 - [Disclaimer](#disclaimer)
 - [Getting Started](#getting-started)
+=======
+- [Module Commitment](#module-commitment)
+>>>>>>> origin/main
 - [Examples](#examples)
 - [Requirements](#requirements)
 - [Providers](#providers)
@@ -17,11 +21,17 @@ Run 'just gen-readme' to regenerate. -->
 - [Project Management](#project-management)
 - [Project Settings](#project-settings)
 - [Project Limits](#project-limits)
+- [Maintenance Window](#maintenance-window)
+- [IP Access List](#ip-access-list)
+- [Backup Compliance Policy](#backup-compliance-policy)
+- [Log Integration](#log-integration)
 - [Optional Variables](#optional-variables)
 - [Outputs](#outputs)
+- [FAQ](#faq)
 - [License](#license)
 <!-- END_TOC -->
 
+<<<<<<< HEAD
 ## Support
 
 The MongoDB Atlas Project Module simplifies Atlas project management and embeds MongoDB's best practices as intelligent defaults. Starting with v1, MongoDB formally supports this module with a two-year stability commitment: no required breaking changes before September 2028. See [CONTRIBUTING.md](CONTRIBUTING.md) to report issues or contribute.
@@ -146,6 +156,13 @@ Follow these steps to set up a simple Atlas project using this module.
         ```sh
         terraform destroy -var-file vars.tfvars
         ```
+=======
+## Module Commitment
+
+MongoDB formally supports this module, including bug fixes, security patches, and backward-compatible enhancements. The v1 release carries a two-year stability commitment: no breaking changes through May 2028 (at the earliest).
+
+**Note:** This module defaults to `default_feature_set = "RECOMMENDED"`. In `RECOMMENDED` mode, future module features that include defaults and require no additional input are automatically activated when you upgrade the module version. Set `default_feature_set = "STANDARD"` to opt out: new features are never automatically activated, and minor version upgrades do not introduce plan changes. See [default_feature_set](#default_feature_set) for details.
+>>>>>>> origin/main
 
 <!-- BEGIN_TABLES -->
 <!-- @generated
@@ -161,12 +178,12 @@ Feature | Name
 --- | ---
 Reference Mode | [Reference Mode (Existing Project)](./examples/reference_mode)
 Basic Project Setup | [Basic Project with Settings and Limits](./examples/basic)
-IP Access List | [Development Project with IP Allowlist](./examples/dev_with_allowlist)
 Production Baseline | [Production Secure Baseline with Maintenance Window](./examples/prod_secure_baseline)
 Alert Configuration | [Alert Configuration for a Module-managed Project](./examples/alerts)
 Log Integration | [Log Integration with Datadog, Splunk, and OTel](./examples/log_integration)
 All Features Enabled | [All Features Enabled](./examples/all_enabled)
 All Features Disabled | [All Features Disabled](./examples/all_disabled)
+Cluster Destruction with BCP | [Cluster Destruction with Backup Compliance Policy (BCP)](./examples/bcp_cluster_destroy)
 
 <!-- END_TABLES -->
 <!-- BEGIN_TF_DOCS -->
@@ -206,7 +223,9 @@ Run 'just docs' to regenerate.
 
 The module operates in two modes depending on whether `project_id` is set:
 - **Managed mode**: set `name` and `org_id`. The module creates and owns the Atlas project resource.
-- **Reference mode**: set `project_id`. The module skips project creation and manages only standalone resources (maintenance window, IP access list, etc.) against an existing project.
+- **Reference mode**: set `project_id`. The module skips project creation and manages only standalone resources (maintenance window, IP access list, backup compliance policy, log integrations) against an existing project.
+
+**Required Atlas role:** `Organization Project Creator` to create a new project (Managed mode).
 
 ### name
 
@@ -235,7 +254,9 @@ Default: `null`
 
 ## Project Settings
 
-Configure Atlas project feature settings. Managed mode only.
+Configures Atlas project feature settings and ownership. Managed mode only.
+
+**Required Atlas role:** `Project Owner`.
 
 ### project_settings
 
@@ -283,11 +304,14 @@ Default: `null`
 
 ## Project Limits
 
-Configure project resource limits. Managed mode only. See the [Atlas project limits documentation](https://www.mongodb.com/docs/atlas/reference/api-resources-spec/v2/#tag/Projects/operation/setProjectLimit) for details.
+Configures project resource limits. Managed mode only. See the [Atlas project limits documentation](https://www.mongodb.com/docs/atlas/reference/api-resources-spec/v2/#tag/Projects/operation/setProjectLimit) for details.
+
+**Required Atlas role:** `Project Owner`.
 
 ### limits
 
 Optional Atlas project limits keyed by limit name. Limit name is the key, value is the limit value.
+See the [Atlas project limits documentation](https://www.mongodb.com/docs/atlas/reference/api-resources-spec/v2/#tag/Projects/operation/setProjectLimit) for available limit names.
 
 For example,
 
@@ -302,7 +326,90 @@ Type: `map(number)`
 Default: `{}`
 
 
-## Optional Variables
+## Maintenance Window
+
+The maintenance window controls when Atlas performs scheduled maintenance. In most cases, Atlas runs maintenance in a rolling manner to preserve cluster availability — manual configuration is optional.
+
+To temporarily defer a scheduled maintenance event, use the Atlas CLI or API. See [`atlas maintenanceWindows defer`](https://www.mongodb.com/docs/atlas/cli/current/command/atlas-maintenanceWindows-defer/) for details.
+
+**Required Atlas role:** `Project Owner`.
+
+### maintenance_window
+
+Maintenance window configuration for the Atlas project.
+- Typically, you don't need to manually configure a maintenance window. Atlas performs maintenance automatically in a rolling manner to preserve continuous availability for resilient applications. See [Cluster Maintenance Window](https://www.mongodb.com/docs/atlas/tutorial/cluster-maintenance-window/) in the MongoDB Atlas documentation for more information.
+- To temporarily defer maintenance, use the Atlas CLI/API. See [Atlas `maintenanceWindows` defer](https://www.mongodb.com/docs/atlas/cli/current/command/atlas-maintenanceWindows-defer/#atlas-maintenancewindows-defer) in the MongoDB Atlas documentation for more information.
+
+Type:
+
+```hcl
+object({
+  enabled                 = bool
+  day_of_week             = optional(number)
+  hour_of_day             = optional(number)
+  auto_defer              = optional(bool, false)
+  auto_defer_once_enabled = optional(bool, false)
+  protected_hours = optional(object({
+    start_hour_of_day = number
+    end_hour_of_day   = number
+  }))
+})
+```
+
+Default:
+
+```json
+{
+  "enabled": false
+}
+```
+
+
+## IP Access List
+
+The IP access list controls which IP addresses and CIDR blocks can connect to the Atlas project. Each entry maps to a CIDR block, a single IP address, or an AWS security group ID.
+
+Entries with source `0.0.0.0/0` or `::/0` are blocked by default. Set `skip_allow_all_validation = true` on the entry to suppress this check.
+
+**Required Atlas role:** `Project Network Access Manager`.
+
+### ip_access_list
+
+IP access list of entries for the Atlas project. Each "source" maps to one of the following: `cidrBlock`, `ipAddress`, or `awsSecurityGroup`.
+
+Note: When using AWS security group IDs, the value must be known at plan time. If you create the ID in the same `apply` command, Terraform fails.
+
+For example,
+
+```hcl
+ip_access_list = [
+  { source = "203.0.113.0/24", comment = "Office VPN" },
+  { source = "198.51.100.10" },
+  { source = "sg-0123456789abcdef0" }
+]
+```
+
+Type:
+
+```hcl
+list(object({
+  source                    = string
+  comment                   = optional(string)
+  skip_allow_all_validation = optional(bool, false)
+}))
+```
+
+Default: `[]`
+
+
+## Backup Compliance Policy
+
+The Backup Compliance Policy (BCP) enforces minimum backup retention requirements across all clusters in the project. [Architecture Center recommended](https://www.mongodb.com/docs/atlas/architecture/current/backups/) policy items are applied by default and can be overridden per frequency type or disabled entirely via `skip_default_policy_items`.
+To destroy clusters when a BCP is active, see the [Cluster Destruction with BCP example](./examples/bcp_cluster_destroy).
+
+**IMPORTANT:** Once a Backup Compliance Policy is enabled, no user, regardless of role, can disable the Backup Compliance Policy via Terraform, or any other method, without contacting MongoDB Support. See [Backup Compliance Policy Prohibited Actions and Considerations](https://www.mongodb.com/docs/atlas/backup/cloud-backup/backup-compliance-policy/#configure-a-backup-compliance-policy).
+
+**Required Atlas role:** `Project Owner`.
 
 ### backup_compliance_policy
 
@@ -352,16 +459,12 @@ object({
 
 Default: `null`
 
-### default_feature_set
 
-Controls which module features with default values are automatically enabled.
+## Log Integration
 
-- **`RECOMMENDED`** (default): features that have module defaults and do not require additional
-  customer input are automatically enabled. Upgrading the module version adopts new best
-  practices without any configuration changes. Minor version upgrades may introduce plan changes (new resources).
-- **`STANDARD`**: features with module defaults are not automatically enabled. Only Atlas
-  defaults apply. Minor version upgrades do not introduce plan changes.
+Log integration exports Atlas operational and audit logs to Datadog, Splunk, or OpenTelemetry collectors. For CSP integrations, use the respective MongoDB Atlas module instead: [AWS](https://registry.terraform.io/modules/terraform-mongodbatlas-modules/atlas-aws), [Azure](https://registry.terraform.io/modules/terraform-mongodbatlas-modules/atlas-azure), or [GCP](https://registry.terraform.io/modules/terraform-mongodbatlas-modules/atlas-gcp).
 
+<<<<<<< HEAD
 In v1 of this module, `default_feature_set` has no effect. All v1 features require explicit inputs.
 Future module versions will add features with module-level defaults.
 
@@ -396,6 +499,9 @@ list(object({
 ```
 
 Default: `[]`
+=======
+**Required Atlas role:** `Project Owner`.
+>>>>>>> origin/main
 
 ### log_integration
 
@@ -434,35 +540,22 @@ object({
 
 Default: `null`
 
-### maintenance_window
 
-Maintenance window configuration for the Atlas project.
-- Typically, you don't need to manually configure a maintenance window. Atlas performs maintenance automatically in a rolling manner to preserve continuous availability for resilient applications. See [Cluster Maintenance Window](https://www.mongodb.com/docs/atlas/tutorial/cluster-maintenance-window/) in the MongoDB Atlas documentation for more information.
-- To temporarily defer maintenance, use the Atlas CLI/API. See [Atlas `maintenanceWindows` defer](https://www.mongodb.com/docs/atlas/cli/current/command/atlas-maintenanceWindows-defer/#atlas-maintenancewindows-defer) in the MongoDB Atlas documentation for more information.
+## Optional Variables
 
-Type:
+### default_feature_set
 
-```hcl
-object({
-  enabled                 = bool
-  day_of_week             = optional(number)
-  hour_of_day             = optional(number)
-  auto_defer              = optional(bool, false)
-  auto_defer_once_enabled = optional(bool, false)
-  protected_hours = optional(object({
-    start_hour_of_day = number
-    end_hour_of_day   = number
-  }))
-})
-```
+Controls which module features with default values are automatically enabled.
 
-Default:
+- **`RECOMMENDED`** (default): features that have module defaults and do not require additional
+  customer input are automatically enabled. Upgrading the module version adopts new best
+  practices without any configuration changes. Minor version upgrades may introduce plan changes (new resources).
+- **`STANDARD`**: features with module defaults are not automatically enabled. Only Atlas
+  defaults apply. Minor version upgrades do not introduce plan changes.
 
-```json
-{
-  "enabled": false
-}
-```
+Type: `string`
+
+Default: `"RECOMMENDED"`
 
 ### tags
 
@@ -502,6 +595,29 @@ Description: Log integration IDs, types, and log types.
 
 Description: Maintenance window details.
 <!-- END_TF_DOCS -->
+
+## FAQ
+
+### Where can I find what changed in each release?
+
+See [CHANGELOG.md](CHANGELOG.md) in this repository. It lists user-facing changes, including breaking changes and migration notes, per release.
+
+### Can I manage alert configurations with this module?
+
+No. Use the [`mongodbatlas_alert_configuration`](https://registry.terraform.io/providers/mongodb/mongodbatlas/latest/docs/resources/alert_configuration) provider resource directly. The [alerts example](./examples/alerts) shows how to create alert configurations alongside the project module.
+
+### What does `provider_meta "mongodbatlas"` do?
+
+This block tracks module usage by updating the User-Agent header of requests to Atlas.
+
+Example:
+
+```text
+User-Agent: terraform-provider-mongodbatlas/2.1.0 Terraform/1.13.1 module_name/project module_version/0.1.0
+```
+
+- The `provider_meta "mongodbatlas"` block does not send configuration-specific data. It sends only the module name and version for feature adoption tracking.
+- Use `export TF_LOG=debug` to see API requests with headers and responses.
 
 ## License
 

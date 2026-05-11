@@ -66,10 +66,11 @@ resource "mongodbatlas_alert_configuration" "disk_partition" {
   enabled    = true
 
   metric_threshold_config {
-    metric_name = "DISK_PARTITION_SPACE_PERCENT_USED"
+    metric_name = "DISK_PARTITION_SPACE_USED_DATA"
     operator    = "GREATER_THAN"
     threshold   = 90
     units       = "RAW"
+    mode        = "AVERAGE"
   }
 
   notification {
