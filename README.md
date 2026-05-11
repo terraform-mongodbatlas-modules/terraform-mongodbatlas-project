@@ -50,7 +50,7 @@ Alert Configuration | [Alert Configuration for a Module-managed Project](./examp
 Log Integration | [Log Integration with Datadog, Splunk, and OTel](./examples/log_integration)
 All Features Enabled | [All Features Enabled](./examples/all_enabled)
 All Features Disabled | [All Features Disabled](./examples/all_disabled)
-Cluster Destruction with BCP | [Cluster Destruction with Backup Compliance Policy](./examples/bcp_cluster_destroy)
+Cluster Destruction with BCP | [Cluster Destruction with Backup Compliance Policy (BCP)](./examples/bcp_cluster_destroy)
 
 <!-- END_TABLES -->
 <!-- BEGIN_TF_DOCS -->

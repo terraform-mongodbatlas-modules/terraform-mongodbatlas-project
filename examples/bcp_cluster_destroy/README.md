@@ -3,9 +3,9 @@ WARNING: This file is auto-generated. Do not edit directly.
 Changes will be overwritten when documentation is regenerated.
 Run 'just gen-examples' to regenerate.
 -->
-# Cluster Destruction with Backup Compliance Policy
+# Cluster Destruction with Backup Compliance Policy (BCP)
 
-The Cluster Destruction with BCP example shows how to destroy a cluster when a Backup Compliance Policy is active using the `skip_destroy` flag on the [backup schedule resource](https://registry.terraform.io/providers/mongodb/mongodbatlas/latest/docs/resources/cloud_backup_schedule).
+The Cluster Destruction with [Backup Compliance Policy](https://www.mongodb.com/docs/atlas/backup/cloud-backup/backup-compliance-policy/) example shows how to destroy a cluster when a BCP is active using the `skip_destroy` flag on the [backup schedule resource](https://registry.terraform.io/providers/mongodb/mongodbatlas/latest/docs/resources/cloud_backup_schedule). An active BCP prevents the deletion of backup schedules. Setting `skip_destroy = true` on the schedule resource removes it from the Terraform state on destroy without calling the Atlas API. The schedule is then removed in Atlas together with the cluster.
 
 <!-- BEGIN_GETTING_STARTED -->
 ## Prerequisites
