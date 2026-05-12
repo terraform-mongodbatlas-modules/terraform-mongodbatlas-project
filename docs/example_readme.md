@@ -30,7 +30,6 @@ terraform destroy -var-file vars.tfvars
 ```
 <!-- END_GETTING_STARTED -->
 
-{{ .CODE_SNIPPET_INTRO }}
 {{ .CODE_SNIPPET }}
 {{ .PRODUCTION_CONSIDERATIONS }}
 
