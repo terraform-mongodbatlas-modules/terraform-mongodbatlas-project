@@ -41,7 +41,6 @@ Copy and use this code to get started quickly:
 ```hcl
 module "atlas_project" {
   source  = "terraform-mongodbatlas-modules/project/mongodbatlas"
-  version = "v0.2.0"
 
   project_id = var.project_id
 
@@ -69,9 +68,9 @@ module "atlas_project" {
 ```
 
 **Additional files needed:**
-- [outputs.tf](https://github.com/terraform-mongodbatlas-modules/terraform-mongodbatlas-project/blob/v0.2.0/examples/reference_mode/outputs.tf)
-- [variables.tf](https://github.com/terraform-mongodbatlas-modules/terraform-mongodbatlas-project/blob/v0.2.0/examples/reference_mode/variables.tf)
-- [versions.tf](https://github.com/terraform-mongodbatlas-modules/terraform-mongodbatlas-project/blob/v0.2.0/examples/reference_mode/versions.tf)
+- [outputs.tf](./outputs.tf)
+- [variables.tf](./variables.tf)
+- [versions.tf](./versions.tf)
 
 
 

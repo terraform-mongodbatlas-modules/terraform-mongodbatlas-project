@@ -41,7 +41,6 @@ Copy and use this code to get started quickly:
 ```hcl
 module "atlas_project" {
   source  = "terraform-mongodbatlas-modules/project/mongodbatlas"
-  version = "v0.2.0"
 
   name   = var.project_name
   org_id = var.org_id
@@ -85,9 +84,9 @@ resource "mongodbatlas_alert_configuration" "disk_partition" {
 ```
 
 **Additional files needed:**
-- [outputs.tf](https://github.com/terraform-mongodbatlas-modules/terraform-mongodbatlas-project/blob/v0.2.0/examples/alerts/outputs.tf)
-- [variables.tf](https://github.com/terraform-mongodbatlas-modules/terraform-mongodbatlas-project/blob/v0.2.0/examples/alerts/variables.tf)
-- [versions.tf](https://github.com/terraform-mongodbatlas-modules/terraform-mongodbatlas-project/blob/v0.2.0/examples/alerts/versions.tf)
+- [outputs.tf](./outputs.tf)
+- [variables.tf](./variables.tf)
+- [versions.tf](./versions.tf)
 
 
 
