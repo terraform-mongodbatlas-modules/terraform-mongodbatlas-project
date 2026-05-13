@@ -1,5 +1,7 @@
 ## (Unreleased)
 
+## 0.0.1 (May 13, 2026)
+
 BREAKING CHANGES:
 
 * variable/ip_access_list: Adds validation that rejects allow-all entries ("0.0.0.0/0" & "::/0"), suppressible via skip_allow_all_validation ([#31](https://github.com/terraform-mongodbatlas-modules/terraform-mongodbatlas-project/pull/31))
