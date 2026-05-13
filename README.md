@@ -38,19 +38,19 @@ Changes will be overwritten when documentation is regenerated.
 Run 'just gen-readme' to regenerate. -->
 ## Examples
 
-The following examples show common configurations you can copy and adapt. Start with the [basic example](./examples/basic) for a minimal setup. To manage features on an existing Atlas project without taking over the project resource, see the [reference mode example](./examples/reference_mode).
+The following examples show common configurations you can copy and adapt. Start with the [basic example](https://github.com/terraform-mongodbatlas-modules/terraform-mongodbatlas-project/blob/v0.0.1/examples/basic) for a minimal setup. To manage features on an existing Atlas project without taking over the project resource, see the [reference mode example](https://github.com/terraform-mongodbatlas-modules/terraform-mongodbatlas-project/blob/v0.0.1/examples/reference_mode).
 
 
 Feature | Name
 --- | ---
-Reference Mode | [Reference Mode (Existing Project)](./examples/reference_mode)
-Basic Project Setup | [Basic Project with Settings and Limits](./examples/basic)
-Production Baseline | [Production Secure Baseline with Maintenance Window](./examples/prod_secure_baseline)
-Alert Configuration | [Alert Configuration for a Module-managed Project](./examples/alerts)
-Log Integration | [Log Integration with Datadog, Splunk, and OTel](./examples/log_integration)
-All Features Enabled | [All Features Enabled](./examples/all_enabled)
-All Features Disabled | [All Features Disabled](./examples/all_disabled)
-Cluster Destruction with BCP | [Cluster Destruction with Backup Compliance Policy (BCP)](./examples/bcp_cluster_destroy)
+Reference Mode | [Reference Mode (Existing Project)](https://github.com/terraform-mongodbatlas-modules/terraform-mongodbatlas-project/blob/v0.0.1/examples/reference_mode)
+Basic Project Setup | [Basic Project with Settings and Limits](https://github.com/terraform-mongodbatlas-modules/terraform-mongodbatlas-project/blob/v0.0.1/examples/basic)
+Production Baseline | [Production Secure Baseline with Maintenance Window](https://github.com/terraform-mongodbatlas-modules/terraform-mongodbatlas-project/blob/v0.0.1/examples/prod_secure_baseline)
+Alert Configuration | [Alert Configuration for a Module-managed Project](https://github.com/terraform-mongodbatlas-modules/terraform-mongodbatlas-project/blob/v0.0.1/examples/alerts)
+Log Integration | [Log Integration with Datadog, Splunk, and OTel](https://github.com/terraform-mongodbatlas-modules/terraform-mongodbatlas-project/blob/v0.0.1/examples/log_integration)
+All Features Enabled | [All Features Enabled](https://github.com/terraform-mongodbatlas-modules/terraform-mongodbatlas-project/blob/v0.0.1/examples/all_enabled)
+All Features Disabled | [All Features Disabled](https://github.com/terraform-mongodbatlas-modules/terraform-mongodbatlas-project/blob/v0.0.1/examples/all_disabled)
+Cluster Destruction with BCP | [Cluster Destruction with Backup Compliance Policy (BCP)](https://github.com/terraform-mongodbatlas-modules/terraform-mongodbatlas-project/blob/v0.0.1/examples/bcp_cluster_destroy)
 
 <!-- END_TABLES -->
 <!-- BEGIN_TF_DOCS -->
@@ -272,7 +272,7 @@ Default: `[]`
 ## Backup Compliance Policy
 
 The Backup Compliance Policy (BCP) enforces minimum backup retention requirements across all clusters in the project. [Architecture Center recommended](https://www.mongodb.com/docs/atlas/architecture/current/backups/) policy items are applied by default and can be overridden per frequency type or disabled entirely via `skip_default_policy_items`.
-To destroy clusters when a BCP is active, see the [Cluster Destruction with BCP example](./examples/bcp_cluster_destroy).
+To destroy clusters when a BCP is active, see the [Cluster Destruction with BCP example](https://github.com/terraform-mongodbatlas-modules/terraform-mongodbatlas-project/blob/v0.0.1/examples/bcp_cluster_destroy).
 
 **IMPORTANT:** Once a Backup Compliance Policy is enabled, no user, regardless of role, can disable the Backup Compliance Policy via Terraform, or any other method, without contacting MongoDB Support. See [Backup Compliance Policy Prohibited Actions and Considerations](https://www.mongodb.com/docs/atlas/backup/cloud-backup/backup-compliance-policy/#configure-a-backup-compliance-policy).
 
@@ -430,11 +430,11 @@ Description: Maintenance window details.
 
 ### Where can I find what changed in each release?
 
-See [CHANGELOG.md](CHANGELOG.md) in this repository. It lists user-facing changes, including breaking changes and migration notes, per release.
+See [CHANGELOG.md](https://github.com/terraform-mongodbatlas-modules/terraform-mongodbatlas-project/blob/v0.0.1/CHANGELOG.md) in this repository. It lists user-facing changes, including breaking changes and migration notes, per release.
 
 ### Can I manage alert configurations with this module?
 
-No. Use the [`mongodbatlas_alert_configuration`](https://registry.terraform.io/providers/mongodb/mongodbatlas/latest/docs/resources/alert_configuration) provider resource directly. The [alerts example](./examples/alerts) shows how to create alert configurations alongside the project module.
+No. Use the [`mongodbatlas_alert_configuration`](https://registry.terraform.io/providers/mongodb/mongodbatlas/latest/docs/resources/alert_configuration) provider resource directly. The [alerts example](https://github.com/terraform-mongodbatlas-modules/terraform-mongodbatlas-project/blob/v0.0.1/examples/alerts) shows how to create alert configurations alongside the project module.
 
 ### What does `provider_meta "mongodbatlas"` do?
 
@@ -451,4 +451,4 @@ User-Agent: terraform-provider-mongodbatlas/2.1.0 Terraform/1.13.1 module_name/p
 
 ## License
 
-See [LICENSE](LICENSE) for full details.
+See [LICENSE](https://github.com/terraform-mongodbatlas-modules/terraform-mongodbatlas-project/blob/v0.0.1/LICENSE) for full details.
