@@ -432,6 +432,10 @@ Description: Maintenance window details.
 
 See [CHANGELOG.md](CHANGELOG.md) in this repository. It lists user-facing changes, including breaking changes and migration notes, per release.
 
+### How do I upgrade to v0.2.0?
+
+See the [v0.1.x to v0.2.0 upgrade guide](docs/v0.2.0-upgrade-guide.md) for migration instructions, including breaking changes to `tags`, `with_default_alerts_settings` and `ip_access_list`.
+
 ### Can I manage alert configurations with this module?
 
 No. Use the [`mongodbatlas_alert_configuration`](https://registry.terraform.io/providers/mongodb/mongodbatlas/latest/docs/resources/alert_configuration) provider resource directly. The [alerts example](./examples/alerts) shows how to create alert configurations alongside the project module.
