@@ -151,6 +151,15 @@ run "reference_mode_rejects_tags" {
   expect_failures = [var.project_id]
 }
 
+run "reference_mode_rejects_with_default_alerts_settings" {
+  command = plan
+  variables {
+    project_id                   = "000000000000000000000000"
+    with_default_alerts_settings = true
+  }
+  expect_failures = [var.project_id]
+}
+
 run "managed_mode_requires_name" {
   command = plan
   variables {
