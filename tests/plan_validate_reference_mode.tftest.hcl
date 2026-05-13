@@ -10,6 +10,11 @@ mock_provider "mongodbatlas" {
   }
 }
 
+# CI unit tests run with a global org_id set. Explicitly unset here.
+variables {
+  org_id = null
+}
+
 run "reference_mode_minimal" {
   command = plan
   variables {
