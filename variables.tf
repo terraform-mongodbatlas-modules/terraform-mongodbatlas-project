@@ -47,6 +47,11 @@ variable "project_id" {
     condition     = var.project_id == null || var.tags == null
     error_message = "tags cannot be set when project_id is set (reference mode)."
   }
+
+  validation {
+    condition     = var.project_id == null || var.with_default_alerts_settings == false # false is the default
+    error_message = "with_default_alerts_settings cannot be set when project_id is set (reference mode)."
+  }
 }
 
 variable "name" {
