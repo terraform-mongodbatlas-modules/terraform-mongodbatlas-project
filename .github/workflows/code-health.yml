@@ -14,6 +14,9 @@ on:
         required: false
         type: string
 
+permissions:
+  contents: read
+
 jobs:
   check:
     name: Code Quality & Validation
