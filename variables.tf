@@ -156,6 +156,7 @@ variable "maintenance_window" {
   - Typically, you don't need to manually configure a maintenance window. Atlas performs maintenance automatically in a rolling manner to preserve continuous availability for resilient applications. See [Cluster Maintenance Window](https://www.mongodb.com/docs/atlas/tutorial/cluster-maintenance-window/) in the MongoDB Atlas documentation for more information.
   - To temporarily defer maintenance, use the Atlas CLI/API. See [Atlas `maintenanceWindows` defer](https://www.mongodb.com/docs/atlas/cli/current/command/atlas-maintenanceWindows-defer/#atlas-maintenancewindows-defer) in the MongoDB Atlas documentation for more information.
   EOT
+  // TODO: Once the provider has been released, update the description to point to provider docs for further examples on how to use MANUAL mode
   type = object({
     enabled                 = bool
     day_of_week             = optional(number)
