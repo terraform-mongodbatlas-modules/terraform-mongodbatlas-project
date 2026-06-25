@@ -133,6 +133,22 @@ run "maintenance_window_enabled_requires_day_and_hour" {
   expect_failures = [var.maintenance_window]
 }
 
+run "maintenance_window_wave_assignment" {
+  command = plan
+  variables {
+    maintenance_window = {
+      enabled         = true
+      day_of_week     = 7
+      hour_of_day     = 3
+      wave_assignment = 1
+    }
+  }
+  assert {
+    condition     = module.maintenance_window[0].maintenance_window.wave_assignment == 1
+    error_message = "Expected wave_assignment to be passed through to the maintenance_window resource"
+  }
+}
+
 run "default_feature_set_invalid_value" {
   command = plan
   variables {
