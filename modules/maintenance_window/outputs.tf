@@ -4,5 +4,6 @@ output "maintenance_window" {
     number_of_deferrals = mongodbatlas_maintenance_window.this.number_of_deferrals
     start_asap          = mongodbatlas_maintenance_window.this.start_asap
     time_zone_id        = mongodbatlas_maintenance_window.this.time_zone_id
+    wave_assignment     = mongodbatlas_maintenance_window.this.wave_assignment
   }
 }

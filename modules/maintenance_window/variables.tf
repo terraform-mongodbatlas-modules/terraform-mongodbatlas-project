@@ -43,3 +43,9 @@ variable "protected_hours" {
     error_message = "protected_hours start_hour_of_day and end_hour_of_day must be between 0 and 23."
   }
 }
+
+variable "wave_assignment" {
+  type        = number
+  description = "Maintenance wave explicitly assigned to this project."
+  default     = null
+}
