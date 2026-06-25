@@ -162,6 +162,7 @@ variable "maintenance_window" {
     hour_of_day             = optional(number)
     auto_defer              = optional(bool, false)
     auto_defer_once_enabled = optional(bool, false)
+    wave_assignment         = optional(number)
     protected_hours = optional(object({
       start_hour_of_day = number
       end_hour_of_day   = number
