@@ -25,6 +25,12 @@ variable "auto_defer_once_enabled" {
   default     = false
 }
 
+variable "wave_assignment" {
+  type        = number
+  description = "Maintenance wave assignment for the project (1, 2, or 3). Configurable only when the organization's wave assignment mode is MANUAL. Omit to use the organization default."
+  default     = null
+}
+
 variable "protected_hours" {
   description = "Protected hours configuration for the maintenance window."
   type = object({

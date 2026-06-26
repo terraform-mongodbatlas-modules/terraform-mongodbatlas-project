@@ -4,6 +4,7 @@ resource "mongodbatlas_maintenance_window" "this" {
   hour_of_day             = var.hour_of_day
   auto_defer              = var.auto_defer
   auto_defer_once_enabled = var.auto_defer_once_enabled
+  wave_assignment         = var.wave_assignment
 
   dynamic "protected_hours" {
     for_each = var.protected_hours == null ? [] : [var.protected_hours]
