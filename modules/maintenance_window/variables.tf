@@ -44,6 +44,7 @@ variable "protected_hours" {
   }
 }
 
+// TODO: Variable still not available until Terraform provider releases the field.
 variable "wave_assignment" {
   type        = number
   description = "Maintenance wave explicitly assigned to this project."
