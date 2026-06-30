@@ -76,6 +76,7 @@ module "maintenance_window" {
   hour_of_day             = var.maintenance_window.hour_of_day
   auto_defer              = var.maintenance_window.auto_defer
   auto_defer_once_enabled = var.maintenance_window.auto_defer_once_enabled
+  wave_assignment         = var.maintenance_window.wave_assignment
   protected_hours         = var.maintenance_window.protected_hours
 }
 
