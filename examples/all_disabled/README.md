@@ -55,6 +55,9 @@ module "atlas_project" {
     is_performance_advisor_enabled        = false
     is_realtime_performance_panel_enabled = false
     is_extended_storage_sizes_enabled     = false
+    is_cluster_ai_assistant_enabled       = false
+    is_data_explorer_gen_ai_features_enabled = false
+    is_data_explorer_gen_ai_sample_document_passing_enabled = false
   }
 }
 ```
