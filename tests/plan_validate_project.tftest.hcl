@@ -19,9 +19,6 @@ run "complete_project" {
     project_settings = {
       is_data_explorer_enabled                                 = false
       is_extended_storage_sizes_enabled                        = true
-      is_cluster_ai_assistant_enabled                          = true
-      is_data_explorer_gen_ai_features_enabled                 = true
-      is_data_explorer_gen_ai_sample_document_passing_enabled  = true
     }
     limits = {
       "atlas.project.deployment.clusters" = 10
