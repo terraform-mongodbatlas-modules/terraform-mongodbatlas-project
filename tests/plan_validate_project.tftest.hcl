@@ -17,8 +17,8 @@ run "complete_project" {
   command = plan
   variables {
     project_settings = {
-      is_data_explorer_enabled                                 = false
-      is_extended_storage_sizes_enabled                        = true
+      is_data_explorer_enabled          = false
+      is_extended_storage_sizes_enabled = true
     }
     limits = {
       "atlas.project.deployment.clusters" = 10
