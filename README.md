@@ -63,15 +63,15 @@ Run 'just docs' to regenerate.
 
 The following requirements are needed by this module:
 
-- <a name="requirement_terraform"></a> [terraform](https://developer.hashicorp.com/terraform/install) (>= 1.9)
+- <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) (>= 1.9)
 
-- <a name="requirement_mongodbatlas"></a> [mongodbatlas](https://registry.terraform.io/providers/mongodb/mongodbatlas/latest/docs) (~> 2.8)
+- <a name="requirement_mongodbatlas"></a> [mongodbatlas](#requirement\_mongodbatlas) (~> 2.8)
 
 ## Providers
 
 The following providers are used by this module:
 
-- <a name="provider_mongodbatlas"></a> [mongodbatlas](https://registry.terraform.io/providers/mongodb/mongodbatlas/latest/docs) (~> 2.8)
+- <a name="provider_mongodbatlas"></a> [mongodbatlas](#provider\_mongodbatlas) (~> 2.8)
 
 ## Resources
 
@@ -82,170 +82,82 @@ The following resources are used by this module:
 
 <!-- BEGIN_TF_INPUTS_RAW -->
 <!-- @generated
-WARNING: This grouped inputs section is auto-generated. Do not edit directly.
+WARNING: Inputs section below is processed and grouped by generate_inputs_from_readme.py. Do not edit directly.
 Changes will be overwritten when documentation is regenerated.
-Run 'just docs' to regenerate.
 -->
-## Project Management
+## Required Inputs
 
-The module operates in two modes depending on whether `project_id` is set:
-- **Managed mode**: set `name` and `org_id`. The module creates and owns the Atlas project resource.
-- **Reference mode**: set `project_id`. The module skips project creation and manages only standalone resources (maintenance window, IP access list, backup compliance policy, log integrations) against an existing project.
+No required inputs.
 
-**Required Atlas role:** `Organization Project Creator` to create a new project (Managed mode).
+## Optional Inputs
 
-### name
+The following input variables are optional (have default values):
 
-Name of the MongoDB Atlas project. Required when project_id is not set.
+### <a name="input_backup_compliance_policy"></a> [backup\_compliance\_policy](#input\_backup\_compliance\_policy)
 
-Type: `string`
+Description: Backup compliance policy configuration. When set, creates a `mongodbatlas_backup_compliance_policy` resource.  
+Default policy items are applied unless disabled via `skip_default_policy_items`.  
+Policy items provided in `policy_items` override the default for that frequency type.
 
-Default: `null`
+Valid `frequency_type` values are: "ondemand", "hourly", "daily", "weekly", "monthly" and "yearly".  
+Each frequency type may appear at most once.
 
-### org_id
+Default policy items:
+- hourly: every 6 hours, retained 7 days
+- daily: every day, retained 7 days
+- weekly: every Saturday, retained 4 weeks
+- monthly: last day of month, retained 12 months
+- yearly: every December 1st, retained 1 year
 
-ID of the MongoDB Atlas organization. Required when project_id is not set.
+`pit_enabled` defaults to `false`. When set to `true`, `restore_window_days` is required.
 
-Type: `string`
-
-Default: `null`
-
-### project_id
-
-ID of an existing Atlas project. When set, the module operates in reference mode: the project resource is not created and only standalone resources are managed.
-
-Type: `string`
-
-Default: `null`
-
-
-## Project Settings
-
-Configures Atlas project feature settings and ownership. Managed mode only.
-
-**Required Atlas role:** `Project Owner`.
-
-### project_settings
-
-Optional Atlas project feature settings. Unset values do not override Atlas defaults.
+**NOTE:** Once a Backup Compliance Policy is enabled, no user, regardless of role, can disable the  
+Backup Compliance Policy via Terraform, or any other method, without contacting MongoDB Support.  
+See [Backup Compliance Policy Prohibited Actions and Considerations](https://www.mongodb.com/docs/atlas/backup/cloud-backup/backup-compliance-policy/#configure-a-backup-compliance-policy).
 
 Type:
 
 ```hcl
 object({
-  is_schema_advisor_enabled             = optional(bool)
-  is_collect_database_specifics_enabled = optional(bool)
-  is_data_explorer_enabled              = optional(bool)
-  is_performance_advisor_enabled        = optional(bool)
-  is_realtime_performance_panel_enabled = optional(bool)
-  is_extended_storage_sizes_enabled     = optional(bool)
-  is_cluster_ai_assistant_enabled       = optional(bool)
-  is_data_explorer_gen_ai_features_enabled = optional(bool)
-  is_data_explorer_gen_ai_sample_document_passing_enabled = optional(bool)
-})
+    authorized_email           = string
+    authorized_user_first_name = string
+    authorized_user_last_name  = string
+
+    copy_protection_enabled    = optional(bool, false)
+    encryption_at_rest_enabled = optional(bool, false)
+    pit_enabled                = optional(bool, false)
+    restore_window_days        = optional(number)
+
+    skip_default_policy_items = optional(bool, false)
+
+    policy_items = optional(list(object({
+      frequency_type     = string
+      frequency_interval = number
+      retention_unit     = string
+      retention_value    = number
+    })))
+  })
 ```
-
-Default: `{}`
-
-### project_owner_id
-
-Unique 24-hexadecimal digit string that identifies the Atlas user account with the Project Owner role on the specified project.
-
-Type: `string`
 
 Default: `null`
 
-### with_default_alerts_settings
+### <a name="input_default_feature_set"></a> [default\_feature\_set](#input\_default\_feature\_set)
 
-Flag that indicates whether to create the project with default alert settings.
+Description: Controls which module features with default values are automatically enabled.
 
-Type: `bool`
-
-Default: `false`
-
-### region_usage_restrictions
-
-Set to `GOV_REGIONS_ONLY` to restrict project to government regions. Defaults to standard regions. Cannot mix government and standard regions in the same project. See [MongoDB Atlas for Government](https://www.mongodb.com/docs/atlas/government/api/#creating-a-project).
+- **`RECOMMENDED`** (default): features that have module defaults and do not require additional  
+  customer input are automatically enabled. Upgrading the module version adopts new best  
+  practices without any configuration changes. Minor version upgrades may introduce plan changes (new resources).
+- **`STANDARD`**: features with module defaults are not automatically enabled. Only Atlas  
+  defaults apply. Minor version upgrades do not introduce plan changes.
 
 Type: `string`
 
-Default: `null`
+Default: `"RECOMMENDED"`
 
+### <a name="input_ip_access_list"></a> [ip\_access\_list](#input\_ip\_access\_list)
 
-## Project Limits
-
-Configures project resource limits. Managed mode only. See the [Atlas project limits documentation](https://www.mongodb.com/docs/atlas/reference/api-resources-spec/v2/#tag/Projects/operation/setProjectLimit) for details.
-
-**Required Atlas role:** `Project Owner`.
-
-### limits
-
-Optional Atlas project limits keyed by limit name. Limit name is the key, value is the limit value.
-See the [Atlas project limits documentation](https://www.mongodb.com/docs/atlas/reference/api-resources-spec/v2/#tag/Projects/operation/setProjectLimit) for available limit names.
-
-For example,
-
-```hcl
-limits = {
-  "atlas.project.deployment.clusters" = 100
-}
-```
-
-Type: `map(number)`
-
-Default: `{}`
-
-
-## Maintenance Window
-
-The maintenance window controls when Atlas performs scheduled maintenance. In most cases, Atlas runs maintenance in a rolling manner to preserve cluster availability — manual configuration is optional.
-
-To temporarily defer a scheduled maintenance event, use the Atlas CLI or API. See [`atlas maintenanceWindows defer`](https://www.mongodb.com/docs/atlas/cli/current/command/atlas-maintenanceWindows-defer/) for details.
-
-**Required Atlas role:** `Project Owner`.
-
-### maintenance_window
-
-Maintenance window configuration for the Atlas project.
-- Typically, you don't need to manually configure a maintenance window. Atlas performs maintenance automatically in a rolling manner to preserve continuous availability for resilient applications. See [Cluster Maintenance Window](https://www.mongodb.com/docs/atlas/tutorial/cluster-maintenance-window/) in the MongoDB Atlas documentation for more information.
-- To temporarily defer maintenance, use the Atlas CLI/API. See [Atlas `maintenanceWindows` defer](https://www.mongodb.com/docs/atlas/cli/current/command/atlas-maintenanceWindows-defer/#atlas-maintenancewindows-defer) in the MongoDB Atlas documentation for more information.
-
-Type:
-
-```hcl
-object({
-  enabled                 = bool
-  day_of_week             = optional(number)
-  hour_of_day             = optional(number)
-  auto_defer              = optional(bool, false)
-  auto_defer_once_enabled = optional(bool, false)
-  protected_hours = optional(object({
-    start_hour_of_day = number
-    end_hour_of_day   = number
-  }))
-})
-```
-
-Default:
-
-```json
-{
-  "enabled": false
-}
-```
-
-
-## IP Access List
-
-The IP access list controls which IP addresses and CIDR blocks can connect to the Atlas project. Each entry maps to a CIDR block, a single IP address, or an AWS security group ID.
-
-Entries with source `0.0.0.0/0` or `::/0` are blocked by default. Set `skip_allow_all_validation = true` on the entry to suppress this check.
-
-**Required Atlas role:** `Project Network Access Manager`.
-
-### ip_access_list
-
-IP access list of entries for the Atlas project. Each "source" maps to one of the following: `cidrBlock`, `ipAddress`, or `awsSecurityGroup`.
+Description: IP access list of entries for the Atlas project. Each "source" maps to one of the following: `cidrBlock`, `ipAddress`, or `awsSecurityGroup`.  
 
 Note: When using AWS security group IDs, the value must be known at plan time. If you create the ID in the same `apply` command, Terraform fails.
 
@@ -263,89 +175,41 @@ Type:
 
 ```hcl
 list(object({
-  source                    = string
-  comment                   = optional(string)
-  skip_allow_all_validation = optional(bool, false)
-}))
+    source                    = string
+    comment                   = optional(string)
+    skip_allow_all_validation = optional(bool, false)
+  }))
 ```
 
 Default: `[]`
 
+### <a name="input_limits"></a> [limits](#input\_limits)
 
-## Backup Compliance Policy
+Description: Optional Atlas project limits keyed by limit name. Limit name is the key, value is the limit value.  
+See the [Atlas project limits documentation](https://www.mongodb.com/docs/atlas/reference/api-resources-spec/v2/#tag/Projects/operation/setProjectLimit) for available limit names.
 
-The Backup Compliance Policy (BCP) enforces minimum backup retention requirements across all clusters in the project. [Architecture Center recommended](https://www.mongodb.com/docs/atlas/architecture/current/backups/) policy items are applied by default and can be overridden per frequency type or disabled entirely via `skip_default_policy_items`.
-To destroy clusters when a BCP is active, see the [Cluster Destruction with BCP example](./examples/bcp_cluster_destroy).
-
-**IMPORTANT:** Once a Backup Compliance Policy is enabled, no user, regardless of role, can disable the Backup Compliance Policy via Terraform, or any other method, without contacting MongoDB Support. See [Backup Compliance Policy Prohibited Actions and Considerations](https://www.mongodb.com/docs/atlas/backup/cloud-backup/backup-compliance-policy/#configure-a-backup-compliance-policy).
-
-**Required Atlas role:** `Project Owner`.
-
-### backup_compliance_policy
-
-Backup compliance policy configuration. When set, creates a `mongodbatlas_backup_compliance_policy` resource.
-Default policy items are applied unless disabled via `skip_default_policy_items`.
-Policy items provided in `policy_items` override the default for that frequency type.
-
-Valid `frequency_type` values are: "ondemand", "hourly", "daily", "weekly", "monthly" and "yearly".
-Each frequency type may appear at most once.
-
-Default policy items:
-- hourly: every 6 hours, retained 7 days
-- daily: every day, retained 7 days
-- weekly: every Saturday, retained 4 weeks
-- monthly: last day of month, retained 12 months
-- yearly: every December 1st, retained 1 year
-
-`pit_enabled` defaults to `false`. When set to `true`, `restore_window_days` is required.
-
-**NOTE:** Once a Backup Compliance Policy is enabled, no user, regardless of role, can disable the
-Backup Compliance Policy via Terraform, or any other method, without contacting MongoDB Support.
-See [Backup Compliance Policy Prohibited Actions and Considerations](https://www.mongodb.com/docs/atlas/backup/cloud-backup/backup-compliance-policy/#configure-a-backup-compliance-policy).
-
-Type:
+For example,
 
 ```hcl
-object({
-  authorized_email           = string
-  authorized_user_first_name = string
-  authorized_user_last_name  = string
-
-  copy_protection_enabled    = optional(bool, false)
-  encryption_at_rest_enabled = optional(bool, false)
-  pit_enabled                = optional(bool, false)
-  restore_window_days        = optional(number)
-
-  skip_default_policy_items = optional(bool, false)
-
-  policy_items = optional(list(object({
-    frequency_type     = string
-    frequency_interval = number
-    retention_unit     = string
-    retention_value    = number
-  })))
-})
+limits = {
+  "atlas.project.deployment.clusters" = 100
+}
 ```
 
-Default: `null`
+Type: `map(number)`
 
+Default: `{}`
 
-## Log Integration
+### <a name="input_log_integration"></a> [log\_integration](#input\_log\_integration)
 
-Log integration exports Atlas operational and audit logs to Datadog, Splunk, or OpenTelemetry collectors. For CSP integrations, use the respective MongoDB Atlas module instead: [AWS](https://registry.terraform.io/modules/terraform-mongodbatlas-modules/atlas-aws), [Azure](https://registry.terraform.io/modules/terraform-mongodbatlas-modules/atlas-azure), or [GCP](https://registry.terraform.io/modules/terraform-mongodbatlas-modules/atlas-gcp).
-
-**Required Atlas role:** `Project Owner`.
-
-### log_integration
-
-Log integration configuration for exporting Atlas logs to Datadog, Splunk, and/or OTel collectors.
+Description: Log integration configuration for exporting Atlas logs to Datadog, Splunk, and/or OTel collectors.  
 For CSP integrations (AWS, Azure & GCP), use their respective MongoDB Atlas modules.
 
 Each list entry creates one `mongodbatlas_log_integration` resource of the corresponding list type.
-`log_types` is always required - valid values: MONGOD, MONGOS, MONGOD_AUDIT, MONGOS_AUDIT.
+`log_types` is always required - valid values: MONGOD, MONGOS, MONGOD\_AUDIT, MONGOS\_AUDIT.
 
 Type-specific fields:
-- `datadog`: `api_key` (sensitive) and `region` (US1, US3, US5, EU, AP1, AP2, US1_FED).
+- `datadog`: `api_key` (sensitive) and `region` (US1, US3, US5, EU, AP1, AP2, US1\_FED).
 - `splunk`: `hec_token` (sensitive) and `hec_url`.
 - `otel`: `endpoint` and `headers` (sensitive, max 10 headers and 2 KB).
 
@@ -353,51 +217,133 @@ Type:
 
 ```hcl
 object({
-  datadog = optional(list(object({
-    log_types = set(string)
-    api_key   = string
-    region    = string
-  })))
-  splunk = optional(list(object({
-    log_types = set(string)
-    hec_token = string
-    hec_url   = string
-  })))
-  otel = optional(list(object({
-    log_types = set(string)
-    endpoint  = string
-    headers   = list(object({ name = string, value = string }))
-  })))
-})
+    datadog = optional(list(object({
+      log_types = set(string)
+      api_key   = string
+      region    = string
+    })))
+    splunk = optional(list(object({
+      log_types = set(string)
+      hec_token = string
+      hec_url   = string
+    })))
+    otel = optional(list(object({
+      log_types = set(string)
+      endpoint  = string
+      headers   = list(object({ name = string, value = string }))
+    })))
+  })
 ```
 
 Default: `null`
 
+### <a name="input_maintenance_window"></a> [maintenance\_window](#input\_maintenance\_window)
 
-## Optional Variables
+Description: Maintenance window configuration for the Atlas project.
+- Typically, you don't need to manually configure a maintenance window. Atlas performs maintenance automatically in a rolling manner to preserve continuous availability for resilient applications. See [Cluster Maintenance Window](https://www.mongodb.com/docs/atlas/tutorial/cluster-maintenance-window/) in the MongoDB Atlas documentation for more information.
+- To temporarily defer maintenance, use the Atlas CLI/API. See [Atlas `maintenanceWindows` defer](https://www.mongodb.com/docs/atlas/cli/current/command/atlas-maintenanceWindows-defer/#atlas-maintenancewindows-defer) in the MongoDB Atlas documentation for more information.
 
-### default_feature_set
+Type:
 
-Controls which module features with default values are automatically enabled.
+```hcl
+object({
+    enabled                 = bool
+    day_of_week             = optional(number)
+    hour_of_day             = optional(number)
+    auto_defer              = optional(bool, false)
+    auto_defer_once_enabled = optional(bool, false)
+    protected_hours = optional(object({
+      start_hour_of_day = number
+      end_hour_of_day   = number
+    }))
+  })
+```
 
-- **`RECOMMENDED`** (default): features that have module defaults and do not require additional
-  customer input are automatically enabled. Upgrading the module version adopts new best
-  practices without any configuration changes. Minor version upgrades may introduce plan changes (new resources).
-- **`STANDARD`**: features with module defaults are not automatically enabled. Only Atlas
-  defaults apply. Minor version upgrades do not introduce plan changes.
+Default:
+
+```json
+{
+  "enabled": false
+}
+```
+
+### <a name="input_name"></a> [name](#input\_name)
+
+Description: Name of the MongoDB Atlas project. Required when project\_id is not set.
 
 Type: `string`
 
-Default: `"RECOMMENDED"`
+Default: `null`
 
-### tags
+### <a name="input_org_id"></a> [org\_id](#input\_org\_id)
 
-Map of tags to assign to the project.
+Description: ID of the MongoDB Atlas organization. Required when project\_id is not set.
+
+Type: `string`
+
+Default: `null`
+
+### <a name="input_project_id"></a> [project\_id](#input\_project\_id)
+
+Description: ID of an existing Atlas project. When set, the module operates in reference mode: the project resource is not created and only standalone resources are managed.
+
+Type: `string`
+
+Default: `null`
+
+### <a name="input_project_owner_id"></a> [project\_owner\_id](#input\_project\_owner\_id)
+
+Description: Unique 24-hexadecimal digit string that identifies the Atlas user account with the Project Owner role on the specified project.
+
+Type: `string`
+
+Default: `null`
+
+### <a name="input_project_settings"></a> [project\_settings](#input\_project\_settings)
+
+Description: Optional Atlas project feature settings. Unset values do not override Atlas defaults.
+
+Type:
+
+```hcl
+object({
+    is_schema_advisor_enabled                               = optional(bool)
+    is_collect_database_specifics_enabled                   = optional(bool)
+    is_data_explorer_enabled                                = optional(bool)
+    is_performance_advisor_enabled                          = optional(bool)
+    is_realtime_performance_panel_enabled                   = optional(bool)
+    is_extended_storage_sizes_enabled                       = optional(bool)
+    is_cluster_ai_assistant_enabled                         = optional(bool)
+    is_data_explorer_gen_ai_features_enabled                = optional(bool)
+    is_data_explorer_gen_ai_sample_document_passing_enabled = optional(bool)
+  })
+```
+
+Default: `{}`
+
+### <a name="input_region_usage_restrictions"></a> [region\_usage\_restrictions](#input\_region\_usage\_restrictions)
+
+Description: Set to `GOV_REGIONS_ONLY` to restrict project to government regions. Defaults to standard regions. Cannot mix government and standard regions in the same project. See [MongoDB Atlas for Government](https://www.mongodb.com/docs/atlas/government/api/#creating-a-project).
+
+Type: `string`
+
+Default: `null`
+
+### <a name="input_tags"></a> [tags](#input\_tags)
+
+Description: Map of tags to assign to the project.
 
 Type: `map(string)`
 
 Default: `null`
 
+### <a name="input_with_default_alerts_settings"></a> [with\_default\_alerts\_settings](#input\_with\_default\_alerts\_settings)
+
+Description: Flag that indicates whether to create the project with default alert settings.
+
+Type: `bool`
+
+Default: `false`
 <!-- END_TF_INPUTS_RAW -->
 
 ## Outputs
