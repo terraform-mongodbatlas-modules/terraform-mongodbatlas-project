@@ -1,3 +1,7 @@
 ```release-note:enhancement
-variable/project_settings: Adds AI project settings for cluster AI assistant, Data Explorer gen AI features, and gen AI sample document passing
+variable/project_settings: Adds AI project settings for cluster AI assistant
+```
+
+```release-note:enhancement
+variable/project_settings: Adds support for gen AI features and passing gen AI sample documents to Data Explorer
 ```
