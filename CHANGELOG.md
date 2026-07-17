@@ -1,5 +1,11 @@
 ## (Unreleased)
 
+ENHANCEMENTS:
+
+* variable/project_settings: Adds project setting for enabling gen AI features in the Data Explorer ([#52](https://github.com/terraform-mongodbatlas-modules/terraform-mongodbatlas-project/pull/52))
+* variable/project_settings: Adds project setting for enabling passing of sample field values with gen AI in the Data Explorer ([#52](https://github.com/terraform-mongodbatlas-modules/terraform-mongodbatlas-project/pull/52))
+* variable/project_settings: Adds project setting for enabling the AI Cluster Assistant ([#52](https://github.com/terraform-mongodbatlas-modules/terraform-mongodbatlas-project/pull/52))
+
 ## 0.2.0 (May 13, 2026)
 
 BREAKING CHANGES:
