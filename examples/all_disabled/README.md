@@ -58,6 +58,7 @@ module "atlas_project" {
     is_cluster_ai_assistant_enabled                         = false
     is_data_explorer_gen_ai_features_enabled                = false
     is_data_explorer_gen_ai_sample_document_passing_enabled = false
+    is_native_reranking_enabled                             = false
   }
 }
 ```
