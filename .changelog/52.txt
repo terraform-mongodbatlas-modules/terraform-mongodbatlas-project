@@ -1,0 +1,11 @@
+```release-note:enhancement
+variable/project_settings: Adds project setting for enabling the AI Cluster Assistant
+```
+
+```release-note:enhancement
+variable/project_settings: Adds project setting for enabling gen AI features in the Data Explorer
+```
+
+```release-note:enhancement
+variable/project_settings: Adds project setting for enabling passing of sample field values with gen AI in the Data Explorer
+```

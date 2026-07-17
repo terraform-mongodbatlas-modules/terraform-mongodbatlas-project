@@ -6,12 +6,15 @@ resource "mongodbatlas_project" "this" {
 
   project_owner_id = var.project_owner_id
 
-  is_collect_database_specifics_statistics_enabled = var.project_settings.is_collect_database_specifics_enabled
-  is_data_explorer_enabled                         = var.project_settings.is_data_explorer_enabled
-  is_extended_storage_sizes_enabled                = var.project_settings.is_extended_storage_sizes_enabled
-  is_performance_advisor_enabled                   = var.project_settings.is_performance_advisor_enabled
-  is_realtime_performance_panel_enabled            = var.project_settings.is_realtime_performance_panel_enabled
-  is_schema_advisor_enabled                        = var.project_settings.is_schema_advisor_enabled
+  is_collect_database_specifics_statistics_enabled        = var.project_settings.is_collect_database_specifics_enabled
+  is_data_explorer_enabled                                = var.project_settings.is_data_explorer_enabled
+  is_extended_storage_sizes_enabled                       = var.project_settings.is_extended_storage_sizes_enabled
+  is_performance_advisor_enabled                          = var.project_settings.is_performance_advisor_enabled
+  is_realtime_performance_panel_enabled                   = var.project_settings.is_realtime_performance_panel_enabled
+  is_schema_advisor_enabled                               = var.project_settings.is_schema_advisor_enabled
+  is_cluster_ai_assistant_enabled                         = var.project_settings.is_cluster_ai_assistant_enabled
+  is_data_explorer_gen_ai_features_enabled                = var.project_settings.is_data_explorer_gen_ai_features_enabled
+  is_data_explorer_gen_ai_sample_document_passing_enabled = var.project_settings.is_data_explorer_gen_ai_sample_document_passing_enabled
 
   with_default_alerts_settings = var.with_default_alerts_settings
   region_usage_restrictions    = var.region_usage_restrictions

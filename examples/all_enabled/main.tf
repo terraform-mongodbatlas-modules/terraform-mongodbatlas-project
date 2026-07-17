@@ -5,12 +5,15 @@ module "atlas_project" {
   org_id = var.org_id
 
   project_settings = {
-    is_schema_advisor_enabled             = true
-    is_collect_database_specifics_enabled = true
-    is_data_explorer_enabled              = true
-    is_performance_advisor_enabled        = true
-    is_realtime_performance_panel_enabled = true
-    is_extended_storage_sizes_enabled     = true
+    is_schema_advisor_enabled                               = true
+    is_collect_database_specifics_enabled                   = true
+    is_data_explorer_enabled                                = true
+    is_performance_advisor_enabled                          = true
+    is_realtime_performance_panel_enabled                   = true
+    is_extended_storage_sizes_enabled                       = true
+    is_cluster_ai_assistant_enabled                         = true
+    is_data_explorer_gen_ai_features_enabled                = true
+    is_data_explorer_gen_ai_sample_document_passing_enabled = true
   }
 
   limits = {
