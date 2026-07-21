@@ -1,0 +1,3 @@
+{{- define "note" -}}
+* {{.Body}} ([#{{- .Issue -}}](GITHUB_REPO_URL/pull/{{- .Issue -}}))
+{{- end -}}
