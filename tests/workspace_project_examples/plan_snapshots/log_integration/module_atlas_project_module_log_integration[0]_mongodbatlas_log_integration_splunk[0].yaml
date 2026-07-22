@@ -1,5 +1,5 @@
 hec_token: test-splunk-hec-token
-hec_url: https://splunk.example.com:8088
+hec_url: https://192.0.2.1:1234/v1/logs
 log_types:
 - MONGOD
 type: SPLUNK_LOG_EXPORT
