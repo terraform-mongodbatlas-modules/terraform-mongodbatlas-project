@@ -30,12 +30,13 @@ env:
   MONGODB_ATLAS_BASE_URL: ${{ secrets.MONGODB_ATLAS_BASE_URL }}
 
 jobs:
+  # === DO_NOT_EDIT: path-sync job-tftest ===
   tftest-all:
     name: All Terraform Tests
     if: ${{ !inputs.skip_tftest }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
       - uses: ./.github/actions/setup
         with:
           just: 'true'
@@ -50,12 +51,14 @@ jobs:
         with:
           provider-ref: ${{ inputs.provider_ref }}
       - run: just tftest-all
+  # === OK_EDIT: path-sync job-tftest ===
 
   apply-and-destroy:
     name: Apply & Destroy Examples
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      # === DO_NOT_EDIT: path-sync job-apply-setup ===
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
       - uses: ./.github/actions/setup
         with:
           just: 'true'
@@ -69,13 +72,20 @@ jobs:
         if: inputs.provider_ref != 'registry' && inputs.provider_ref != 'default'
         with:
           provider-ref: ${{ inputs.provider_ref }}
+      # === OK_EDIT: path-sync job-apply-setup ===
       - run: just dev-vars-org "${MONGODB_ATLAS_ORG_ID}"
       - name: Apply examples
         env:
           INCLUDE_EXAMPLES: ${{ inputs.include_examples }}
-        run: just apply-examples --auto-approve -e "$INCLUDE_EXAMPLES" --var-file $(pwd)/tests/workspace_project_examples/dev.tfvars
+        run: just apply-examples --auto-approve -e "$INCLUDE_EXAMPLES" --var-file "$(pwd)/tests/workspace_project_examples/dev.tfvars"
+      # === DO_NOT_EDIT: path-sync job-import-validate ===
+      - name: Import validate examples
+        env:
+          INCLUDE_EXAMPLES: ${{ inputs.include_examples }}
+      # === OK_EDIT: path-sync job-import-validate ===
+        run: just import-validate -e "$INCLUDE_EXAMPLES" --var-file "$(pwd)/tests/workspace_project_examples/dev.tfvars"
       - name: Destroy examples
         if: always()
         env:
           INCLUDE_EXAMPLES: ${{ inputs.include_examples }}
-        run: just destroy-examples --auto-approve -e "$INCLUDE_EXAMPLES" --var-file $(pwd)/tests/workspace_project_examples/dev.tfvars
+        run: just destroy-examples --auto-approve -e "$INCLUDE_EXAMPLES" --var-file "$(pwd)/tests/workspace_project_examples/dev.tfvars"

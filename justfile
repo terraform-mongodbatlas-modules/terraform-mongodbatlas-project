@@ -254,6 +254,10 @@ update-terraform-versions:
 sdlc-validate:
     uvx path-sync validate-no-changes -b main
 # === OK_EDIT: path-sync sdlc-validate ===
+# === DO_NOT_EDIT: path-sync import-validate ===
+import-validate *args:
+    just ws-run -m import {{args}}
+# === OK_EDIT: path-sync import-validate ===
 # Module-specific recipes below (not synced)
 
 tf-gen *args:
