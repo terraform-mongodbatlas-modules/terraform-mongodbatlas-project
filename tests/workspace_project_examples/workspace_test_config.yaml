@@ -1,6 +1,21 @@
+# Import ID formats from provider docs / ImportStateIdFunc.
+# mongodbatlas_project_ip_access_list is SKIP: import ID is {project_id}-{entry}
+# where entry is ip_address OR cidr_block OR aws_security_group; a single
+# format_map template cannot pick the non-empty field when others are null/empty.
+# mongodbatlas_alert_configuration is SKIP: owned by the alerts example, not the module.
+resource_type_import_ids:
+  mongodbatlas_project: "{id}"
+  mongodbatlas_project_ip_access_list: SKIP
+  mongodbatlas_maintenance_window: "{project_id}"
+  mongodbatlas_alert_configuration: SKIP
+  mongodbatlas_backup_compliance_policy: "{project_id}"
+  mongodbatlas_log_integration: "{project_id}/{integration_id}"
+
 examples:
   - name: basic
     var_groups: [basic]
+    import_validation:
+      enabled: true
     plan_regressions:
       - address: module.atlas_project.mongodbatlas_project.this[0]
       - address: module.atlas_project.module.ip_access_list[0].mongodbatlas_project_ip_access_list.this["198.51.100.10"]
@@ -8,6 +23,8 @@ examples:
 
   - name: prod_secure_baseline
     var_groups: [prod_secure_baseline]
+    import_validation:
+      enabled: true
     plan_regressions:
       - address: module.atlas_project.mongodbatlas_project.this[0]
       - address: module.atlas_project.module.ip_access_list[0].mongodbatlas_project_ip_access_list.this["198.51.100.10"]
@@ -16,6 +33,8 @@ examples:
 
   - name: alerts
     var_groups: [alerts]
+    import_validation:
+      enabled: true
     plan_regressions:
       - address: module.atlas_project.mongodbatlas_project.this[0]
       - address: mongodbatlas_alert_configuration.no_primary
@@ -24,6 +43,8 @@ examples:
   - name: log_integration
     var_groups: [log_integration]
     sensitive_output: true
+    import_validation:
+      enabled: true
     plan_regressions:
       - address: module.atlas_project.mongodbatlas_project.this[0]
       - address: module.atlas_project.module.log_integration[0].mongodbatlas_log_integration.datadog[0]
@@ -33,6 +54,8 @@ examples:
   - name: all_enabled
     var_groups: [all_enabled]
     sensitive_output: true
+    import_validation:
+      enabled: true
     plan_regressions:
       - address: module.atlas_project.mongodbatlas_project.this[0]
       - address: module.atlas_project.module.maintenance_window[0].mongodbatlas_maintenance_window.this
@@ -43,6 +66,8 @@ examples:
 
   - name: all_disabled
     var_groups: [all_disabled]
+    import_validation:
+      enabled: true
     plan_regressions:
       - address: module.atlas_project.mongodbatlas_project.this[0]
 
@@ -89,10 +114,10 @@ var_groups:
       module_value: '"test-splunk-hec-token"'
     - name: splunk_hec_url
       expose_in_workspace: false
-      module_value: '"https://splunk.example.com:8088"'
+      module_value: '"https://192.0.2.1:1234/v1/logs"'
     - name: otel_endpoint
       expose_in_workspace: false
-      module_value: '"https://otel-collector.example.com:4318"'
+      module_value: '"https://192.0.2.1/v1/logs"'
     - name: otel_auth_header
       expose_in_workspace: false
       module_value: '"Bearer test-otel-token"'
@@ -115,7 +140,7 @@ var_groups:
       module_value: '"Doe"'
     - name: otel_endpoint
       expose_in_workspace: false
-      module_value: '"https://otel-collector.example.com:4318"'
+      module_value: '"https://192.0.2.1/v1/logs"'
     - name: otel_auth_header
       expose_in_workspace: false
       module_value: '"Bearer test-otel-token"'
