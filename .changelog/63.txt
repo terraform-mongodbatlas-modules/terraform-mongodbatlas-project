@@ -4,3 +4,6 @@ terraform: Requires minimum version 1.10
 ```release-note:note
 provider/mongodbatlas: Requires minimum version 2.14.0 for project AI settings support
 ```
+```release-note:bug
+submodule/maintenance_window: Handles null protected_hours with Terraform 1.10
+```
