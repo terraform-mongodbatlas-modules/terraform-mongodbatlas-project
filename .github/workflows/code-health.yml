@@ -1,3 +1,5 @@
+# path-sync copy -n sdlc
+# === DO_NOT_EDIT: path-sync triggers ===
 name: Code Health
 
 on:
@@ -5,24 +7,21 @@ on:
     branches:
       - main
   pull_request:
+  merge_group:
   schedule:
     - cron: '0 2 * * *'
-  workflow_dispatch:
-    inputs:
-      provider_ref:
-        description: 'Provider git ref (empty = default branch)'
-        required: false
-        type: string
+# === OK_EDIT: path-sync triggers ===
 
 permissions:
   contents: read
 
 jobs:
+  # === DO_NOT_EDIT: path-sync job-check ===
   check:
     name: Code Quality & Validation
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
       - uses: ./.github/actions/setup
         with:
           just: 'true'
@@ -30,42 +29,124 @@ jobs:
           docs: 'true'
       - name: Run all validation checks
         run: just pre-commit
+  # === OK_EDIT: path-sync job-check ===
 
+  # === DO_NOT_EDIT: path-sync job-py-tests ===
+  py-tests:
+    name: Python Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - uses: ./.github/actions/setup
+        with:
+          just: 'true'
+          uv: 'true'
+          terraform: 'true'
+          go: 'true'
+          go-version-file: 'tools/changelog/check-changelog-entry-file/go.mod'
+      - name: Run Python tests
+        run: just py-test
+  # === OK_EDIT: path-sync job-py-tests ===
+
+  # === DO_NOT_EDIT: path-sync job-plan-tests ===
   plan-tests:
     name: Terraform Unit Plan Tests
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
       - uses: ./.github/actions/setup
         with:
           just: 'true'
           terraform: 'true'
       - name: Run Terraform plan tests
         run: just unit-plan-tests
+  # === OK_EDIT: path-sync job-plan-tests ===
 
+  # === DO_NOT_EDIT: path-sync job-compat-tests ===
   compat-tests:
     name: Terraform CLI Version Compatibility
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
       - uses: ./.github/actions/setup
         with:
           just: 'true'
           uv: 'true'
           mise: 'true'
       - run: just test-compat
+  # === OK_EDIT: path-sync job-compat-tests ===
 
+  # === DO_NOT_EDIT: path-sync job-snapshot-tests ===
   plan-snapshot-tests:
-    name: Terraform Examples Plan Snapshot Tests
+    name: Plan Snapshots (${{ matrix.lane }})
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - lane: minimum
+            terraform_version: '1.10'
+            provider_mode: minimum
+          - lane: maximum
+            terraform_version: latest
+            provider_mode: registry
+          - lane: provider-head
+            terraform_version: latest
+            provider_mode: head
+  # === OK_EDIT: path-sync job-snapshot-tests ===
+    env:
+      # Module-specific: Set the minimum provider release.
+      MONGODB_ATLAS_PROVIDER_MIN_VERSION: '2.14.0'
+  # === DO_NOT_EDIT: path-sync job-snapshot-tests ===
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
       - uses: ./.github/actions/setup
         with:
           just: 'true'
           uv: 'true'
-          terraform: 'true'
-      - uses: ./.github/actions/setup-provider-dev
+      - name: Configure minimum provider
+        if: matrix.provider_mode == 'minimum'
+        shell: bash
+        run: |
+          if [[ -z "${MONGODB_ATLAS_PROVIDER_MIN_VERSION:-}" ]]; then
+            echo "::error::MONGODB_ATLAS_PROVIDER_MIN_VERSION must be set for the minimum lane"
+            exit 1
+          fi
+          echo "MONGODB_ATLAS_PROVIDER_VERSION=${MONGODB_ATLAS_PROVIDER_MIN_VERSION}" >> "$GITHUB_ENV"
+      - uses: hashicorp/setup-terraform@b9cd54a3c349d3f38e8881555d616ced269862dd
         with:
-          provider-ref: ${{ inputs.provider_ref }}
+          terraform_version: ${{ matrix.terraform_version }}
+          terraform_wrapper: false
+      - uses: ./.github/actions/setup-provider-dev
+        if: matrix.provider_mode == 'head'
+  # === OK_EDIT: path-sync job-snapshot-tests ===
       - run: just plan-snapshot-test
+  # === DO_NOT_EDIT: path-sync job-snapshot-tests ===
+  # === OK_EDIT: path-sync job-snapshot-tests ===
+
+  # === DO_NOT_EDIT: path-sync job-slack ===
+  slack-notification:
+    needs: [check, py-tests, plan-tests, compat-tests, plan-snapshot-tests]
+    if: ${{ github.event_name == 'schedule' && !cancelled() && contains(needs.*.result, 'failure') }}
+    runs-on: ubuntu-latest
+    permissions: {}
+    steps:
+      - name: Send Slack message
+        uses: slackapi/slack-github-action@dcb1066f776dd043e64d0e8ba94ca15cc7e1875d
+        with:
+          webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
+          webhook-type: incoming-webhook
+          payload: |
+            {
+              "text": "${{ github.event.repository.name }}: Code Health scheduled run failed",
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": ":x: *${{ github.event.repository.name }}: Code Health scheduled run failed* ${{ secrets.SLACK_ONCALL_TAG }} <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View failed run>"
+                  }
+                }
+              ]
+            }
+  # === OK_EDIT: path-sync job-slack ===
