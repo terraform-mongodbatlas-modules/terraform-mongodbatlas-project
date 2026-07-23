@@ -10,7 +10,6 @@ examples_readme:
   versions_tf:
     add: |
       provider "mongodbatlas" {}
-    skip_if_name_contains: []
     generate_when_missing_only: false
     force_generate: false
 
