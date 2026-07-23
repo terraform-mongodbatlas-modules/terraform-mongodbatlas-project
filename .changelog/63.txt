@@ -1,5 +1,5 @@
 ```release-note:note
-terraform: Requires minimum version 1.10
+terraform: Requires minimum version 1.10 to align with the MongoDB Atlas provider compatibility matrix
 ```
 ```release-note:note
 provider/mongodbatlas: Requires minimum version 2.14.0 for project AI settings support
