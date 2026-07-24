@@ -34,7 +34,7 @@ variable "protected_hours" {
   default = null
 
   validation {
-    condition = var.protected_hours == null || (
+    condition = var.protected_hours == null ? true : (
       var.protected_hours.start_hour_of_day >= 0 &&
       var.protected_hours.start_hour_of_day <= 23 &&
       var.protected_hours.end_hour_of_day >= 0 &&
