@@ -1,10 +1,19 @@
 ## (Unreleased)
 
+NOTES:
+
+* provider/mongodbatlas: Requires minimum version 2.14.0 for project AI settings support ([#63](https://github.com/terraform-mongodbatlas-modules/terraform-mongodbatlas-project/pull/63))
+* terraform: Requires minimum version 1.10 to align with the MongoDB Atlas provider compatibility matrix ([#63](https://github.com/terraform-mongodbatlas-modules/terraform-mongodbatlas-project/pull/63))
+
 ENHANCEMENTS:
 
 * variable/project_settings: Adds project setting for enabling gen AI features in the Data Explorer ([#52](https://github.com/terraform-mongodbatlas-modules/terraform-mongodbatlas-project/pull/52))
 * variable/project_settings: Adds project setting for enabling passing of sample field values with gen AI in the Data Explorer ([#52](https://github.com/terraform-mongodbatlas-modules/terraform-mongodbatlas-project/pull/52))
 * variable/project_settings: Adds project setting for enabling the AI Cluster Assistant ([#52](https://github.com/terraform-mongodbatlas-modules/terraform-mongodbatlas-project/pull/52))
+
+BUG FIXES:
+
+* submodule/maintenance_window: Handles null protected_hours with Terraform 1.10 ([#63](https://github.com/terraform-mongodbatlas-modules/terraform-mongodbatlas-project/pull/63))
 
 ## 0.2.0 (May 13, 2026)
 
