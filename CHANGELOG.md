@@ -3,6 +3,7 @@
 NOTES:
 
 * provider/mongodbatlas: Requires minimum version 2.14.0 for project AI settings support ([#63](https://github.com/terraform-mongodbatlas-modules/terraform-mongodbatlas-project/pull/63))
+* provider/mongodbatlas: Requires minimum version 2.15.0 for native reranking support ([#66](https://github.com/terraform-mongodbatlas-modules/terraform-mongodbatlas-project/pull/66))
 * terraform: Requires minimum version 1.10 to align with the MongoDB Atlas provider compatibility matrix ([#63](https://github.com/terraform-mongodbatlas-modules/terraform-mongodbatlas-project/pull/63))
 
 ENHANCEMENTS:
