@@ -96,7 +96,7 @@ jobs:
   # === OK_EDIT: path-sync job-snapshot-tests ===
     env:
       # Module-specific: Set the minimum provider release.
-      MONGODB_ATLAS_PROVIDER_MIN_VERSION: '2.14.0'
+      MONGODB_ATLAS_PROVIDER_MIN_VERSION: '2.15.0'
   # === DO_NOT_EDIT: path-sync job-snapshot-tests ===
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1

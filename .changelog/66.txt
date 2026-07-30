@@ -1,0 +1,3 @@
+```release-note:note
+provider/mongodbatlas: Requires minimum version 2.15.0 for native reranking support
+```
