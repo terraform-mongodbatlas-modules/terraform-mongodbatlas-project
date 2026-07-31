@@ -55,6 +55,7 @@ module "atlas_project" {
     is_cluster_ai_assistant_enabled                         = true
     is_data_explorer_gen_ai_features_enabled                = true
     is_data_explorer_gen_ai_sample_document_passing_enabled = true
+    is_native_reranking_enabled                             = true
   }
 
   limits = {
