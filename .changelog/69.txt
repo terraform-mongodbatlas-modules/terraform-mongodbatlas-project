@@ -1,0 +1,15 @@
+```release-note:enhancement
+variable/default_feature_set: Enables is_cluster_ai_assistant_enabled by default in RECOMMENDED mode
+```
+
+```release-note:enhancement
+variable/default_feature_set: Enables is_data_explorer_gen_ai_features_enabled by default in RECOMMENDED mode
+```
+
+```release-note:enhancement
+variable/default_feature_set: Enables is_data_explorer_gen_ai_sample_document_passing_enabled by default in RECOMMENDED mode
+```
+
+```release-note:enhancement
+variable/default_feature_set: Enables is_native_reranking_enabled by default in RECOMMENDED mode
+```
