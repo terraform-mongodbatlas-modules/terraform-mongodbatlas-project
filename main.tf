@@ -12,10 +12,10 @@ resource "mongodbatlas_project" "this" {
   is_performance_advisor_enabled                          = var.project_settings.is_performance_advisor_enabled
   is_realtime_performance_panel_enabled                   = var.project_settings.is_realtime_performance_panel_enabled
   is_schema_advisor_enabled                               = var.project_settings.is_schema_advisor_enabled
-  is_cluster_ai_assistant_enabled                         = var.project_settings.is_cluster_ai_assistant_enabled
-  is_data_explorer_gen_ai_features_enabled                = var.project_settings.is_data_explorer_gen_ai_features_enabled
-  is_data_explorer_gen_ai_sample_document_passing_enabled = var.project_settings.is_data_explorer_gen_ai_sample_document_passing_enabled
-  is_native_reranking_enabled                             = var.project_settings.is_native_reranking_enabled
+  is_cluster_ai_assistant_enabled                         = local.is_cluster_ai_assistant_enabled
+  is_data_explorer_gen_ai_features_enabled                = local.is_data_explorer_gen_ai_features_enabled
+  is_data_explorer_gen_ai_sample_document_passing_enabled = local.is_data_explorer_gen_ai_sample_document_passing_enabled
+  is_native_reranking_enabled                             = local.is_native_reranking_enabled
 
   with_default_alerts_settings = var.with_default_alerts_settings
   region_usage_restrictions    = var.region_usage_restrictions
@@ -46,6 +46,13 @@ moved {
 }
 
 locals {
+  recommended = var.default_feature_set == "RECOMMENDED"
+
+  is_cluster_ai_assistant_enabled                         = var.project_settings.is_cluster_ai_assistant_enabled != null ? var.project_settings.is_cluster_ai_assistant_enabled : (local.recommended ? true : null)
+  is_data_explorer_gen_ai_features_enabled                = var.project_settings.is_data_explorer_gen_ai_features_enabled != null ? var.project_settings.is_data_explorer_gen_ai_features_enabled : (local.recommended ? true : null)
+  is_data_explorer_gen_ai_sample_document_passing_enabled = var.project_settings.is_data_explorer_gen_ai_sample_document_passing_enabled != null ? var.project_settings.is_data_explorer_gen_ai_sample_document_passing_enabled : (local.recommended ? true : null)
+  is_native_reranking_enabled                             = var.project_settings.is_native_reranking_enabled != null ? var.project_settings.is_native_reranking_enabled : (local.recommended ? true : null)
+
   project_id            = var.project_id != null ? var.project_id : mongodbatlas_project.this[0].id
   project_created_at    = var.project_id != null ? data.mongodbatlas_project.this[0].created : mongodbatlas_project.this[0].created
   project_cluster_count = var.project_id != null ? data.mongodbatlas_project.this[0].cluster_count : mongodbatlas_project.this[0].cluster_count
