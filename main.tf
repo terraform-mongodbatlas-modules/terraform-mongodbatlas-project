@@ -48,10 +48,10 @@ moved {
 locals {
   recommended = var.default_feature_set == "RECOMMENDED"
 
-  is_cluster_ai_assistant_enabled                         = try(coalesce(var.project_settings.is_cluster_ai_assistant_enabled, local.recommended ? true : null), null)
-  is_data_explorer_gen_ai_features_enabled                = try(coalesce(var.project_settings.is_data_explorer_gen_ai_features_enabled, local.recommended ? true : null), null)
-  is_data_explorer_gen_ai_sample_document_passing_enabled = try(coalesce(var.project_settings.is_data_explorer_gen_ai_sample_document_passing_enabled, local.recommended ? true : null), null)
-  is_native_reranking_enabled                             = try(coalesce(var.project_settings.is_native_reranking_enabled, local.recommended ? true : null), null)
+  is_cluster_ai_assistant_enabled                         = local.recommended ? coalesce(var.project_settings.is_cluster_ai_assistant_enabled, true) : var.project_settings.is_cluster_ai_assistant_enabled
+  is_data_explorer_gen_ai_features_enabled                = local.recommended ? coalesce(var.project_settings.is_data_explorer_gen_ai_features_enabled, true) : var.project_settings.is_data_explorer_gen_ai_features_enabled
+  is_data_explorer_gen_ai_sample_document_passing_enabled = local.recommended ? coalesce(var.project_settings.is_data_explorer_gen_ai_sample_document_passing_enabled, true) : var.project_settings.is_data_explorer_gen_ai_sample_document_passing_enabled
+  is_native_reranking_enabled                             = local.recommended ? coalesce(var.project_settings.is_native_reranking_enabled, true) : var.project_settings.is_native_reranking_enabled
 
   project_id            = var.project_id != null ? var.project_id : mongodbatlas_project.this[0].id
   project_created_at    = var.project_id != null ? data.mongodbatlas_project.this[0].created : mongodbatlas_project.this[0].created
