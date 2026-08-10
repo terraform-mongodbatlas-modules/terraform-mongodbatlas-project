@@ -146,12 +146,20 @@ run "default_feature_set_standard" {
   variables {
     default_feature_set = "STANDARD"
   }
+  assert {
+    condition     = length(mongodbatlas_project.this) == 1
+    error_message = "Expected project to be created"
+  }
 }
 
 run "default_feature_set_recommended" {
   command = plan
   variables {
     default_feature_set = "RECOMMENDED"
+  }
+  assert {
+    condition     = length(mongodbatlas_project.this) == 1
+    error_message = "Expected project to be created"
   }
   assert {
     condition     = mongodbatlas_project.this[0].is_cluster_ai_assistant_enabled == true
