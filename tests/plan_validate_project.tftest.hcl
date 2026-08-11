@@ -141,6 +141,8 @@ run "default_feature_set_invalid_value" {
   expect_failures = [var.default_feature_set]
 }
 
+# AI settings attributes are Optional+Computed in the provider schema, so their values are only
+# known after apply. We only verify the plan succeeds and the project resource is created.
 run "default_feature_set_standard" {
   command = plan
   variables {
