@@ -8,6 +8,10 @@ NOTES:
 
 ENHANCEMENTS:
 
+* variable/default_feature_set: Enables is_cluster_ai_assistant_enabled by default in RECOMMENDED mode ([#69](https://github.com/terraform-mongodbatlas-modules/terraform-mongodbatlas-project/pull/69))
+* variable/default_feature_set: Enables is_data_explorer_gen_ai_features_enabled by default in RECOMMENDED mode ([#69](https://github.com/terraform-mongodbatlas-modules/terraform-mongodbatlas-project/pull/69))
+* variable/default_feature_set: Enables is_data_explorer_gen_ai_sample_document_passing_enabled by default in RECOMMENDED mode ([#69](https://github.com/terraform-mongodbatlas-modules/terraform-mongodbatlas-project/pull/69))
+* variable/default_feature_set: Enables is_native_reranking_enabled by default in RECOMMENDED mode ([#69](https://github.com/terraform-mongodbatlas-modules/terraform-mongodbatlas-project/pull/69))
 * variable/project_settings: Adds project setting for enabling gen AI features in the Data Explorer ([#52](https://github.com/terraform-mongodbatlas-modules/terraform-mongodbatlas-project/pull/52))
 * variable/project_settings: Adds project setting for enabling native reranking ([#54](https://github.com/terraform-mongodbatlas-modules/terraform-mongodbatlas-project/pull/54))
 * variable/project_settings: Adds project setting for enabling passing of sample field values with gen AI in the Data Explorer ([#52](https://github.com/terraform-mongodbatlas-modules/terraform-mongodbatlas-project/pull/52))
