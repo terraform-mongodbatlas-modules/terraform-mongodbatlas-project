@@ -141,12 +141,13 @@ run "default_feature_set_invalid_value" {
   expect_failures = [var.default_feature_set]
 }
 
+# AI settings attributes are Optional+Computed in the provider schema, so their values are only
+# known after apply. We only verify the plan succeeds and the project resource is created.
 run "default_feature_set_standard" {
   command = plan
   variables {
     default_feature_set = "STANDARD"
   }
-  # default_feature_set is unused in v1, we only verify that the project is created.
   assert {
     condition     = length(mongodbatlas_project.this) == 1
     error_message = "Expected project to be created"
@@ -158,9 +159,24 @@ run "default_feature_set_recommended" {
   variables {
     default_feature_set = "RECOMMENDED"
   }
-  # default_feature_set is unused in v1, we only verify that the project is created.
   assert {
     condition     = length(mongodbatlas_project.this) == 1
     error_message = "Expected project to be created"
+  }
+  assert {
+    condition     = mongodbatlas_project.this[0].is_cluster_ai_assistant_enabled == true
+    error_message = "Expected is_cluster_ai_assistant_enabled to be true in RECOMMENDED mode"
+  }
+  assert {
+    condition     = mongodbatlas_project.this[0].is_data_explorer_gen_ai_features_enabled == true
+    error_message = "Expected is_data_explorer_gen_ai_features_enabled to be true in RECOMMENDED mode"
+  }
+  assert {
+    condition     = mongodbatlas_project.this[0].is_data_explorer_gen_ai_sample_document_passing_enabled == true
+    error_message = "Expected is_data_explorer_gen_ai_sample_document_passing_enabled to be true in RECOMMENDED mode"
+  }
+  assert {
+    condition     = mongodbatlas_project.this[0].is_native_reranking_enabled == true
+    error_message = "Expected is_native_reranking_enabled to be true in RECOMMENDED mode"
   }
 }

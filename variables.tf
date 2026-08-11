@@ -183,7 +183,6 @@ variable "maintenance_window" {
   }
 }
 
-# tflint-ignore: terraform_unused_declarations # Unused for v1.
 variable "default_feature_set" {
   description = <<-EOT
     Controls which module features with default values are automatically enabled.
