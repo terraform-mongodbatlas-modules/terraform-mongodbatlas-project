@@ -1,0 +1,3 @@
+```release-note:bug
+module: Strips double quotes from plan snapshot filenames so Windows can clone the repository
+```
