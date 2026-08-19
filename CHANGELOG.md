@@ -1,5 +1,7 @@
 ## (Unreleased)
 
+## 0.3.0 (August 19, 2026)
+
 NOTES:
 
 * provider/mongodbatlas: Requires minimum version 2.14.0 for project AI settings support ([#63](https://github.com/terraform-mongodbatlas-modules/terraform-mongodbatlas-project/pull/63))
