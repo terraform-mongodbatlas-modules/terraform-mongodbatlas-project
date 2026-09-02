@@ -341,3 +341,34 @@ git push origin feature/your-feature-name
 - Check [Issues](../../../issues) for similar problems
 - Create new issue with output from `just pre-commit` if needed
 - See [Terraform docs](https://www.terraform.io/docs) and [MongoDB Atlas Provider docs](https://registry.terraform.io/providers/mongodb/mongodbatlas/latest/docs)
+
+<!-- === DO_NOT_EDIT: path-sync release-troubleshooting === -->
+### Troubleshooting: New version not showing in the Terraform Registry
+
+The Registry sometimes misses a new tag. Re-sync the module from HCP Terraform. Sign in and open the org using the steps in the [modules-management README](https://github.com/terraform-mongodbatlas-modules/terraform-mongodbatlas-modules-management/blob/main/README.md#troubleshooting-new-module-version-not-showing-up-in-the-terraform-registry).
+
+1. Open the [modules page](https://app.terraform.io/app/mongodbatlas/registry/public-namespaces/terraform-mongodbatlas-modules/modules), select the module, and press `Re-sync`.
+2. If the UI shows `403 API rate limit exceeded` for `api.github.com/.../tags`, wait for the reset time in the message and press `Re-sync` again.
+<!-- === OK_EDIT: path-sync release-troubleshooting === -->
+
+## Submitting Changes
+
+```bash
+# Create feature branch
+git checkout -b feature/your-feature-name
+
+# Make changes and verify
+just pre-commit
+just plan-examples YOUR_PROJECT_ID  # if applicable
+
+# Commit and push
+git add .
+git commit -m "feat: your feature description"
+git push origin feature/your-feature-name
+```
+
+## Getting Help
+
+- Check [Issues](../../../issues) for similar problems
+- Create new issue with output from `just pre-commit` if needed
+- See [Terraform docs](https://www.terraform.io/docs) and [MongoDB Atlas Provider docs](https://registry.terraform.io/providers/mongodb/mongodbatlas/latest/docs)
