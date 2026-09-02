@@ -1,6 +1,5 @@
 <!-- path-sync copy -n sdlc -->
-<!-- === OK_EDIT: path-sync header === -->
-# Contributing to terraform-mongodbatlas-cluster
+# Contributing to terraform-mongodbatlas-project
 
 Quick guide for contributing to this Terraform module.
 
@@ -15,7 +14,7 @@ mise install
 
 # Clone and setup
 git clone <repo-url>
-cd terraform-mongodbatlas-cluster
+cd terraform-mongodbatlas-project
 
 # Install git hooks (optional but recommended)
 pre-commit install
@@ -270,7 +269,7 @@ Scripts are organized in `tools/` subdirectories ([Python](https://www.python.or
 See [tf-gen README](../tools/tf_gen/README.md) for configuration reference and examples.
 
 See [documentation-guide.md](./documentation-guide.md) for detailed documentation contributor guidelines.
-<!-- === DO_NOT_EDIT: path-sync release === -->
+
 ## Release Process (Maintainers)
 
 Releases are automated via the `release.yml` GitHub Actions workflow. The workflow uses a 2-commit + revert strategy to keep tags reachable from main branch history.
@@ -316,14 +315,10 @@ git push origin main              # Push main with changelog + revert
 
 ### Troubleshooting: New version not showing in the Terraform Registry
 
-The Registry sometimes misses a new tag. Re-sync the module from HCP Terraform:
+The Registry sometimes misses a new tag. Re-sync the module from HCP Terraform. Sign in and open the org using the steps in the [modules-management README](https://github.com/terraform-mongodbatlas-modules/terraform-mongodbatlas-modules-management/blob/main/README.md#troubleshooting-new-module-version-not-showing-up-in-the-terraform-registry).
 
-1. Sign in at <https://registry.terraform.io/sign-in> and open HCP Terraform (email `{your_name}@mongodb.com`; GitHub SSO is not configured yet).
-2. Open the [modules page](https://app.terraform.io/app/mongodbatlas/registry/public-namespaces/terraform-mongodbatlas-modules/modules), select the module, and press `Re-sync`.
-3. If the UI shows `403 API rate limit exceeded` for `api.github.com/.../tags`, wait for the reset time in the message and press `Re-sync` again.
-
-The full login path and a sample rate-limit error are in the [modules-management README](https://github.com/terraform-mongodbatlas-modules/terraform-mongodbatlas-modules-management/blob/main/README.md#troubleshooting-new-module-version-not-showing-up-in-the-terraform-registry).
-<!-- === OK_EDIT: path-sync release === -->
+1. Open the [modules page](https://app.terraform.io/app/mongodbatlas/registry/public-namespaces/terraform-mongodbatlas-modules/modules), select the module, and press `Re-sync`.
+2. If the UI shows `403 API rate limit exceeded` for `api.github.com/.../tags`, wait for the reset time in the message and press `Re-sync` again.
 
 ## Submitting Changes
 
