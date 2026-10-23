@@ -1,0 +1,3 @@
+```release-note:bug
+module: Shortens plan snapshot paths so Windows can clone the module without exceeding the path length limit
+```
