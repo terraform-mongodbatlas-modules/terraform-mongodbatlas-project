@@ -140,7 +140,7 @@ list(object({
     node_count_analytics    = optional(number)
     node_count_read_only    = optional(number)
     provider_name           = optional(string)
-    shard_number            = optional(number)
+    shard_name              = optional(string)
     zone_name               = optional(string)
   }))
 ```"""
@@ -157,7 +157,7 @@ list(object({
   node_count_analytics    = optional(number)
   node_count_read_only    = optional(number)
   provider_name           = optional(string)
-  shard_number            = optional(number)
+  shard_name              = optional(string)
   zone_name               = optional(string)
 }))
 ```"""
