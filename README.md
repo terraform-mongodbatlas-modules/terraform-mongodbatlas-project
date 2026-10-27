@@ -27,7 +27,9 @@ Run 'just gen-readme' to regenerate. -->
 
 ## Module Commitment
 
-MongoDB formally supports this module, including bug fixes, security patches, and backward-compatible enhancements. The v1 release carries a two-year stability commitment: no breaking changes through May 2028 (at the earliest).
+MongoDB formally supports this module, including bug fixes, security patches, and backward-compatible enhancements. The v1 release carries a two-year stability commitment: no breaking changes through October 2028 (at the earliest).
+
+The module tracks MongoDB Atlas provider releases and adopts each new provider major after a stabilization period following general availability. Before adopting, we test the new provider major against the latest supported minor version of the module. Adopting a provider major does not rename or remove module variables or change defaults. You can move to a new provider major on your current module minor version without changing your configuration.
 
 **Note:** This module defaults to `default_feature_set = "RECOMMENDED"`. In `RECOMMENDED` mode, future module features that include defaults and require no additional input are automatically activated when you upgrade the module version. Set `default_feature_set = "STANDARD"` to opt out: new features are never automatically activated, and minor version upgrades do not introduce plan changes. See [default_feature_set](#default_feature_set) for details.
 
